@@ -71,9 +71,12 @@ function share_history {
 PROMPT_COMMAND='share_history'
 shopt -u histappend
 
-### add at 2011/11/24
+### bash_completion
 if type brew >/dev/null 2>&1 && [ -f $(brew --prefix)/etc/bash_completion ] ; then
     source $(brew --prefix)/etc/bash_completion
+fi
+if [ -f /etc/bash_completion ] ; then
+    source /etc/bash_completion
 fi
 
 ### add at 2012/03/19
