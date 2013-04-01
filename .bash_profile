@@ -4,9 +4,13 @@
 # ~/.bash_profile is personal profile for login shell.
 # ~/.bashrc is personal "conversation" profile for subshell.
 
+umask 022
+
 ### read bashrc
-if [ -f ~/.bashrc ] ; then
-    . ~/.bashrc
+if [ -n "$BASH_VERSION" ] ; then
+    if [ -f ~/.bashrc ] ; then
+        . ~/.bashrc
+    fi
 fi
 
 ### PATH
@@ -22,3 +26,5 @@ if [ -d /Developer/usr/bin ] ; then
     # for Xcode3 on Lion
     PATH=$PATH:/Developer/usr/bin
 fi
+
+BASH_PROFILE_DONE=1
