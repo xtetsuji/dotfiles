@@ -7,6 +7,12 @@ test -z "$PS1" && return
 shopt -s histappend
 shopt -s checkwinsize
 
+### locale is UTF-8 ordinary on modern Debian and some dists.
+if    [ -f /etc/locale.gen ] \
+   && grep -i '^ja_JP\.UTF-8' /etc/locale.gen >/dev/null 2>&1 ; then
+    export LANG=ja_JP.UTF-8
+fi
+
 ### Aliases
 if [ -f ~/.bash_aliases ] ; then
     source ~/.bash_aliases
