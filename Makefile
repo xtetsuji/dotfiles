@@ -15,7 +15,7 @@ deploy:
 	@echo "If this is \"dotdir\", curretly it is ignored and copy your hand."
 	for f in .??* ; do \
 		test -d $${f} && continue ; \
-		if [ -f ~/$${f} ] ; then \
+		if [ -f ~/$${f} ] && [ ! -L ~/$${f} ] ; then \
 			echo "backup as $${f} to $${f}.$(BACKUP_EXT)" ; \
 			cp ~/$${f} ~/$${f}.$(BACKUP_EXT) ; \
 		fi ; \
