@@ -16,8 +16,8 @@ deploy:
 	for f in .??* ; do \
 		test -d $${f} && continue ; \
 		if [ -f ~/$${f} ] ; then \
-			@echo "backup as $${f} to $${f}.$(BACKUP_EXT)" ; \
-			@cp ~/$${f} ~/$${f}.$(BACKUP_EXT) ; \
+			echo "backup as $${f} to $${f}.$(BACKUP_EXT)" ; \
+			cp ~/$${f} ~/$${f}.$(BACKUP_EXT) ; \
 		fi ; \
 		ln -i -s $(PWD)/$${f} ~/ ; \
 	done ; true
