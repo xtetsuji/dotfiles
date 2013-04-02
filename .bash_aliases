@@ -67,6 +67,7 @@ alias modperl-method='perl -MModPerl::MethodLookup -e ModPerl::MethodLookup::pri
 alias perl-deparse='perl -MO=Deparse '
 function perl-module { perl -M$1 -e 1 ; }
 function perl-flymake { pfswatch -q $1 -e perl -wc $1 ; }
+function perl-installed-modules { perl -MExtUtils::Installed -E 'say($_) for ExtUtils::Installed->new->modules' }
 alias uri-unescape='perl -MURI::Escape=uri_unescape -E "say uri_unescape(join q/ /, @ARGV)" '
 alias uri-escape='perl -MURI::Escape=uri_escape -E "say uri_escape(join q/ /, @ARGV)" '
 alias suddenly_death='perl -MAcme::SuddenlyDeath -E "say suddenly_death(@ARGV)"'
