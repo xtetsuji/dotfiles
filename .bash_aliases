@@ -118,6 +118,7 @@ if [ "$UNAME" = Darwin ] ; then
     function pb-remove-quote {
         pbpaste | remove-quote | pbcopy
     }
+    alias pb-iconv-change='pbpaste | iconv -c -f UTF-8-MAC -t UTF-8 | pbcopy'
 fi
 
 ###
