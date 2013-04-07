@@ -1,0 +1,9 @@
+.bash_secret
+.bash_history
+.cvspass
+.folders
+.mysql_history
+.ssh/
+.subversion/
+.w3m/
+.wl
