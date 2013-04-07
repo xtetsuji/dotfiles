@@ -14,6 +14,7 @@ deploy:
 	@echo "Start deploy dotfiles current directory."
 	@echo "If this is \"dotdir\", curretly it is ignored and copy your hand."
 	for f in .??* ; do \
+		test $${f} == .git -o $${f} == .git/ && continue ; \
 		test -d $${f} && continue ; \
 		if [ -f ~/$${f} ] && [ ! -L ~/$${f} ] ; then \
 			echo "backup as $${f} to $${f}.$(BACKUP_EXT)" ; \
