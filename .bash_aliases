@@ -103,7 +103,7 @@ if [ "$UNAME" = Darwin ] ; then
     if [ -d '/Applications/Evernote Account Info 1.0.app/' ] ; then
         alias evernote-account-info='/Applications/Evernote\ Account\ Info\ 1.0.app/Contents/MacOS/applet'
     fi
-    if type md5 >/dev/null 2>&1 ; then
+    if type md5 >/dev/null 2>&1 && ! type md5sum >/dev/null 2>&1 ; then
         alias md5sum='md5 -s '
     fi
     alias screen-sharing='open /System/Library/CoreServices/Screen\ Sharing.app/'
