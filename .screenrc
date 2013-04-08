@@ -3,7 +3,7 @@
 # $Id: .screenrc,v 1.9 2008/06/17 01:36:39 ogata Exp $
 # $Source: /var/cvs/dot/daichi/.screenrc,v $
 
-defencoding utf-8
+defencoding utf8
 escape ^z^z
 
 
