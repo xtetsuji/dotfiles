@@ -6,6 +6,7 @@ usage:
 	@echo "Usage:"
 	@echo "  make list"
 	@echo "  make deproy"
+	@echo "  make update #=> git pull origin master"
 
 list:
 	ls -a
@@ -23,3 +24,6 @@ deploy:
 		fi ; \
 		ln -i -s $(PWD)/$${f} ~/ ; \
 	done ; true
+
+update:
+	git pull origin master
