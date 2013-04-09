@@ -63,7 +63,7 @@ alias remove-quote='sed -e "s/^> //"'
 ###
 ### Perl
 ###
-alias modperl-method='perl -MModPerl::MethodLookup -e ModPerl::MethodLookup::print_method '
+alias modperl-method='/usr/bin/perl -MModPerl::MethodLookup -e ModPerl::MethodLookup::print_method '
 alias perl-deparse='perl -MO=Deparse '
 function perl-module { perl -M$1 -e 1 ; }
 function perl-flymake { pfswatch -q $1 -e perl -wc $1 ; }
