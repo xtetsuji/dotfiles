@@ -208,14 +208,14 @@ function cd {
 }
 
 # 最近の cd によって移動したディレクトリを選択
-function gd {
-    local newdir
-    dirs -v | head --lines $(( LINES - 3 ))
-    read -p "select number: " newdir
-    if [ -z $newdir ] ; then
+function cdhist {
+    local newdirnum
+    dirs -v | head -n $(( LINES - 3 ))
+    read -p "select number: " newdirnum
+    if [ -z $newdirnum ] ; then
 	echo "gd: Abort." 1>&2
-    elif ( echo $newdir | egrep '^[[:digit:]]+$' > /dev/null ) ; then
-	cd $( echo ${DIRSTACK[$newdir]} | sed -e "s;^~;$HOME;" )
+    elif ( echo $newdirnum | egrep '^[[:digit:]]+$' > /dev/null ) ; then
+	cd $( echo ${DIRSTACK[$newdirnum]} | sed -e "s;^~;$HOME;" )
     else
 	echo "gd: Wrong." 1>&2
     fi
@@ -289,7 +289,6 @@ function chproxy {
     fi
     echo http_proxy=$http_proxy
 }
-
 
 # ssh と tail を使った簡単リモート通知
 # ただ使い方が面倒
