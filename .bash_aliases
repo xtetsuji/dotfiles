@@ -254,10 +254,10 @@ function chcvsroot {
 #         "outdev" ":ext:username@cvs.example.com:/var/cvsroot"
 #   );
     if [ "$arg" = "-h" ] ; then
-        echo "Usage: $0 "
-        echo "  $0"
-        echo "  $0 [-h|-l]"
-        echo "  $0 <cvsroot_alias>"
+        echo "Usage: $FUNCNAME "
+        echo "  $FUNCNAME"
+        echo "  $FUNCNAME [-h|-l]"
+        echo "  $FUNCNAME <cvsroot_alias>"
         return
     elif [ "$arg" = "-l" ] ; then
         for (( i=0; $i<${#CHCVSROOT_MAP[*]}; i=$((i+2)) )) ; do
@@ -303,7 +303,7 @@ function jcd {
     declare arg dir i
     arg=$1
     if [ -z "$arg" -o "$arg" = "-h" ] ; then
-        echo "Usage: $0 <directory_alias>"
+        echo "Usage: $FUNCNAME <directory_alias>"
         return
     elif [ $arg = "-l" ] ; then
         for (( i=0; $i<${#JCD_DIR_MAP[*]}; i=$((i+2)) )) ; do
