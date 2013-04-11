@@ -300,16 +300,28 @@ function chcvsroot {
 
 # Jump cd as shortcut key.
 function cdj {
-    declare arg dir i
+    declare arg subarg dir i
     arg=$1
-    if [ -z "$arg" -o "$arg" = "-h" ] ; then
+    subarg=$2
+    if [ -z "$arg" -o "$arg" = "-h" ] || [ "$arg" = "-l" -a -z "$subarg" ] ; then
         echo "Usage: $FUNCNAME <directory_alias>"
+        echo "       $FUNCNAME [-h|-v|-l <directory_alias>]"
+        echo "-h: help"
+        echo "-v: view defined lists"
+        echo "-l <directory_alias>: view path specify alias."
         return
-    elif [ $arg = "-l" ] ; then
+    elif [ "$arg" = "-v" -o "$arg" = "-l" ] ; then
         for (( i=0; $i<${#CDJ_DIR_MAP[*]}; i=$((i+2)) )) ; do
             key=${CDJ_DIR_MAP[$i]}
             value=${CDJ_DIR_MAP[$((i+1))]}
-            printf "%8s => %s\n" $key $value
+            if [ "$arg" = "-v" ] ; then
+                printf "%8s => %s\n" $key $value
+            elif [ "$arg" = "-l" ] ; then
+                if [ $key = $subarg ] ; then
+                    echo $value
+                    return
+                fi
+            fi
         done
         return
     fi
