@@ -243,38 +243,66 @@ function sd {
     fi
 }
 
-# chcvsroot
-# CVSROOT 環境変数を変更して export する
+# chcvsroot: CVSROOT 環境変数を変更して export する
 function chcvsroot {
-    # :pserver:ogata@localhost:2402/var/cvs ... waffle
-    # :pserver:ogata-t@localhost:/var/cvs ... nv
-    # ~/var/cvs ... local
-    # 2011/04/28: seq コマンドがない環境向けに書き換えた
-    declare i
-    declare -a dir desc max
-    dir=(':pserver:ogata@localhost:2402/var/cvs'
-	':pserver:ogata-t@localhost:/var/cvs'
-	':ext:ogata-t@aitest:/var/cvsroot'
-	'~/var/cvs')
-    desc=('waffle' 'nv' 'aitest' 'local')
-#    for i in $( seq 0 $(( ${#dir[*]} - 1 )) ) ; do
-    max=$(( ${#dir[*]} - 1 ))
-    for i in $( eval echo {0..$max} ) ; do
-	printf '%3d %8s %s%b\n' $i ${desc[$i]} ${dir[$i]}
-    done
-    read -p "select number: " i
-    if [ -z $i ] ; then
-	echo "chcvsroot: Abort." 1>&2
+    declare arg desc dir i
+    arg="$1"
+    # CHCVSROOT_MAP array Example. I define in ~/.bash_secret
+#     CHCVSROOT_MAP=(
+#         "local"    "~/var/cvs"
+#         "intra"  ":pserver:username@cvs.intra.example.jp:/var/cvs"
+#         "outdev" ":ext:username@cvs.example.com:/var/cvsroot"
+#   );
+    if [ "$arg" = "-h" ] ; then
+        echo "Usage: $0 "
+        echo "  $0"
+        echo "  $0 [-h|-l]"
+        echo "  $0 <cvsroot_alias>"
+        return
+    elif [ "$arg" = "-l" ] ; then
+        for (( i=0; $i<${#CHCVSROOT_MAP[*]}; i=$((i+2)) )) ; do
+            desc=${CHCVSROOT_MAP[$i]}
+            dir=${CHCVSROOT_MAP[$((i+1))]}
+            printf "%8s => %s\n" $desc $dir
+        done
+        return
+    elif [ -z "$arg" ] ; then
+        for (( i=0; $i<${#CHCVSROOT_MAP[*]}; i=$((i+2)) )) ; do
+            desc=${CHCVSROOT_MAP[$i]}
+            dir=${CHCVSROOT_MAP[$((i+1))]}
+            printf '%3d %8s %s%b\n' $((i/2)) $desc $dir
+        done
+        read -p "select number: " i
+        if [ -z "$i" ] ; then
+            echo "chcvsroot: Abort." 1>&2
+            return 1
+        fi
+        dir=${CHCVSROOT_MAP[$((i*2+1))]}
+        if [ -z "$dir" ] ; then
+            echo "directory is not defined" 1>&2
+            return 1
+        fi
+        export CVSROOT="$dir"
+        return
     else
-	export CVSROOT=${dir[$i]}
+        for (( i=0; $i<${#CHCVSROOT_MAP[*]}; i=$((i+2)) )) ; do
+            desc=${CHCVSROOT_MAP[$i]}
+            dir=${CHCVSROOT_MAP[$((i+1))]}
+            if [ "$desc" = "$arg" ] ; then
+                echo "export CVSROOT=$dir"
+                export CVSROOT="$dir"
+                return
+            fi
+        done
     fi
+    echo "argument is not recognized."
 }
 
 # Jump cd as shortcut key.
 function jcd {
     declare arg dir i
     arg=$1
-    if [ -z "$arg" ] ; then
+    if [ -z "$arg" -o "$arg" = "-h" ] ; then
         echo "Usage: $0 <directory_alias>"
         return
     elif [ $arg = "-l" ] ; then
@@ -285,7 +313,7 @@ function jcd {
         done
         return
     fi
-    # Example. I define in ~/.bash_secret
+    # JCD_DIR_MAP array Example. I define in ~/.bash_secret
 #     JCD_DIR_MAP=(
 #         dbox ~/Dropbox
 #         cvs  ~/cvs
@@ -301,7 +329,8 @@ function jcd {
             return
         fi
     done
-    echo "directory alias $arg"
+    echo "directory alias \"$arg\" is not found"
+    return 1
 }
 
 # chproxy
