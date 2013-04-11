@@ -309,7 +309,7 @@ function jcd {
         for (( i=0; $i<${#JCD_DIR_MAP[*]}; i=$((i+2)) )) ; do
             key=${JCD_DIR_MAP[$i]}
             value=${JCD_DIR_MAP[$((i+1))]}
-            echo "$key => $value"
+            printf "%8s => %s\n" $key $value
         done
         return
     fi
