@@ -299,30 +299,30 @@ function chcvsroot {
 }
 
 # Jump cd as shortcut key.
-function jcd {
+function cdj {
     declare arg dir i
     arg=$1
     if [ -z "$arg" -o "$arg" = "-h" ] ; then
         echo "Usage: $FUNCNAME <directory_alias>"
         return
     elif [ $arg = "-l" ] ; then
-        for (( i=0; $i<${#JCD_DIR_MAP[*]}; i=$((i+2)) )) ; do
-            key=${JCD_DIR_MAP[$i]}
-            value=${JCD_DIR_MAP[$((i+1))]}
+        for (( i=0; $i<${#CDJ_DIR_MAP[*]}; i=$((i+2)) )) ; do
+            key=${CDJ_DIR_MAP[$i]}
+            value=${CDJ_DIR_MAP[$((i+1))]}
             printf "%8s => %s\n" $key $value
         done
         return
     fi
-    # JCD_DIR_MAP array Example. I define in ~/.bash_secret
-#     JCD_DIR_MAP=(
+    # CDJ_DIR_MAP array Example. I define in ~/.bash_secret
+#     CDJ_DIR_MAP=(
 #         dbox ~/Dropbox
 #         cvs  ~/cvs
 #         etc  /etc
 #         );
-    #echo "DEBUG: dir arg=$arg #JCD_DIR_MAP=${#JCD_DIR_MAP[*]}"
-    for (( i=0; $i<${#JCD_DIR_MAP[*]}; i=$((i+2)) )) ; do
-        key=${JCD_DIR_MAP[$i]}
-        value=${JCD_DIR_MAP[$((i+1))]}
+    #echo "DEBUG: dir arg=$arg #CDJ_DIR_MAP=${#CDJ_DIR_MAP[*]}"
+    for (( i=0; $i<${#CDJ_DIR_MAP[*]}; i=$((i+2)) )) ; do
+        key=${CDJ_DIR_MAP[$i]}
+        value=${CDJ_DIR_MAP[$((i+1))]}
         #echo "$key => $value"
         if [ "$key" = "$arg" ] ; then
             cd $value
