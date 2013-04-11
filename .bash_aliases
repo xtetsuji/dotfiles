@@ -222,7 +222,7 @@ function cdhist {
 }
 
 # 現在のディレクトリの中にあるディレクトリを番号指定で移動
-function sd {
+function cdlist {
     local -a dirlist opt_f=false
     local i d num=0 dirnum opt opt_f
     while getopts ":f" opt ; do
