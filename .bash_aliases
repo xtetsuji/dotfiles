@@ -270,6 +270,40 @@ function chcvsroot {
     fi
 }
 
+# Jump cd as shortcut key.
+function jcd {
+    declare arg dir i
+    arg=$1
+    if [ -z "$arg" ] ; then
+        echo "Usage: $0 <directory_alias>"
+        return
+    elif [ $arg = "-l" ] ; then
+        for (( i=0; $i<${#JCD_DIR_MAP[*]}; i=$((i+2)) )) ; do
+            key=${JCD_DIR_MAP[$i]}
+            value=${JCD_DIR_MAP[$((i+1))]}
+            echo "$key => $value"
+        done
+        return
+    fi
+    # Example. I define in ~/.bash_secret
+#     JCD_DIR_MAP=(
+#         dbox ~/Dropbox
+#         cvs  ~/cvs
+#         etc  /etc
+#         );
+    #echo "DEBUG: dir arg=$arg #JCD_DIR_MAP=${#JCD_DIR_MAP[*]}"
+    for (( i=0; $i<${#JCD_DIR_MAP[*]}; i=$((i+2)) )) ; do
+        key=${JCD_DIR_MAP[$i]}
+        value=${JCD_DIR_MAP[$((i+1))]}
+        #echo "$key => $value"
+        if [ "$key" = "$arg" ] ; then
+            cd $value
+            return
+        fi
+    done
+    echo "directory alias $arg"
+}
+
 # chproxy
 # http_proxy 環境変数を変更して export する
 function chproxy {
