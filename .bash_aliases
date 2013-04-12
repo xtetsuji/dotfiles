@@ -11,9 +11,6 @@ case "$UNAME" in
 	alias ls='ls -FG' # BSD type "ls"
 	alias lsx='ls -xG'
 	# see: http://ascii.jp/elem/000/000/594/594203/
-	alias CharacterPalette='open /System/Library/Input\ Methods/CharacterPalette.app/'
-	alias ArchiveUtility='open /System/Library/CoreServices/Archive\ Utility.app/'
-	alias iPhoneSimulator='open /Developer/Platforms/iPhoneSimulator.platform/Developer/Applications/iPhone\ Simulator.app'
 	;;
     Linux)
 	alias ls='ls --color=auto'
@@ -94,11 +91,14 @@ alias ssh-keylist="ssh-add -l | sed -e 's;/[^[:space:]]*/;;'"
     #alias dialog='growlnotify -s -m '
     #alias notify='read line; growlnotify -m "$line"'
 #fi
-# airport
 if [ "$UNAME" = Darwin ] ; then
     alias airport='/System/Library/PrivateFrameworks/Apple80211.framework/Versions/Current/Resources/airport '
     alias airport-info='airport -I'
     alias ssid='airport-info | grep " SSID: " | sed -e "s/.* //"'
+    alias CharacterPalette='open /System/Library/Input\ Methods/CharacterPalette.app/'
+    alias ArchiveUtility='open /System/Library/CoreServices/Archive\ Utility.app/'
+    alias iPhoneSimulator='open /Developer/Platforms/iPhoneSimulator.platform/Developer/Applications/iPhone\ Simulator.app'
+    alias screen-sharing='open /System/Library/CoreServices/Screen\ Sharing.app/'
     alias ql='qlmanage -p'
     if [ -d '/Applications/Evernote Account Info 1.0.app/' ] ; then
         alias evernote-account-info='/Applications/Evernote\ Account\ Info\ 1.0.app/Contents/MacOS/applet'
@@ -106,38 +106,33 @@ if [ "$UNAME" = Darwin ] ; then
     if type md5 >/dev/null 2>&1 && ! type md5sum >/dev/null 2>&1 ; then
         alias md5sum='md5 -s '
     fi
-    alias screen-sharing='open /System/Library/CoreServices/Screen\ Sharing.app/'
-    function pbtee {
-        cat | pbcopy
-        sleep 1
-        pbpaste
-    }
-    function pb-append-quote {
-        pbpaste | append-quote | pbcopy
-    }
-    function pb-remove-quote {
-        pbpaste | remove-quote | pbcopy
-    }
+    alias pbtee='cat | pbcopy ; sleep 1 ; pbpaste'
+    alias pb-append-quote='pbpaste | append-quote | pbcopy'
+    alias pb-remove-quote='pbpaste | remove-quote | pbcopy'
     alias pb-iconv-change='pbpaste | iconv -c -f UTF-8-MAC -t UTF-8 | pbcopy'
 fi
 
 ###
-### KDE
+### X / KDE
 ###
 if type dcop >/dev/null 2>&1 ; then
     alias mixer='dcop kmix kmix-mainwindow#1 show'
     alias mute='dcop kmix Mixer0 toggleMasterMute' # arg: "on" or "off"
+
+    alias kding='test $? -eq 0 && ogg123 -q /usr/share/sounds/KDE_Event_1.ogg || ogg123 -q /usr/share/sounds/KDE_Event_5.ogg'
+    alias ding='test $? -eq 0 && ogg123 -q /usr/share/sounds/KDE_Event_1.ogg || ogg123 -q /usr/share/sounds/KDE_Event_5.ogg'
 fi
 if type kdialog >/dev/null 2>&1 ; then
-    function finish {
+    alias kpopup='test $? -eq 0 && kdialog --msgbox 処理が完了しました || kdialog --error エラーコードを受けとりました '
+    function kfinish {
         declare status=$? cmd=`history 1 | sed -e 's/^ *[[:digit:]]* *//'`
         kdialog --title "コマンドが終了しました" --msgbox "cmd=${cmd}\nstatus=$status"
     }
 fi
-#alias ding='test $? -eq 0 && ogg123 -q /usr/share/sounds/KDE_Event_1.ogg || ogg123 -q /usr/share/sounds/KDE_Event_5.ogg'
-#alias popup='test $? -eq 0 && kdialog --msgbox 処理が完了しました || kdialog --error エラーコードを受けとりました '
-#alias vga-display='xrandr --output VGA --mode 1024x768'
-#alias lcd-display='xrandr --output LVDS --mode 1024x768'
+if type xrandr >/dev/null 2>&1 ; then
+    alias vga-display='xrandr --output VGA --mode 1024x768'
+    alias lcd-display='xrandr --output LVDS --mode 1024x768'
+fi
 
 ###
 ### big functions
@@ -196,10 +191,6 @@ function cd {
     if [ -z "$1" ] ; then
 	# cd 連打で余計な $DIRSTACK を増やさない
 	test "$PWD" != "$HOME" && pushd $HOME > /dev/null
-    elif [ "x$1" == "x-" ] ; then
-	pushd "$OLDPWD" > /dev/null
-    elif [ "$1" == "+" ] ; then
-	test -z $2 || builtin cd $2
     elif ( echo "$1" | egrep "^\.\.\.+$" > /dev/null ) ; then
 	cd $( echo "$1" | perl -ne 'print "../" x ( tr/\./\./ - 1 )' )
     else
@@ -209,15 +200,15 @@ function cd {
 
 # 最近の cd によって移動したディレクトリを選択
 function cdhist {
-    local newdirnum
+    local dirnum
     dirs -v | head -n $(( LINES - 3 ))
-    read -p "select number: " newdirnum
-    if [ -z $newdirnum ] ; then
-	echo "gd: Abort." 1>&2
-    elif ( echo $newdirnum | egrep '^[[:digit:]]+$' > /dev/null ) ; then
-	cd $( echo ${DIRSTACK[$newdirnum]} | sed -e "s;^~;$HOME;" )
+    read -p "select number: " dirnum
+    if [ -z "$dirnum" ] ; then
+	echo "$FUNCNAME: Abort." 1>&2
+    elif ( echo $dirnum | egrep '^[[:digit:]]+$' > /dev/null ) ; then
+	cd $( echo ${DIRSTACK[$dirnum]} | sed -e "s;^~;$HOME;" )
     else
-	echo "gd: Wrong." 1>&2
+	echo "$FUNCNAME: Wrong." 1>&2
     fi
 }
 
@@ -233,13 +224,16 @@ function cdlist {
     shift $(( OPTIND -1 ))
     dirlist[0]=..
     # external pipe scope. array is established.
-    for d in * ; do test -d "$d" && dirlist[$((++num))]=$d ; done
-    for i in $( seq 0 $num ) ; do printf "%3d %s%b\n" $i "$( $opt_f && echo -n "$PWD/" )${dirlist[$i]}" ; done | more
+    for d in * ; do test -d "$d" && dirlist[$((++num))]="$d" ; done
+    # TODO: Is seq installed?
+    for i in $( seq 0 $num ) ; do printf "%3d %s%b\n" $i "$( $opt_f && echo -n "$PWD/" )${dirlist[$i]}" ; done
     read -p "select number: " dirnum
-    if [ -z $dirnum ] ; then
-	echo "sd: Abort." 1>&2
-    else
+    if [ -z "$dirnum" ] ; then
+	echo "$FUNCNAME: Abort." 1>&2
+    elif ( echo $dirnum | egrep '^[[:digit:]]+$' > /dev/null ) ; then
 	cd "${dirlist[$dirnum]}"
+    else
+	echo "$FUNCNAME: Something wrong." 1>&2
     fi
 }
 
@@ -247,9 +241,7 @@ function cdback {
     popd $1 >/dev/null
 }
 
-function cdclear {
-    dirs -c
-}
+alias cdclear='dirs -c'
 
 # Jump cd as shortcut key.
 function cdj {
@@ -286,11 +278,11 @@ function cdj {
 #         );
     #echo "DEBUG: dir arg=$arg #CDJ_DIR_MAP=${#CDJ_DIR_MAP[*]}"
     for (( i=0; $i<${#CDJ_DIR_MAP[*]}; i=$((i+2)) )) ; do
-        key=${CDJ_DIR_MAP[$i]}
-        value=${CDJ_DIR_MAP[$((i+1))]}
+        key="${CDJ_DIR_MAP[$i]}"
+        value="${CDJ_DIR_MAP[$((i+1))]}"
         #echo "$key => $value"
         if [ "$key" = "$arg" ] ; then
-            cd $value
+            cd "$value"
             return
         fi
     done
