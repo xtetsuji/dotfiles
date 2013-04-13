@@ -107,6 +107,7 @@ if [ "$UNAME" = Darwin ] ; then
         alias md5sum='md5 -s '
     fi
     alias pbtee='cat | pbcopy ; sleep 1 ; pbpaste'
+    #alias pbtee='cat | tee >(pbpaste)' # FIXME: does not work.
     alias pb-append-quote='pbpaste | append-quote | pbcopy'
     alias pb-remove-quote='pbpaste | remove-quote | pbcopy'
     alias pb-iconv-change='pbpaste | iconv -c -f UTF-8-MAC -t UTF-8 | pbcopy'
