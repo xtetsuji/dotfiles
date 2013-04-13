@@ -346,23 +346,51 @@ function chcvsroot {
 }
 
 # chproxy
-# http_proxy 環境変数を変更して export する
+# http proxy 関連の環境変数を変更して export する
 function chproxy {
-    declare i
-    declare -a proxy desc
-    echo "currently http_proxy is \"$http_proxy\""
-    proxy=('http://localhost:8080/' 'http://localhost:3128/')
-    desc=('waffle-portbind' 'nv-portbind')
-    for i in $( seq 0 $(( ${#proxy[*]} - 1 )) ) ; do
-        printf '%3d %8s %s%b\n' $i ${desc[$i]} ${proxy[$i]}
+    declare i num desc proxy
+    echo "currently http_proxy is ..."
+    env | grep -i _proxy | sed -e 's/^/  > /'
+    echo ""
+    # CHPROXYT_MAP array Example. I define in ~/.bash_secret
+#     CHPROXY_MAP=(
+#         "portforward" "http://localhost:8080/"
+#         "company"     "http://proxy.example.co.jp:80/"
+#   );
+    for (( i=0; $i<${#CHPROXY_MAP[*]}; i=$((i+2)) )) ; do
+        desc=${CHPROXY_MAP[$i]}
+        proxy=${CHPROXY_MAP[$((i+1))]}
+        printf '%3d %16s %s%b\n' $((i/2)) $desc $proxy
     done
-    read -p "select number: " i
-    if [ -z $i ] ; then
-        echo "chproxy: Abort." 1>&2
+    read -p "select number: " num
+    if [ -z "$num" ] ; then
+        echo "$FUNCNAME: Abort." 1>&2
+        return 1
     else
-        export http_proxy=${proxy[$i]}
+        echo "$num" | grep '^[[:digit:]]+$' || \
+            { echo "$FUNCNAME: Abort." 1>&2 ; return ; }
+        proxy=${CHPROXY_MAP[$((num*2+1))]}
+        echo "proxy is $proxy"
+        # NOTE: HTTP_PROXY (All uppercase "HTTP_PROXY" is not recommended.)
+        export http_proxy=$proxy
+        export HTTPS_PROXY=$proxy
+        export FTP_PROXY=$proxy
+        if [ -z "$NO_PROXY" ] ; then
+            # comma-separated list of hosts
+            export NO_PROXY=localhost
+        fi
+        return
     fi
-    echo http_proxy=$http_proxy
+}
+
+function reset-proxyenv {
+    # NOTE: HTTP_PROXY (All uppercase "HTTP_PROXY" is not recommended.)
+    unset HTTP_PROXY
+    unset http_proxy
+    unset HTTPS_PROXY
+    unset https_proxy
+    unset FTP_PROXY
+    unset ftp_proxy
 }
 
 # ssh と tail を使った簡単リモート通知
