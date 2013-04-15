@@ -58,3 +58,50 @@ _cdj()
     return 0
 } &&
 complete -F _cdj cdj
+
+# perlbrew bash_completion.
+# see other implementation: https://github.com/telemachus/bash_completion.d/blob/master/perlbrew.bash
+type perlbrew >/dev/null 2>&1 &&
+_perlbrew()
+{
+    # I refer to App::perlbrew/0.62 for makeing it.
+    local cur prev opts_all opts_names opts
+    COMPREPLY=()
+    cur="${COMP_WORDS[COMP_CWORD]}"
+    prev="${COMP_WORDS[COMP_CWORD-1]}"
+    opts_names="
+        init
+        install uninstall available lib alias upgrade-perl
+        list use off switch switch-off exec
+        self-install self-upgrade
+        install-patchperl install-cpanm install-ack
+        download mirro version help"
+    opts_all="$opts_names -q --quiet -v --verbose"
+
+    case ${prev} in
+        help)
+            COMPREPLY=( $(compgen -W "$opts_names" -- ${cur} ))
+            ;;
+        install|download)
+            opts=$(perlbrew available)
+            COMPREPLY=( $(compgen -W "$opts" -- ${cur} ))
+            return 0
+            ;;
+        list)
+            opts=$(perlbrew list | sed -e 's/^..//' -e 's/ .*//')
+            COMPREPLY=( $(compgen -W "$opts" -- ${cur} ))
+            return 0
+            ;;
+        use|switch|exec|uninstall)
+            opts=$(perlbrew list | grep '^\*' | sed -e 's/..//' -e 's/ .*//')
+            COMPREPLY=( $(compgen -W "$opts" -- ${cur} ))
+            return 0
+            ;;
+        *)
+            ;;
+    esac
+
+    COMPREPLY=( $(compgen -W "$opts_all" -- ${cur} ))
+    return 0
+} &&
+complete -F _perlbrew perlbrew
