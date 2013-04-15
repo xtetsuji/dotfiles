@@ -105,3 +105,33 @@ _perlbrew()
     return 0
 } &&
 complete -F _perlbrew perlbrew
+
+type pbpaste >/dev/null 2>&1 &&
+_pbpaste(){
+    local cur prev opts i
+    COMPREPLY=()
+    cur="${COMP_WORDS[COMP_CWORD]}"
+    prev="${COMP_WORDS[COMP_CWORD-1]}"
+    opts="-help -Prefer"
+    case ${prev} in
+        -Prefer)
+            opts="rtf ps txt"
+            ;;
+        *)
+            ;;
+    esac
+    COMPREPLY=( $(compgen -W "$opts" -- ${cur} ))
+    return 0
+} &&
+complete -F _pbpaste pbpaste
+
+type pbcopy >/dev/null 2>&1 &&
+_pbcopy(){
+    COMPREPLY=()
+    cur="${COMP_WORDS[COMP_CWORD]}"
+    prev="${COMP_WORDS[COMP_CWORD-1]}"
+    opts="-help"
+    COMPREPLY=( $(compgen -W "$opts" -- ${cur} ))
+    return 0
+} &&
+complete -F _pbpaste pbpaste
