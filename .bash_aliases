@@ -74,6 +74,7 @@ alias suddenly_death='perl -MAcme::SuddenlyDeath -E "say suddenly_death(@ARGV)"'
 ###
 alias my-ssh-add='ssh-add ~/.ssh/{id_dsa,nvlocal,ffpartner,jitakulocal,sakura_vps,root-waffle2,github,host1}'
 alias ssh-keylist="ssh-add -l | sed -e 's;/[^[:space:]]*/;;'"
+alias hup-autossh='killall -HUP autossh'
 
 # SSH_XTERM='env TERM=xterm ssh'
 # alias ssh-tetsuji-portbind='$SSH_XTERM tetsuji.jp.portbind -t screen -xR waffle'
