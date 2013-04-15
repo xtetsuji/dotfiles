@@ -39,7 +39,6 @@ _cdj()
     cur="${COMP_WORDS[COMP_CWORD]}"
     prev="${COMP_WORDS[COMP_CWORD-1]}"
     opts=$(for i in $(seq 0 2 $((${#CDJ_DIR_MAP[*]}-2)) ) ; do echo ${CDJ_DIR_MAP[$i]} ; done ; echo "-h -v -l")
-    opts=${opts% }
     #echo ""
     #echo "> cur=$cur prev=$prev COMP_CWORD=$COMP_CWORD"
     #echo "> opts=$opts"
@@ -49,6 +48,7 @@ _cdj()
         -l)
             opts=$(for i in $(seq 0 2 $((${#CDJ_DIR_MAP[*]}-2)) ) ; do echo ${CDJ_DIR_MAP[$i]} ; done)
             COMPREPLY=( $(compgen -W "$opts" -- ${cur} ))
+            return 0
             ;;
         *)
             ;;
