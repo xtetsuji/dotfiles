@@ -1,0 +1,10 @@
+# -*- shell-script -*-
+# $Id: .inputrc,v 1.1 2005/05/19 15:28:17 ogata Exp $
+# $Source: /var/cvs/dot/waffle/.inputrc,v $
+# ogata 2005/05/20(Fri)
+
+### Is following settings legacy?
+#set kanji-code euc
+#set convert-meta off
+#set meta-flag on
+#set output-meta on
