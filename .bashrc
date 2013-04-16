@@ -4,18 +4,23 @@
 ### (インタラクティブでない場合、何もしない)
 test -z "$PS1" && return
 
-shopt -s histappend
-shopt -s checkwinsize
-
 ### locale is UTF-8 ordinary on modern Debian and some dists.
 if    [ -f /etc/locale.gen ] \
    && grep -i '^ja_JP\.UTF-8' /etc/locale.gen >/dev/null 2>&1 ; then
     export LANG=ja_JP.UTF-8
 fi
 
+### Personal secret settings.
+if [ -f ~/.bash_secret ] ; then
+    source ~/.bash_secret
+fi
 ### Aliases
 if [ -f ~/.bash_aliases ] ; then
     source ~/.bash_aliases
+fi
+### add at 2011/11/07
+if [ -f ~/perl5/perlbrew/etc/bashrc ] ; then
+    source ~/perl5/perlbrew/etc/bashrc
 fi
 
 case `uname` in
@@ -45,14 +50,10 @@ if [ "$color_prompt" = yes ] ; then
 fi
 unset color_prompt
 
-### add at 2011/11/07
-if [ -f ~/perl5/perlbrew/etc/bashrc ] ; then
-    source ~/perl5/perlbrew/etc/bashrc
-fi
-
 ### add at 2013/02/24
 export GROWL_ANY_DEFAULT_BACKEND=CocoaGrowl
 export GROWL_ANY_DEBUG=0
+# I like CocoaGrowl than MacGrowl.
 
 ### proxy
 export http_proxy=http://localhost:8080/
@@ -70,12 +71,20 @@ function share_history {
 }
 PROMPT_COMMAND='share_history'
 shopt -u histappend
+shopt -s checkwinsize
+### add at 2012/07/01
+# http://blog.withsin.net/2010/12/29/bash%E3%81%AEhistcontrol%E5%A4%89%E6%95%B0/
+# ignoredups：連続した同一コマンドの履歴を1回に
+# ignorespace：空白から始まるコマンドを履歴に残さない
+# ignoreboth:上記の両方を設定
+export HISTCONTROL=ignoreboth
 
 ### bash_completion
 if type brew >/dev/null 2>&1 && [ -f $(brew --prefix)/etc/bash_completion ] ; then
+    # Mac homebrew
     source $(brew --prefix)/etc/bash_completion
-fi
-if [ -f /etc/bash_completion ] ; then
+elif [ -f /etc/bash_completion ] ; then
+    # Debian
     source /etc/bash_completion
 fi
 
@@ -84,19 +93,7 @@ if type lv >/dev/null 2>&1 ; then
     export PAGER=lv
 fi
 
-### add at 2012/07/01
-# http://blog.withsin.net/2010/12/29/bash%E3%81%AEhistcontrol%E5%A4%89%E6%95%B0/
-# ignoredups：連続した同一コマンドの履歴を1回に
-# ignorespace：空白から始まるコマンドを履歴に残さない
-# ignoreboth:上記の両方を設定
-export HISTCONTROL=ignoreboth
-
 ### add at 2012/04/25
 export JAVA_HOME=/System/Library/Frameworks/JavaVM.framework/Home
 export AWS_RDS_HOME=$HOME/tmp/RDSCli-1.6.001
 export AWS_CREDENTIAL_FILE=$AWS_RDS_HOME/credential-file-path
-
-### Personal secret settings.
-if [ -f ~/.bash_secret ] ; then
-    source ~/.bash_secret
-fi
