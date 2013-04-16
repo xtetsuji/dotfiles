@@ -4,12 +4,6 @@
 ### (インタラクティブでない場合、何もしない)
 test -z "$PS1" && return
 
-### locale is UTF-8 ordinary on modern Debian and some dists.
-if    [ -f /etc/locale.gen ] \
-   && grep -i '^ja_JP\.UTF-8' /etc/locale.gen >/dev/null 2>&1 ; then
-    export LANG=ja_JP.UTF-8
-fi
-
 ### Personal secret settings.
 if [ -f ~/.bash_secret ] ; then
     source ~/.bash_secret
@@ -92,6 +86,21 @@ fi
 if type lv >/dev/null 2>&1 ; then
     export PAGER=lv
 fi
+if type vi >/dev/null 2>&1 ; then
+    export EDITOR=vi
+fi
+
+if ! type lv &>/dev/null && type less &>/dev/null ; then
+    alias lv=less
+    export LESS=-M
+    if type /usr/bin/lesspipe &>/dev/null ; then
+        export LESSOPEN="| /usr/bin/lesspipe '%s'"
+        export LESSCLOSE="/usr/bin/lesspipe '%s' '%s'"
+    fi
+fi
+
+# avoid Ctrl-D logout.
+IGNOREEOF=3
 
 ### add at 2012/04/25
 export JAVA_HOME=/System/Library/Frameworks/JavaVM.framework/Home
