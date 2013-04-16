@@ -247,7 +247,7 @@ alias cdclear='dirs -c'
 
 # Jump cd as shortcut key.
 function cdj {
-    declare arg subarg dir i
+    declare arg subarg dir i key value warn
     arg=$1
     subarg=$2
     if [ -z "$arg" -o "$arg" = "-h" ] || [ "$arg" = "-l" -a -z "$subarg" ] ; then
@@ -262,7 +262,12 @@ function cdj {
             key=${CDJ_DIR_MAP[$i]}
             value=${CDJ_DIR_MAP[$((i+1))]}
             if [ "$arg" = "-v" ] ; then
-                printf "%8s => %s\n" $key $value
+                if [ ! -d "$value" ] ; then
+                    warn=" ***NOT_FOUND***"
+                else
+                    warn=""
+                fi
+                printf "%8s => %s%s\n" "$key" "$value" "$warn"
             elif [ "$arg" = "-l" ] ; then
                 if [ $key = $subarg ] ; then
                     echo $value
