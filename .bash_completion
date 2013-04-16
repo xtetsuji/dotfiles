@@ -135,3 +135,13 @@ _pbcopy(){
     return 0
 } &&
 complete -F _pbpaste pbpaste
+
+type brew >/dev/null 2>&1 &&
+_brew(){
+    COMPREPLY=()
+    cur="${COMP_WORDS[COMP_CWORD]}"
+    prev="${COMP_WORDS[COMP_CWORD-1]}"
+    opts="info home options install uninstall search list update upgrade doctor --env --config create edit"
+    COMPREPLY=( $(compgen -W "$opts" -- ${cur} ))
+} &&
+complete -F _brew brew
