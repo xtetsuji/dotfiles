@@ -27,7 +27,7 @@ if [ -d /Developer/usr/bin ] ; then
     PATH=$PATH:/Developer/usr/bin
 fi
 if [ -d ~/git/@github/xtetsuji/various-commands/bin ] ; then
-    PATH=$PATH::~/git/@github/xtetsuji/various-commands/bin
+    PATH=$PATH:~/git/@github/xtetsuji/various-commands/bin
 fi
 
 ### Locale / Lang
