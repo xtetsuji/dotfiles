@@ -1,0 +1,4 @@
+comment	\s*#.*	red
+header	^[A-Z]\S+:	blue	http:\S+	underline
+diff	^\+.*	red	^-.*	blue	^@.*	yellow
+apache	\[.*?\]	blue	"[A-Z].*?"	underline
