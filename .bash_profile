@@ -42,6 +42,8 @@ elif  [ -f /etc/locale.gen ] \
    && grep -i '^ja_JP\.eucJP' /etc/locale.gen >/dev/null 2>&1 ; then
     export LANG=ja_JP.eucJP
     export JLESSCHARSET=japanese-euc
+elif [ `uname` = Darwin ] ; then
+    export LANG=ja_JP.UTF-8
 else
     export LANG=C
 fi
