@@ -101,10 +101,21 @@ _perlbrew()
             ;;
     esac
 
-    COMPREPLY=( $(compgen -W "$opts_all" -- ${cur} ))
+    COMPREPLY=( $(compgen -W "$opts_all" -- ${cur} ) )
     return 0
 } &&
 complete -F _perlbrew perlbrew
+
+_cpanm(){
+    local cur prev opts i
+    COMPREPLY=()
+    cur="${COMP_WORDS[COMP_CWORD]}"
+    prev="${COMP_WORDS[COMP_CWORD-1]}"
+    opts="-v --verbose -q --quiet --interactive -f --force -n --notest --test-only -S --sudo --installdeps --showdeps --reinstall --mirro --mirror-only --prompt -l --local-lib -L --local-lib-contained --self-contained --auto-cleanup --self-upgrade --info --look -V --version"
+    COMPREPLY=( $(compgen -W "$opts" -- ${cur} ))
+    return 0
+} &&
+complete -o default -F _cpanm cpanm
 
 type pbpaste >/dev/null 2>&1 &&
 _pbpaste(){
