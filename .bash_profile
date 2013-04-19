@@ -13,6 +13,8 @@ if [ -n "$BASH_VERSION" ] ; then
     fi
 fi
 
+# Read "perlbrew" in .bashrc path definition fast than in .bash_profile other definitions.
+
 ### PATH
 export PATH
 if [ -d ~/bin ] ; then
