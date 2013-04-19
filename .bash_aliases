@@ -400,6 +400,34 @@ function reset-proxyenv {
     unset ftp_proxy
 }
 
+function clean-path {
+    declare p new_path 
+    declare -a path_array path_array_queue
+    OLD_PATH="$PATH"
+    path_array=( $(echo $(echo $PATH | sed -e 's/::*/ /g') ) )
+    echo "OLD_PATH=$PATH"
+    #echo "path_array=${path_array[*]}"
+    for p in "${path_array[@]}" ; do # array quoted "@" is each element quoted.
+        #echo "p=$p"
+        for q in "${path_array_queue[*]}" ; do
+            if [ "$p" = "$q" ] ; then
+                # Already queued
+                continue 2
+            fi
+        done
+        if [ -d "$p" ] ; then
+            new_path="$new_path:$p"
+            path_array_queue[${#path_array_queue[*]}]="$new_path"
+        fi
+    done
+    new_path="${new_path#:}"
+    new_path="${new_path%:}"
+    echo "NEW_PATH=$new_path"
+    NEW_PATH="$new_path"
+    echo "In this version, dry-run."
+    echo "Please \"export PATH=\"$NEW_PATH\" by hand."
+}
+
 # ssh と tail を使った簡単リモート通知
 # ただ使い方が面倒
 # http://d.hatena.ne.jp/punitan/20110416/1302928953
