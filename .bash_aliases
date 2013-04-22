@@ -74,8 +74,7 @@ alias suddenly_death='perl -MAcme::SuddenlyDeath -E "say suddenly_death(@ARGV)"'
 ###
 # ~/.ssh/keylist.txt has private key filename per line.
 #alias my-ssh-add='eval ssh-add ~/.ssh/{$(cat ~/.ssh/keylist.txt | xargs echo | sed -e "s/ /,/g")}'
-alias my-ssh-add='for key in $(<~/.ssh/keylist.txt) ; do ssh-add ~/.ssh/$key ; done'
-
+alias my-ssh-add='for key in $(<~/.ssh/keylist.txt) ; do ssh-add ~/.ssh/$key ; done ; unset key'
 alias ssh-keylist="ssh-add -l | sed -e 's;/[^[:space:]]*/;;'"
 alias hup-autossh='killall -HUP autossh'
 
