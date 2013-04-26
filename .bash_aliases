@@ -19,6 +19,9 @@ case "$UNAME" in
 esac
 
 alias lv='lv -c'
+if ! type lv >/dev/null 2>&1 && type less >/dev/null 2>&1 ; then
+    alias lv='echo "lv is aliased as less" 1>&2 ; less'
+fi
 alias tree='tree -C'
 alias mv='mv -i'
 alias en='env LANG=C '
@@ -65,8 +68,8 @@ alias perl-deparse='perl -MO=Deparse '
 function perl-module { perl -M$1 -e 1 ; }
 function perl-flymake { pfswatch -q $1 -e perl -wc $1 ; }
 function perl-installed-modules { perl -MExtUtils::Installed -E 'say($_) for ExtUtils::Installed->new->modules' ; }
-alias uri-unescape='perl -MURI::Escape=uri_unescape -E "say uri_unescape(join q/ /, @ARGV)" '
-alias uri-escape='perl -MURI::Escape=uri_escape -E "say uri_escape(join q/ /, @ARGV)" '
+alias uri_unescape='perl -MURI::Escape=uri_unescape -E "say uri_unescape(join q/ /, @ARGV)" '
+alias uri_escape='perl -MURI::Escape=uri_escape -E "say uri_escape(join q/ /, @ARGV)" '
 alias suddenly_death='perl -MAcme::SuddenlyDeath -E "say suddenly_death(@ARGV)"'
 
 ###
@@ -427,7 +430,7 @@ function clean-path {
     echo "NEW_PATH=$new_path"
     NEW_PATH="$new_path"
     echo "In this version, dry-run."
-    echo "Please \"export PATH=\"$NEW_PATH\" by hand."
+    echo "Please 'export PATH=\"$NEW_PATH\"' by hand."
 }
 
 # ssh と tail を使った簡単リモート通知
@@ -435,6 +438,7 @@ function clean-path {
 # http://d.hatena.ne.jp/punitan/20110416/1302928953
 # 2011/12/16
 function snotifyd {
+    declare host remote_log line
     declare -r IMAGE_PATH=$HOME/Pictures/min_x40_mini.png
     host=$1
     if [ -z "$host" ] ; then
@@ -446,12 +450,9 @@ function snotifyd {
         remote_log='$HOME/log/growler.log'
     fi
     echo "start snotify to $host:$remote_log"
-    declare line
     ssh $host env LANG=C tail -q -n 0 -F "$remote_log" \
         | while read line ; do echo "$line" ; growlnotify -s -m "$line" -t $host ; done
-
     #| perl -e 'system qw/growlnotify -s -m/, $_, '$host' while <STDIN>;'
-
 }
 
 unset ALIASES
