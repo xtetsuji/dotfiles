@@ -1,6 +1,7 @@
 # -*- makefile -*-
 
 BACKUP_EXT	= orig
+UNAME		= $(shell uname)
 
 usage:
 	@echo "Usage:"
@@ -18,6 +19,7 @@ deploy:
 		test $${f} == .git -o $${f} == .git/ && continue ; \
 		test $${f} == .gitignore && continue ; \
 		test $${f} == .DS_Store && continue ; \
+		test $${f} == .xsession -a "$(UNAME)" == Darwin && continue ; \
 		test -d $${f} && continue ; \
 		if [ -f ~/$${f} ] && [ ! -L ~/$${f} ] ; then \
 			echo "backup as $${f} to $${f}.$(BACKUP_EXT)" ; \
@@ -28,3 +30,4 @@ deploy:
 
 update:
 	git pull origin master
+
