@@ -30,6 +30,10 @@ case `uname` in
 	;;
 esac
 
+alias grep='grep --color=auto'
+alias fgrep='fgrep --color=auto'
+alias egrep='egrep --color=auto'
+
 ### Prompt
 case "$TERM" in
     xterm-color) color_prompt=yes;;
