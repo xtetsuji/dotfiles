@@ -1,8 +1,14 @@
-# -*- mode: shell-script ; coding: utf-8 -*-
+# -*- mode: shell-script ; coding: utf-8 ; -*-
 
 ### relax if it is not interactive.
 ### (インタラクティブでない場合、何もしない)
 test -z "$PS1" && return
+
+UNAME="$(uname)"
+
+###
+### read some config
+###
 
 ### Personal secret settings.
 if [ -f ~/.bash_secret ] ; then
@@ -17,24 +23,9 @@ if [ -f ~/perl5/perlbrew/etc/bashrc ] ; then
     source ~/perl5/perlbrew/etc/bashrc
 fi
 
-case `uname` in
-    Darwin) ### Mac OS X
-	alias ls='ls -FG' # BSD type "ls"
-	# see: http://ascii.jp/elem/000/000/594/594203/
- 	alias CharacterPalette='open /System/Library/Input\ Methods/CharacterPalette.app/'
-	alias ArchiveUtility='open /System/Library/CoreServices/Archive\ Utility.app/'
-	alias iPhoneSimulator='open /Developer/Platforms/iPhoneSimulator.platform/Developer/Applications/iPhone\ Simulator.app'
-	;;
-    Linux)
-	alias ls='ls --color=auto'
-	;;
-esac
-
-alias grep='grep --color=auto'
-alias fgrep='fgrep --color=auto'
-alias egrep='egrep --color=auto'
-
+###
 ### Prompt
+###
 case "$TERM" in
     xterm-color) color_prompt=yes;;
     xterm-256color) color_prompt=yes;;
@@ -48,12 +39,20 @@ if [ "$color_prompt" = yes ] ; then
 fi
 unset color_prompt
 
-### add at 2013/02/24
-export GROWL_ANY_DEFAULT_BACKEND=CocoaGrowl
-export GROWL_ANY_DEBUG=0
-# I like CocoaGrowl than MacGrowl.
+###
+### Growl
+###
 
+### add at 2013/02/24
+if [ "$UNAME" = Darwin ] ; then
+    export GROWL_ANY_DEFAULT_BACKEND=CocoaGrowl
+    export GROWL_ANY_DEBUG=0
+    # I like CocoaGrowl than MacGrowl.
+fi
+
+###
 ### proxy
+###
 export http_proxy=http://localhost:8080/
 export https_proxy=$http_proxy
 export ftp_proxy=$http_proxy
@@ -77,7 +76,9 @@ shopt -s checkwinsize
 # ignoreboth:上記の両方を設定
 export HISTCONTROL=ignoreboth
 
+###
 ### bash_completion
+###
 if type brew >/dev/null 2>&1 && [ -f $(brew --prefix)/etc/bash_completion ] ; then
     # Mac homebrew
     source $(brew --prefix)/etc/bash_completion
@@ -85,23 +86,56 @@ elif [ -f /etc/bash_completion ] ; then
     # Debian
     source /etc/bash_completion
 fi
+# and see "~/.bash_completion". It is read by builtin bash_completion.
+
+###
+### pager and editor
+###
 
 ### add at 2012/03/19
 if type lv >/dev/null 2>&1 ; then
     export PAGER=lv
+elif type jless >/dev/null 2>&1 ; then
+    export PAGER=jless
+elif type less >/dev/null 2>&1 ; then
+    export PAGER=less
+else
+    export PAGER=more
 fi
+
+if [ "$PAGER" != lv ] ; then
+    alias lv="$PAGER"
+fi
+
 if type vi >/dev/null 2>&1 ; then
     export EDITOR=vi
 fi
 
-if ! type lv &>/dev/null && type less &>/dev/null ; then
-    alias lv=less
+if type less &>/dev/null ; then
     export LESS=-M
     if type /usr/bin/lesspipe &>/dev/null ; then
         export LESSOPEN="| /usr/bin/lesspipe '%s'"
         export LESSCLOSE="/usr/bin/lesspipe '%s' '%s'"
     fi
+    case "$LANG" in
+        ja_JP.UTF-8) JLESSCHARSET=utf-8 ;    LV=-Ou8 ;;
+        ja_JP.*) JLESSCHARSET=japanese-euc ; LV=-Oej ;;
+        *) JLESSCHARSET=latin1 ;             LV=-Al1 ;;
+    esac
+    export JLESSCHARSET LV
+elif [ "$UNAME" =~ CYGWIN.* ] ; then # Do not quote "=~"'s right side.
+    alias lv='lv -Os'
 fi
+
+###
+### some config by env
+###
+
+export CVS_RSH=ssh
+export RSYNC_RSH=ssh
+export PERLDOC_PAGER='lv -c'
+
+set bell-style visible
 
 # avoid Ctrl-D logout.
 IGNOREEOF=3
@@ -110,3 +144,5 @@ IGNOREEOF=3
 export JAVA_HOME=/System/Library/Frameworks/JavaVM.framework/Home
 export AWS_RDS_HOME=$HOME/tmp/RDSCli-1.6.001
 export AWS_CREDENTIAL_FILE=$AWS_RDS_HOME/credential-file-path
+
+unset UNAME

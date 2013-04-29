@@ -32,6 +32,12 @@ if [ -d ~/git/@github/xtetsuji/various-commands/bin ] ; then
     PATH=$PATH:~/git/@github/xtetsuji/various-commands/bin
 fi
 
+### MANPATH
+export MANPATH
+
+### INFOPATH
+export INFOPATH
+
 ### Locale / Lang
 
 # locale is UTF-8 ordinary on modern Debian and some dists.

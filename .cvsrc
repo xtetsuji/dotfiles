@@ -1,4 +1,5 @@
 cvs -z3 -q
+checkout -P
 update -dP
 diff -uaN
 log -N

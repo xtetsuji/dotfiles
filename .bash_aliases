@@ -1,4 +1,4 @@
-# -*- shell-script -*-
+# -*- mode: shell-script ; coding: utf-8 ; -*-
 
 declare ALIASES=$HOME/.bash_aliases
 declare UNAME=$(uname)
@@ -6,17 +6,30 @@ declare UNAME=$(uname)
 ###
 ### Basics
 ##
+
 case "$UNAME" in
     Darwin) ### Mac OS X
 	alias ls='ls -FG' # BSD type "ls"
 	alias lsx='ls -xG'
 	# see: http://ascii.jp/elem/000/000/594/594203/
+ 	alias CharacterPalette='open /System/Library/Input\ Methods/CharacterPalette.app/'
+	alias ArchiveUtility='open /System/Library/CoreServices/Archive\ Utility.app/'
+	alias iPhoneSimulator='open /Developer/Platforms/iPhoneSimulator.platform/Developer/Applications/iPhone\ Simulator.app'
 	;;
     Linux)
 	alias ls='ls --color=auto'
 	alias lsx='ls -x --color=always'
 	;;
+    CYGWIN*)
+        alias ls='ls --color -F --show-control-chars'
+        ;;
+    *)
+        ;;
 esac
+
+alias grep='grep --color=auto'
+alias fgrep='fgrep --color=auto'
+alias egrep='egrep --color=auto'
 
 alias lv='lv -c'
 if ! type lv >/dev/null 2>&1 && type less >/dev/null 2>&1 ; then
@@ -60,6 +73,10 @@ alias usr2='kill -USR2 '
 alias append-quote='sed -e "s/^/> /"'
 alias remove-quote='sed -e "s/^> //"'
 
+alias find-backups='find . -maxdepth 1 -name "?*~" -o -name "?*.bak" -o -name ".[^.]?*~" -o name ".[^.]*.bak"'
+
+function xtitle { echo -e "\033]0;$*\007\c" ; }
+
 ###
 ### Perl
 ###
@@ -68,6 +85,7 @@ alias perl-deparse='perl -MO=Deparse '
 function perl-module { perl -M$1 -e 1 ; }
 function perl-flymake { pfswatch -q $1 -e perl -wc $1 ; }
 function perl-installed-modules { perl -MExtUtils::Installed -E 'say($_) for ExtUtils::Installed->new->modules' ; }
+function perllv { perldoc -l $1 | xargs --no-run-if-empty lv ; }
 alias uri_unescape='perl -MURI::Escape=uri_unescape -E "say uri_unescape(join q/ /, @ARGV)" '
 alias uri_escape='perl -MURI::Escape=uri_escape -E "say uri_escape(join q/ /, @ARGV)" '
 alias suddenly_death='perl -MAcme::SuddenlyDeath -E "say suddenly_death(@ARGV)"'
@@ -140,6 +158,33 @@ if type xrandr >/dev/null 2>&1 ; then
     alias vga-display='xrandr --output VGA --mode 1024x768'
     alias lcd-display='xrandr --output LVDS --mode 1024x768'
 fi
+if type wavemon >/dev/null 2>&1 ; then
+    alias xwavemon='env LANG=C xterm +sb -e wavemon'
+fi
+if type mlterm >/dev/null 2>&1 ; then
+    alias ml-server="mlterm -j genuine"
+    # If running ml-server at first, then use mlclient by mlterm subprocess up.
+    alias mlclient-remote="mlclient --bg=black --fg=gray "
+    alias mlclient-local="mlclient --bg=#EEEEE6 --title=local -e 'screen -xR $USER'"
+fi
+
+###
+### Cygwin
+###
+if [[ "$UNAME" =~ CYGWIN.* ]] ; then # Do not quote "=~"'s right side.
+    alias halt='shutdown -s -f -t 0 '
+    alias uptime='cat /proc/loadavg'
+    alias hide-dotfile='for f in .??* ; do attrib +h ; done'
+    alias cdcygdesktop='cd "$(cygpath -D)"'
+    function cygcd {
+        local arg dir
+        arg="$1"
+        if echo "$arg" | grep '^shell:' &>/dev/null 2>&1 ; then
+            dir=$(getwssname "$arg")
+        fi
+        builtin cd "$dir"
+    }
+fi
 
 ###
 ### big functions
@@ -194,6 +239,7 @@ function attach-agent {
 }
 
 # 履歴を記録する cd の再定義
+# Initial release at 2005/03/22(Tue)
 function cd {
     if [ -z "$1" ] ; then
 	# cd 連打で余計な $DIRSTACK を増やさない
