@@ -80,7 +80,9 @@ function xtitle { echo -e "\033]0;$*\007\c" ; }
 ###
 ### Perl
 ###
-alias modperl-method='/usr/bin/perl -MModPerl::MethodLookup -e ModPerl::MethodLookup::print_method '
+alias modperl-method='/usr/bin/perl -MModPerl::MethodLookup -e print_method'
+alias modperl-object='/usr/bin/perl -MModPerl::MethodLookup -e print_object'
+alias modperl-module='/usr/bin/perl -MModPerl::MethodLookup -e print_module'
 alias perl-deparse='perl -MO=Deparse '
 function perl-module { perl -M$1 -e 1 ; }
 function perl-flymake { pfswatch -q $1 -e perl -wc $1 ; }
