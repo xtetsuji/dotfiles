@@ -80,6 +80,8 @@ function xtitle { echo -e "\033]0;$*\007\c" ; }
 ###
 ### Perl
 ###
+alias system-perldoc='/usr/bin/perldoc'
+alias system-perl='/usr/bin/perl'
 alias modperl-method='/usr/bin/perl -MModPerl::MethodLookup -e print_method'
 alias modperl-object='/usr/bin/perl -MModPerl::MethodLookup -e print_object'
 alias modperl-module='/usr/bin/perl -MModPerl::MethodLookup -e print_module'
