@@ -54,7 +54,8 @@ function exists { type $1 >/dev/null 2>&1 ; return $? ; }
 
 function extcount {
     local dir="${1:-.}"
-    find "$dir" -type f | sed -e 's/.*\.//' | grep -v '/' | sort | uniq c | sort -rnk1
+    find "$dir" -type f |  sed -e 's/.*\.//' | grep -v '/' | sort | uniq -c | sort -rnk1
+    # TODO: detection no-having-extension file and dotfile.
 }
 
 ###
