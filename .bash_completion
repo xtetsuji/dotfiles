@@ -209,4 +209,5 @@ _mojo(){
     esac
 
     COMPREPLY=( $(compgen -W "$opts_all" -- ${cur} ))
-}
+} &&
+complete -F _mojo mojo
