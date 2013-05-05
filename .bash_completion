@@ -78,9 +78,10 @@ _perlbrew()
         download mirro version help"
     opts_all="$opts_names -q --quiet -v --verbose"
 
-    case ${prev} in
+    case "${prev}" in
         help)
             COMPREPLY=( $(compgen -W "$opts_names" -- ${cur} ))
+            return 0
             ;;
         install|download)
             opts=$(perlbrew available)
@@ -149,6 +150,7 @@ complete -F _pbpaste pbpaste
 
 type brew >/dev/null 2>&1 &&
 _brew(){
+    local cur prev opts
     # I refer to homebrew/0.9.4 for makeing it.
     COMPREPLY=()
     cur="${COMP_WORDS[COMP_CWORD]}"
@@ -160,6 +162,7 @@ complete -F _brew brew
 
 type tweetbot >/dev/null 2>&1 &&
 _tweetbot(){
+    local cur prev opts
     # I refer to homebrew/0.9.4 for makeing it.
     COMPREPLY=()
     cur="${COMP_WORDS[COMP_CWORD]}"
@@ -171,3 +174,39 @@ complete -F _tweetbot tweetbot
 
 type zcssh >/dev/null 2>&1 &&
 complete -F _ssh zcssh
+
+# TODO: under construction.
+type mojo >/dev/null 2>&1 &&
+_mojo(){
+    local cur prev opts_names opts_all opts
+    COMPREPLY=()
+    cur="${COMP_WORDS[COMP_CWORD]}"
+    prev="${COMP_WORDS[COMP_CWORD-1]}"
+    opts_names="cgi cpanify daemon eval generate get inflate prefork psgi routes test version"
+    opts_all="$opts_name -h --help --home -m --mode"
+
+    case "${prev}" in
+        help)
+            COMPREPLY=( $(compgen -W "$opts_names" -- ${cur} ))
+            return 0
+            ;;
+        cgi)
+            COMPREPLY=( $(compgen -W "--nph" -- ${cur} ))
+            return 0
+            ;;
+        cpanify)
+            # [OPTIONS] [FILE]
+            opts="-p --password -u --user"
+            COMPREPLY=( $(compgen -W "$opts" -- ${cur} ))
+            ;;
+        daemon)
+            # TODO: options argument completion.
+            opts="-b --backlog -c --clients -g --group -i --inactivity -l --listen -p --proxy -r --requests -u --user"
+            COMPREPLY=( $(compgen -W "$opts" -- ${cur} ))
+            ;;
+        *)
+            ;;
+    esac
+
+    COMPREPLY=( $(compgen -W "$opts_all" -- ${cur} ))
+}
