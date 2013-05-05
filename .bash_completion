@@ -183,7 +183,7 @@ _mojo(){
     cur="${COMP_WORDS[COMP_CWORD]}"
     prev="${COMP_WORDS[COMP_CWORD-1]}"
     opts_names="cgi cpanify daemon eval generate get inflate prefork psgi routes test version"
-    opts_all="$opts_name -h --help --home -m --mode"
+    opts_all="$opts_names -h --help --home -m --mode"
 
     case "${prev}" in
         help)
