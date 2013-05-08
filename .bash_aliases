@@ -59,6 +59,7 @@ function extcount {
 }
 
 function init-git-flavor {
+    # TODO: Does pager recognized color sequence?
      git config --global color.ui true
      git config --global alias.graph "log --graph --date-order --all --pretty=format:'%h %Cred%d %Cgreen%ad %Cblue%cn %Creset%s' --date=short" 
 }
@@ -137,6 +138,13 @@ alias hup-autossh='killall -HUP autossh'
 if [ "$UNAME" = Darwin ] ; then
     alias airport='/System/Library/PrivateFrameworks/Apple80211.framework/Versions/Current/Resources/airport '
     alias airport-info='airport -I'
+    function search-ssid {
+        local ssid=$1
+        while true ; do
+            airport -s | grep "$ssid"
+            sleep 3
+        done
+    }
     alias ssid='airport-info | grep " SSID: " | sed -e "s/.* //"'
     alias CharacterPalette='open /System/Library/Input\ Methods/CharacterPalette.app/'
     alias ArchiveUtility='open /System/Library/CoreServices/Archive\ Utility.app/'
