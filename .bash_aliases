@@ -83,6 +83,10 @@ alias find-backups='find . -maxdepth 1 -name "?*~" -o -name "?*.bak" -o -name ".
 
 function xtitle { echo -e "\033]0;$*\007\c" ; }
 
+if type emacsclient >/dev/null 2>&1 && ! type ec >/dev/null 2>&1 ; then
+    alias ec=emacsclient
+fi
+
 ###
 ### Perl
 ###
