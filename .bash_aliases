@@ -58,6 +58,11 @@ function extcount {
     # TODO: detection no-having-extension file and dotfile.
 }
 
+function init-git-flavor {
+     git config --global color.ui true
+     git config --global alias.graph "log --graph --date-order --all --pretty=format:'%h %Cred%d %Cgreen%ad %Cblue%cn %Creset%s' --date=short" 
+}
+
 ###
 ### Utilities
 ###
