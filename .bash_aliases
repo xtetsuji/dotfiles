@@ -60,8 +60,10 @@ function extcount {
 
 function init-git-flavor {
     # TODO: Does pager recognized color sequence?
-     git config --global color.ui true
-     git config --global alias.graph "log --graph --date-order --all --pretty=format:'%h %Cred%d %Cgreen%ad %Cblue%cn %Creset%s' --date=short" 
+    git config —global push.default simple
+    # true or false?
+    git config --global color.ui false
+    git config --global alias.graph "log --graph --date-order --all --pretty=format:'%h %Cred%d %Cgreen%ad %Cblue%cn %Creset%s' --date=short" 
 }
 
 ###
