@@ -138,8 +138,11 @@ alias hup-autossh='killall -HUP autossh'
     #alias notify='read line; growlnotify -m "$line"'
 #fi
 if [ "$UNAME" = Darwin ] ; then
-    alias airport='/System/Library/PrivateFrameworks/Apple80211.framework/Versions/Current/Resources/airport '
-    alias airport-info='airport -I'
+    # Recommend to create symlink /usr/sbin/airport as the airport.
+    if [ ! -f /sbin/airport ] || [ ! -f /usr/sbin/airport ] ; then
+        alias airport='/System/Library/PrivateFrameworks/Apple80211.framework/Versions/Current/Resources/airport'
+    fi
+    #alias airport-info='airport -I'
     function search-ssid {
         local ssid=$1
         while true ; do
