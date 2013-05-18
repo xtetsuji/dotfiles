@@ -211,3 +211,15 @@ _mojo(){
     COMPREPLY=( $(compgen -W "$opts_all" -- ${cur} ))
 } &&
 complete -F _mojo mojo
+
+
+type minil >/dev/null 2>&1 &&
+_minil(){
+    local cur prev opts
+    COMPREPLY=()
+    cur="${COMP_WORDS[COMP_CWORD]}"
+    prev="${COMP_WORDS[COMP_CWORD-1]}"
+    opts="new test dist install release"
+    COMPREPLY=( $(compgen -W "$opts" -- ${cur} ))
+} &&
+complete -F _minil minil
