@@ -330,6 +330,14 @@ alias cdclear='dirs -c'
 
 # Jump cd as shortcut key.
 function cdj {
+    ### cdj needs CDJ_DIR_MAP array definition:
+    # CDJ_DIR_MAP array Example. I define in ~/.bash_secret
+#     CDJ_DIR_MAP=(
+#         dbox ~/Dropbox
+#         cvs  ~/cvs
+#         etc  /etc
+#         );
+    #echo "DEBUG: dir arg=$arg #CDJ_DIR_MAP=${#CDJ_DIR_MAP[*]}"
     declare arg subarg dir i key value warn
     arg=$1
     subarg=$2
@@ -352,7 +360,7 @@ function cdj {
                 fi
                 printf "%8s => %s%s\n" "$key" "$value" "$warn"
             elif [ "$arg" = "-l" ] ; then
-                if [ $key = $subarg ] ; then
+                if [ "$key" = "$subarg" ] ; then
                     echo $value
                     return
                 fi
@@ -360,19 +368,17 @@ function cdj {
         done
         return
     fi
-    # CDJ_DIR_MAP array Example. I define in ~/.bash_secret
-#     CDJ_DIR_MAP=(
-#         dbox ~/Dropbox
-#         cvs  ~/cvs
-#         etc  /etc
-#         );
-    #echo "DEBUG: dir arg=$arg #CDJ_DIR_MAP=${#CDJ_DIR_MAP[*]}"
     for (( i=0; $i<${#CDJ_DIR_MAP[*]}; i=$((i+2)) )) ; do
         key="${CDJ_DIR_MAP[$i]}"
         value="${CDJ_DIR_MAP[$((i+1))]}"
         #echo "$key => $value"
         if [ "$key" = "$arg" ] ; then
-            cd "$value"
+            if [ -n "$subarg" ] ; then
+                dir="$value/$subarg"
+            else
+                dir="$value"
+            fi
+            cd "$dir"
             return
         fi
     done
