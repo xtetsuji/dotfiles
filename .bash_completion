@@ -219,7 +219,7 @@ _minil(){
     COMPREPLY=()
     cur="${COMP_WORDS[COMP_CWORD]}"
     prev="${COMP_WORDS[COMP_CWORD-1]}"
-    opts="new test dist install release"
+    opts="new test dist install release help"
     COMPREPLY=( $(compgen -W "$opts" -- ${cur} ))
 } &&
 complete -F _minil minil
