@@ -358,20 +358,22 @@ function cdj {
 #         etc  /etc
 #         );
     #echo "DEBUG: dir arg=$arg #CDJ_DIR_MAP=${#CDJ_DIR_MAP[*]}"
-    declare arg subarg dir i key value warn
-    arg=$1
-    subarg=$2
+    declare arg=$1 \
+            subarg=$2 \
+            dir i key value warn
     if [ -z "$arg" -o "$arg" = "-h" ] || [ "$arg" = "-l" -a -z "$subarg" ] ; then
+        ### help and usage mode
         echo "Usage: $FUNCNAME <directory_alias>"
         echo "       $FUNCNAME [-h|-v|-l <directory_alias>]"
         echo "-h: help"
         echo "-v: view defined lists"
         echo "-l <directory_alias>: view path specify alias."
         return
-    elif [ "$arg" = "-v" -o "$arg" = "-l" ] ; then
+    elif [ "$arg" = "-v" -o "$arg" = "-l" ] ; then 
+        ### view detail mode
         for (( i=0; $i<${#CDJ_DIR_MAP[*]}; i=$((i+2)) )) ; do
-            key=${CDJ_DIR_MAP[$i]}
-            value=${CDJ_DIR_MAP[$((i+1))]}
+            key="${CDJ_DIR_MAP[$i]}"
+            value="${CDJ_DIR_MAP[$((i+1))]}"
             if [ "$arg" = "-v" ] ; then
                 if [ ! -d "$value" ] ; then
                     warn=" ***NOT_FOUND***"
@@ -388,6 +390,7 @@ function cdj {
         done
         return
     fi
+    ### change directory mode
     for (( i=0; $i<${#CDJ_DIR_MAP[*]}; i=$((i+2)) )) ; do
         key="${CDJ_DIR_MAP[$i]}"
         value="${CDJ_DIR_MAP[$((i+1))]}"
