@@ -331,7 +331,19 @@ function cdlist {
 }
 
 function cdback {
-    popd $1 >/dev/null
+    #popd $1 >/dev/null
+    local num=$1 i
+    if [ -z "$num" -o "$num" = 1 ] ; then
+        popd >/dev/null
+        return
+    elif [[ "$num" =~ ^[0-9]+$ ]] ; then
+        for (( i=0 ; i<num ; i++ )) ; do
+            popd >/dev/null
+        done
+        return
+    else
+        echo "cdback: argument is invalid." >&2
+    fi
 }
 
 alias cdclear='dirs -c'
