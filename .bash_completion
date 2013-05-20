@@ -223,3 +223,26 @@ _minil(){
     COMPREPLY=( $(compgen -W "$opts" -- ${cur} ))
 } &&
 complete -F _minil minil
+
+# mdfind [-live] [-count] [-onlyin directory] [-name fileName] query
+# see: http://takuya-1st.hatenablog.jp/entry/20111116/1321427556
+type mdfind >/dev/null 2>&1 &&
+_mdfind(){
+    local cur prev opts
+    cur="${COMP_WORDS[COMP_CWORD]}"
+    prev="${COMP_WORDS[COMP_CWORD-1]}"
+    opts="-0 -live -count -onlyin -name"
+    COMPREPLY=( $(compgen -W "$opts" -- ${cur} ))
+} &&
+complete -F _mdfind mdfind
+
+# mdls [-name attributeName] [-raw [-nullMarker markerString]] file ...
+type mdls >/dev/null 2>&1 &&
+_mdls(){
+    local cur prev opts
+    cur="${COMP_WORDS[COMP_CWORD]}"
+    prev="${COMP_WORDS[COMP_CWORD-1]}"
+    opts="-name -raw -nullMarker"
+    COMPREPLY=( $(compgen -W "$opts" -- ${cur} ))
+} &&
+complete -F _mdls mdls
