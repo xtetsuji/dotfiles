@@ -147,9 +147,13 @@ if [ "$UNAME" = Darwin ] ; then
     if [ ! -f /sbin/airport ] || [ ! -f /usr/sbin/airport ] ; then
         alias airport='/System/Library/PrivateFrameworks/Apple80211.framework/Versions/Current/Resources/airport'
     fi
-    #alias airport-info='airport -I'
+    alias airport-info='airport -I'
     function search-ssid {
         local ssid=$1
+        if [ -z "$ssid" ] ; then
+            echo "specify ssid as first argument" >&2
+            return 1
+        fi
         while true ; do
             airport -s | grep "$ssid"
             sleep 3
