@@ -11,4 +11,6 @@ environment maybe.
 Now, I am using this dotfiles on my MacBook Air environment (Mountain Lion),
 and some version's Debian GNU/Linux environment.
 
+Those files license are **MIT License** without mentioned in it.
+
 OGATA Tetsuji at 2013/03/19
