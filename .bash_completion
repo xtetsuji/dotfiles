@@ -198,11 +198,13 @@ _mojo(){
             # [OPTIONS] [FILE]
             opts="-p --password -u --user"
             COMPREPLY=( $(compgen -W "$opts" -- ${cur} ))
+            return 0
             ;;
         daemon)
             # TODO: options argument completion.
             opts="-b --backlog -c --clients -g --group -i --inactivity -l --listen -p --proxy -r --requests -u --user"
             COMPREPLY=( $(compgen -W "$opts" -- ${cur} ))
+            return 0
             ;;
         *)
             ;;
