@@ -106,6 +106,21 @@ if type emacsclient >/dev/null 2>&1 && ! type ec >/dev/null 2>&1 ; then
     alias ec=emacsclient
 fi
 
+function debug {
+    local arg="$1"
+    if [ -z "$arg" ] ; then
+        echo "DEBUG is:"
+        echo $DEBUG
+    elif [ "$arg" = off -o "$arg" = "0" ] ; then
+        echo "unset DEBUG."
+        DEBUG=
+        unset DEBUG
+    elif [ "$arg" = on -o "$arg" = "1" ] ; then
+        echo "set DEBUG."
+        DEBUG=1
+    fi
+}
+
 ###
 ### Perl
 ###
