@@ -2,6 +2,7 @@
 .bash_secret
 .bash_history
 .cvspass
+.dotfiles
 .folders
 .mysql_history
 .ssh/
