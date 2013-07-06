@@ -111,6 +111,13 @@ fi
 # debug off
 function debug {
     local arg="$1"
+    if [ "x$arg" = "x--help" ] ; then
+        echo "Usage:"
+        echo "  debug"
+        echo "  debug on"
+        echo "  debug off"
+        return
+    fi
     if [ -z "$arg" ] ; then
         echo "DEBUG is:"
         echo $DEBUG
