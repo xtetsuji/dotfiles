@@ -26,6 +26,9 @@ case "$UNAME" in
     *)
         ;;
 esac
+if ! type lst >/dev/null 2>&1 ; then
+    alias lst='ls -t'
+fi
 
 alias grep='grep --color=auto'
 alias fgrep='fgrep --color=auto'
