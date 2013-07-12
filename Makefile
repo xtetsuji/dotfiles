@@ -3,11 +3,18 @@
 BACKUP_EXT	= orig
 UNAME		= $(shell uname)
 
+RSYNC_OPTS	= -avz -e ssh --exclude=Makefile --exclude=README.md --exclude=.git --exclude=.gitignore --exclude=.DS_Store
+
+REMOTE_USER	= $(USER)
+REMOTE_HOST	= 
+
 usage:
 	@echo "Usage:"
-	@echo "  make list"
-	@echo "  make deproy"
-	@echo "  make update #=> git pull origin master"
+	@echo "  make list             #=> ls -a"
+	@echo "  make deproy           #=> create symlink"
+	@echo "  make upload-files     #=> rsync to REMOTE_SERVER"
+	@echo "  make dry-upload-files #=> dry-run and ditto"
+	@echo "  make update           #=> git pull origin master"
 
 list:
 	ls -a
@@ -28,6 +35,20 @@ deploy:
 		ln -i -s $(PWD)/$${f} ~/ ; \
 	done ; true
 
+upload-files: .dotfiles
+	@echo "Start upload files to remote server."
+	@echo "If this is \"dotdir\", currently it is ignored and copy your hand.";
+	rsync $(RSYNC_OPTS) ./ $(REMOTE_USER)@$(REMOTE_HOST)
+
+dry-upload-files:
+	$(MAKE) upload-files RSYNC_OPTS="--dry-run $(RSYNC_OPTS)"
+
+.dotfiles:
+	date +"%Y/%m/%d %H:%M:%S" > $@
+	echo $(REMOTE_HOST) >> $@
+
 update:
 	git pull origin master
 
+clean:
+	rm -f .dotfiles
