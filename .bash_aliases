@@ -280,7 +280,6 @@ function attach-agent {
 	&& [ $TERM != screen-w ] \
 	&& [ $TERM != mlterm ]   \
         && [ $TERM != screen.mlterm ] ; then
-#	echo "execute TERM=(screen|screen-w|mlterm) environment!"
 	return 1
     fi
     declare sock childpid
