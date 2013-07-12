@@ -391,6 +391,14 @@ function cdback {
 
 alias cdclear='dirs -c'
 
+### ad-hoc chdir like aliases 
+alias ,=cdback
+alias ..="cd .."
+alias ...=".. ; ..;"
+alias ....="..; ..; ..;"
+alias .....="..; ..; ..; ..;"
+alias ......="..; ..; ..; ..; ..;"
+
 # Jump cd as shortcut key.
 function cdj {
     ### cdj needs CDJ_DIR_MAP array definition:
@@ -441,7 +449,7 @@ function cdj {
         if [ "$key" = "$arg" ] ; then
             if [ -n "$subarg" ] ; then
                 dir="$value/$subarg"
-            else
+
                 dir="$value"
             fi
             cd "$dir"
