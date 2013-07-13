@@ -38,6 +38,9 @@ deploy:
 upload-files: .dotfiles
 	@echo "Start upload files to remote server."
 	@echo "If this is \"dotdir\", currently it is ignored and copy your hand.";
+	if [ -z "$(REMOTE_HOST)" ] ; then \
+		echo "REMOTE_HOST is required" ; \
+	fi
 	rsync $(RSYNC_OPTS) ./ $(REMOTE_USER)@$(REMOTE_HOST)
 
 dry-upload-files:
