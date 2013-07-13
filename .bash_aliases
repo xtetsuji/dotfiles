@@ -341,7 +341,7 @@ function cdhist {
     if [ -z "$dirnum" ] ; then
 	echo "$FUNCNAME: Abort." 1>&2
     elif ( echo $dirnum | egrep '^[[:digit:]]+$' > /dev/null ) ; then
-	cd $( echo ${DIRSTACK[$dirnum]} | sed -e "s;^~;$HOME;" )
+	cd "$( echo ${DIRSTACK[$dirnum]} | sed -e "s;^~;$HOME;" )"
     else
 	echo "$FUNCNAME: Wrong." 1>&2
     fi
@@ -407,7 +407,7 @@ function cdj {
 #         cvs  ~/cvs
 #         etc  /etc
 #         );
-    #echo "DEBUG: dir arg=$arg #CDJ_DIR_MAP=${#CDJ_DIR_MAP[*]}"
+    test -n "$DEBUG" && echo "DEBUG: dir arg=$arg #CDJ_DIR_MAP=${#CDJ_DIR_MAP[*]}" 
     declare arg=$1 \
             subarg=$2 \
             dir i key value warn
