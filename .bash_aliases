@@ -444,11 +444,11 @@ function cdj {
     for (( i=0; $i<${#CDJ_DIR_MAP[*]}; i=$((i+2)) )) ; do
         key="${CDJ_DIR_MAP[$i]}"
         value="${CDJ_DIR_MAP[$((i+1))]}"
-        #echo "$key => $value"
+        test -n "$DEBUG" && echo "$key => $value"
         if [ "$key" = "$arg" ] ; then
             if [ -n "$subarg" ] ; then
                 dir="$value/$subarg"
-
+	    else
                 dir="$value"
             fi
             cd "$dir"
