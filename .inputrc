@@ -3,6 +3,8 @@
 # $Source: /var/cvs/dot/waffle/.inputrc,v $
 # ogata 2005/05/20(Fri)
 
+set completion-ignore-case on
+
 ### Is following settings legacy?
 #set kanji-code euc
 #set convert-meta off
