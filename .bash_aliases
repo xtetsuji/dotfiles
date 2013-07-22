@@ -286,17 +286,17 @@ function attach-agent {
     for sock in $( find /tmp -type s -name agent.\* -user $USER 2> /dev/null ) ; do
 	childpid=$( echo $sock | awk -F. '{ print $2 }' ) # ordinaly "sh"'s pid
 	if ps ux | grep $childpid | grep -v grep > /dev/null ; then
-	    eval $( ( cat /proc/$childpid/environ ; echo ) | tr "\000" "\n" | egrep ^SSH_AGENT_PID )
-	    if [ -z $SSH_AGENT_PID ] ; then
-		echo "${FUNCNAME}: error! SSH_AGENT_PID unknonw"
-		unset SSH_AGENT_PID
-		return 1
-	    elif ! ( ps ux | grep $SSH_AGENT_PID | grep -v grep > /dev/null ) ; then
-		echo "${FUNCNAME}: error! no process found corresponding SSH_AGENT_PID=$SSH_AGENT_PID"
-		unset SSH_AGENT_PID
-		return 1
-	    fi
-	    export SSH_AGENT_PID
+# 	    eval $( ( cat /proc/$childpid/environ ; echo ) | tr "\000" "\n" | egrep ^SSH_AGENT_PID )
+# 	    if [ -z $SSH_AGENT_PID ] ; then
+# 		echo "${FUNCNAME}: error! SSH_AGENT_PID unknonw"
+# 		unset SSH_AGENT_PID
+# 		return 1
+# 	    elif ! ( ps ux | grep $SSH_AGENT_PID | grep -v grep > /dev/null ) ; then
+# 		echo "${FUNCNAME}: error! no process found corresponding SSH_AGENT_PID=$SSH_AGENT_PID"
+# 		unset SSH_AGENT_PID
+# 		return 1
+# 	    fi
+# 	    export SSH_AGENT_PID
 	    export SSH_AUTH_SOCK=$sock
 	    if ssh-add -l &> /dev/null ; then
 		# unsetenv for old (woody) version screen.
