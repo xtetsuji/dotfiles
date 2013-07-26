@@ -233,7 +233,8 @@ fi
 if type kdialog >/dev/null 2>&1 ; then
     alias kpopup='test $? -eq 0 && kdialog --msgbox 処理が完了しました || kdialog --error エラーコードを受けとりました '
     function kfinish {
-        declare status=$? cmd=`history 1 | sed -e 's/^ *[[:digit:]]* *//'`
+        declare status=$?
+        declare cmd=`history 1 | sed -e 's/^ *[[:digit:]]* *//'`
         kdialog --title "コマンドが終了しました" --msgbox "cmd=${cmd}\nstatus=$status"
     }
 fi
@@ -302,8 +303,8 @@ function attach-agent {
 		# unsetenv for old (woody) version screen.
 #		screen -X unsetenv SSH_AGENT_PID
 		if [ $TERM = screen ] || [ $TERM = screen-w ] || [ $TERM = screen.mlterm ] ; then
+		    #screen -X setenv SSH_AGENT_PID $SSH_AGENT_PID
 		    screen -X unsetenv SSH_AUTH_SOCK
-		    screen -X setenv SSH_AGENT_PID $SSH_AGENT_PID
 		    screen -X setenv SSH_AUTH_SOCK $SSH_AUTH_SOCK
 		fi
 		echo "OK, success that $TERM attaches to the ssh-agent!"
