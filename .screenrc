@@ -162,6 +162,8 @@ terminfo vt100* 'AF=\E[3%p1%dm:AB=\E[4%p1%dm'
 
 bind w windowlist -b
 bind c colon 'screen -t '
+bind C eval split focus screen focus
+bind n colon 'number '
 #bind j focus down
 #bind k focus up
 #bind t focus top # load is ^t
