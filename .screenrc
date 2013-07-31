@@ -134,7 +134,7 @@ bind ^] paste [.]
 # default windows
 #
 screen -t local 0
-screen -t root 1 sudo su -
+#screen -t root 1 sudo su -
 #screen -t liece 2 emacs -nw -e liece
 #screen -t messages 2 sudo tail -f /var/log/messages
 
