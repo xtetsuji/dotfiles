@@ -337,7 +337,8 @@ function cd {
 # 最近の cd によって移動したディレクトリを選択
 function cdhist {
     local dirnum
-    dirs -v | head -n $(( LINES - 3 ))
+    #dirs -v | head -n $(( LINES - 3 ))
+    dirs -v | sort -k 2 | uniq -f 1 | sort -n -k 1 | head -n $(( LINES - 3 ))
     read -p "select number: " dirnum
     if [ -z "$dirnum" ] ; then
 	echo "$FUNCNAME: Abort." 1>&2
