@@ -562,6 +562,12 @@ function reset-proxyenv {
     unset https_proxy
     unset FTP_PROXY
     unset ftp_proxy
+    unset NO_PROXY
+    unset no_proxy
+}
+
+function show-proxyenv {
+    env | grep -i _proxy
 }
 
 function clean-path {

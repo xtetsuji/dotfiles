@@ -53,11 +53,12 @@ fi
 ###
 ### proxy
 ###
-export http_proxy=http://localhost:8080/
-export https_proxy=$http_proxy
-export ftp_proxy=$http_proxy
-export HTTPS_PROXY=$http_proxy
-export FTP_PROXY=$http_proxy
+# export http_proxy=http://localhost:8080/
+# export https_proxy=$http_proxy
+# export ftp_proxy=$http_proxy
+# export HTTPS_PROXY=$http_proxy
+# export FTP_PROXY=$http_proxy
+### NOTE: proxy environments are detected chproxy function or on .bash_secret.
 
 ### history
 # see: http://tukaikta.blog135.fc2.com/blog-entry-187.html
