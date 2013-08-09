@@ -129,6 +129,14 @@ elif [ "$UNAME" =~ CYGWIN.* ] ; then # Do not quote "=~"'s right side.
 fi
 
 ###
+### some settings
+###
+
+# see: http://d.hatena.ne.jp/hogem/20090411/1239451878
+stty stop undef
+
+
+###
 ### some config by env
 ###
 
@@ -147,3 +155,4 @@ export AWS_RDS_HOME=$HOME/tmp/RDSCli-1.6.001
 export AWS_CREDENTIAL_FILE=$AWS_RDS_HOME/credential-file-path
 
 unset UNAME
+
