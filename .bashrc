@@ -133,6 +133,7 @@ fi
 ###
 
 # see: http://d.hatena.ne.jp/hogem/20090411/1239451878
+# Ignore C-s for terminal stop.
 stty stop undef
 
 
