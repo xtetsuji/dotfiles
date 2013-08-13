@@ -546,10 +546,12 @@ function chproxy {
         # NOTE: HTTP_PROXY (All uppercase "HTTP_PROXY" is not recommended.)
         export http_proxy=$proxy
         export HTTPS_PROXY=$proxy
+        export https_proxy=$proxy
         export FTP_PROXY=$proxy
         if [ -z "$NO_PROXY" ] ; then
             # comma-separated list of hosts
-            export NO_PROXY=localhost
+            export NO_PROXY=localhost,127.0.0.1
+            export no_proxy="$NO_PROXY"
         fi
         return
     fi
