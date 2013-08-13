@@ -40,8 +40,9 @@ upload-files: .dotfiles
 	@echo "If this is \"dotdir\", currently it is ignored and copy your hand.";
 	if [ -z "$(REMOTE_HOST)" ] ; then \
 		echo "REMOTE_HOST is required" ; \
+		exit 1 ; \
 	fi
-	rsync $(RSYNC_OPTS) ./ $(REMOTE_USER)@$(REMOTE_HOST)
+	rsync $(RSYNC_OPTS) ./ $(REMOTE_USER)@$(REMOTE_HOST):
 
 dry-upload-files:
 	$(MAKE) upload-files RSYNC_OPTS="--dry-run $(RSYNC_OPTS)"
