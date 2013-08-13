@@ -542,7 +542,7 @@ function chproxy {
         echo "$num" | grep '[^[:digit:]]' && \
             { echo "$FUNCNAME: Abort. Invalid input." 1>&2 ; return ; }
         proxy=${CHPROXY_MAP[$((num*2+1))]}
-        echo "proxy is $proxy"
+        echo "Set proxy to $proxy"
         # NOTE: HTTP_PROXY (All uppercase "HTTP_PROXY" is not recommended.)
         export http_proxy=$proxy
         export HTTPS_PROXY=$proxy
