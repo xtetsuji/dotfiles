@@ -536,11 +536,11 @@ function chproxy {
     done
     read -p "select number: " num
     if [ -z "$num" ] ; then
-        echo "$FUNCNAME: Abort." 1>&2
+        echo "$FUNCNAME: Abort Input number." 1>&2
         return 1
     else
-        echo "$num" | grep '^[[:digit:]]+$' || \
-            { echo "$FUNCNAME: Abort." 1>&2 ; return ; }
+        echo "$num" | grep '[^[:digit:]]' && \
+            { echo "$FUNCNAME: Abort. Invalid input." 1>&2 ; return ; }
         proxy=${CHPROXY_MAP[$((num*2+1))]}
         echo "proxy is $proxy"
         # NOTE: HTTP_PROXY (All uppercase "HTTP_PROXY" is not recommended.)
