@@ -149,7 +149,6 @@ function perl-installed-modules { perl -MExtUtils::Installed -E 'say($_) for Ext
 function perllv { perldoc -l $1 | xargs --no-run-if-empty lv ; }
 alias uri_unescape='perl -MURI::Escape=uri_unescape -E "say uri_unescape(join q/ /, @ARGV)" '
 alias uri_escape='perl -MURI::Escape=uri_escape -E "say uri_escape(join q/ /, @ARGV)" '
-alias suddenly_death='perl -MAcme::SuddenlyDeath -E "say suddenly_death(@ARGV)"'
 function perl-mods2newit-perlbrew {
     # function naming is irresponsible. I will change it's names.
     # see: https://delicious.com/ogata/perlbrew articles.
