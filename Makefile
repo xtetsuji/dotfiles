@@ -12,7 +12,7 @@ usage:
 	@echo "Usage:"
 	@echo "  make list             #=> ls -a"
 	@echo "  make deproy           #=> create symlink"
-	@echo "  make upload-files     #=> rsync to REMOTE_SERVER"
+	@echo "  make upload-files     #=> rsync to REMOTE_USER @ REMOTE_HOST"
 	@echo "  make dry-upload-files #=> dry-run and ditto"
 	@echo "  make update           #=> git pull origin master"
 
