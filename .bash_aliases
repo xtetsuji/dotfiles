@@ -219,6 +219,8 @@ if [ "$UNAME" = Darwin ] ; then
     alias pb-iconv-change='pbpaste | iconv -c -f UTF-8-MAC -t UTF-8 | pbcopy'
 fi
 
+alias term-growl='killall -TERM Growl'
+
 ###
 ### X / KDE
 ###
