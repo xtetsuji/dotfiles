@@ -217,6 +217,7 @@ if [ "$UNAME" = Darwin ] ; then
     alias pb-append-quote='pbpaste | append-quote | pbcopy'
     alias pb-remove-quote='pbpaste | remove-quote | pbcopy'
     alias pb-iconv-change='pbpaste | iconv -c -f UTF-8-MAC -t UTF-8 | pbcopy'
+    alias pwdcopy='echo -n $(pwd) | pbcopy'
 fi
 
 alias term-growl='killall -TERM Growl'
