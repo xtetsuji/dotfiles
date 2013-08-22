@@ -52,6 +52,7 @@ function hms {
     sep=$1
     env LANG=C date +"%H${sep}%M${sep}%S"
 }
+alias cldate="en date +'%a %b %d %T %Y'"
 alias epoch='date +%s'
 function exists { type $1 >/dev/null 2>&1 ; return $? ; }
 
