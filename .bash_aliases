@@ -156,6 +156,10 @@ function perl-mods2newit-perlbrew {
     arg=$1
     perlbrew list-modules | perlbrew exec --with $1 cpanm
 }
+if type highlight >/dev/null 2>&1 && ! type hl >/dev/null 2>&1 ; then
+    hl=highlight
+fi
+
 ###
 ### SSH
 ###
