@@ -159,6 +159,20 @@ function perl-mods2newit-perlbrew {
 if type highlight >/dev/null 2>&1 && ! type hl >/dev/null 2>&1 ; then
     alias hl=highlight
 fi
+function jsonlv {
+    # TODO: plural arguments
+    local command arg
+    arg="$1"
+    if type json_xs >/dev/null 2>&1 ; then
+        command=json_xs
+    elif type json_pp >/dev/null 2>&1 ; then
+        command=json_pp
+    else
+        # :-(
+        command=cat
+    fi
+    $command <"$arg" | lv
+}
 
 ###
 ### SSH
