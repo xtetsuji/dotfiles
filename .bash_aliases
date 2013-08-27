@@ -157,7 +157,7 @@ function perl-mods2newit-perlbrew {
     perlbrew list-modules | perlbrew exec --with $1 cpanm
 }
 if type highlight >/dev/null 2>&1 && ! type hl >/dev/null 2>&1 ; then
-    hl=highlight
+    alias hl=highlight
 fi
 
 ###
