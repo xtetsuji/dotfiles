@@ -81,6 +81,11 @@ function greppath() {
     [ ${FOUND} -ge 1 ] && echo "${1}" && return 0 || return 1
 }
 
+# invert of "bg" command
+if ! type stop 2>/dev/null 2>&1 ; then
+    alias stop='kill -STOP '
+fi
+
 ###
 ### Utilities
 ###
