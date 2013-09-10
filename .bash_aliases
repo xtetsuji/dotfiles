@@ -82,7 +82,7 @@ function greppath() {
 }
 
 # invert of "bg" command
-if ! type stop 2>/dev/null 2>&1 ; then
+if ! type stop >/dev/null 2>&1 ; then
     alias stop='kill -STOP '
 fi
 
