@@ -178,7 +178,8 @@ function jsonlv {
     fi
     $command <"$arg" | lv
 }
-alias lookup='perl -MCocoa::DictionaryServices=lookup -e "print(lookup(@ARGV))"' 
+alias lookup='perl -MCocoa::DictionaryServices=lookup -e "print(lookup(@ARGV))"'
+alias lup='perl -MCocoa::DictionaryServices=lookup -e "print(lookup(@ARGV))"'
 
 ###
 ### SSH
