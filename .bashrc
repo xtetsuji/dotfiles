@@ -30,6 +30,7 @@ case "$TERM" in
     xterm-color) color_prompt=yes;;
     xterm-256color) color_prompt=yes;;
     screen) color_prompt=yes;; # Is modern screen OK!?
+    screen-256color) color_prompt=yes;;
 esac
 if [ -z "$debian_chroot" -a -r /etc/debian_chroot ] ; then
     debian_chroot=$(cat /etc/debian_chroot)
