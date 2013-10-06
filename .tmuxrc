@@ -1,0 +1,85 @@
+# エンコーディング
+set -g status-utf8 on
+setw -g utf8 on
+
+# 256色表示
+set -g default-terminal "screen-256color"
+
+# ビジュアルベル(画面全体が点滅する)を切る
+set -g bell-action none
+
+# ウィンドウ履歴で保持される最大行数
+set -g history-limit 5000
+
+# デフォルトのシェルを指定
+set -g default-shell /bin/zsh
+
+# 起動後のコマンド
+set -g default-command "tmux >/dev/null 2>&1; if [ $(uname) = Darwin ]; then reattach-to-user-namespace -l /bin/zsh; else /bin/zsh; fi"
+
+# メッセージ表示
+set -g message-fg "white"
+set -g message-bg "colour30"
+setw -g mode-fg "white"
+setw -g mode-bg "colour30"
+
+# ステータスバー表示
+set -g status on
+set -g status-position "bottom"
+set -g status-interval 30
+set -g status-left-length 80
+set -g status-right-length 80
+set -g status-justify "left"
+set -g status-fg "white"
+set -g status-bg "colour250"
+set -g status-left "#[bg=colour30] HOST #[fg=colour30, bg=default]⮀"
+set -g status-right "#[fg=colour238][ %Y/%m/%d %H:%M ]"
+
+# ウィンドウタイトル
+setw -g automatic-rename off
+set -g set-titles on
+set -g set-titles-string "#T"
+
+setw -g window-status-separator ""
+setw -g window-status-fg "colour238"
+setw -g window-status-bg "colour250"
+setw -g window-status-format "#[default]  #I #W  #[default]"
+setw -g window-status-current-fg "colour238"
+setw -g window-status-current-bg "colour8"
+setw -g window-status-current-format "#[bg=colour255]  #I #W  #[default]"
+
+# スクロールモード、コピーモード、選択モードをVimライクに
+setw -g mode-keys vi
+
+# エスケープキー
+set -g prefix C-z
+unbind-key C-b
+bind-key C-z send-prefix
+
+# 設定リロード
+unbind R
+bind R source-file "$HOME/.tmuxrc"
+
+# 再描画
+unbind r
+bind r refresh-client
+
+# 次のウィンドウへ
+unbind C-n
+bind -r C-n next-window
+unbind n
+bind -r n next-window
+
+# 前のウィンドウへ
+unbind C-p
+bind -r C-p previous-window
+unbind p
+bind -r p previous-window
+
+# 直前に選択したウィンドウへ
+bind -r Tab last-window
+bind -r C-z last-window
+
+
+# 参考
+#  * 2013/10/06 https://github.com/raomito/dotfiles/blob/master/tmux/.tmuxrc
