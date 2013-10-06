@@ -12,10 +12,10 @@ set -g bell-action none
 set -g history-limit 5000
 
 # デフォルトのシェルを指定
-set -g default-shell /bin/zsh
+set -g default-shell /bin/bash
 
 # 起動後のコマンド
-set -g default-command "tmux >/dev/null 2>&1; if [ $(uname) = Darwin ]; then reattach-to-user-namespace -l /bin/zsh; else /bin/zsh; fi"
+#set -g default-command "tmux >/dev/null 2>&1; if [ $(uname) = Darwin ]; then reattach-to-user-namespace -l /bin/zsh; else /bin/zsh; fi"
 
 # メッセージ表示
 set -g message-fg "white"
@@ -79,7 +79,6 @@ bind -r p previous-window
 # 直前に選択したウィンドウへ
 bind -r Tab last-window
 bind -r C-z last-window
-
 
 # 参考
 #  * 2013/10/06 https://github.com/raomito/dotfiles/blob/master/tmux/.tmuxrc
