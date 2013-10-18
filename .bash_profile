@@ -31,6 +31,10 @@ fi
 if [ -d ~/git/@github/xtetsuji/various-commands/bin ] ; then
     PATH=$PATH:~/git/@github/xtetsuji/various-commands/bin
 fi
+if [ -d ~/.rbenv/bin ] ; then
+    PATH=$PATH:~/.rbenv/bin
+    eval "$(rbenv init -)"
+fi
 
 ### MANPATH
 export MANPATH
