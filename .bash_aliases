@@ -181,6 +181,24 @@ function jsonlv {
 alias lookup='perl -MCocoa::DictionaryServices=lookup -e "print(lookup(@ARGV))"'
 alias lup='perl -MCocoa::DictionaryServices=lookup -e "print(lookup(@ARGV))"'
 
+# see: http://tech.bayashi.jp/archives/entry/perl/2011/003303.html
+function pm() {
+  [ -n "$1" ] && perldoc -m $1
+}
+
+function pv() {
+  [ -n "$1" ] && perl -e "use $1;print qq|$1: \$$1::VERSION\n|;";
+}
+
+function pmgrep() {
+  [ -n "$1" ] && [ -n "$2" ] && grep -C3 -n "$1" `perldoc -l $2` | less -r;
+}
+
+# complete -C perldoc-complete -o nospace -o default perldoc
+# complete -C perldoc-complete -o nospace -o default pm
+# complete -C perldoc-complete -o nospace -o default pv
+# complete -C perldoc-complete -o nospace -o default pmgrep
+
 ###
 ### SSH
 ###
