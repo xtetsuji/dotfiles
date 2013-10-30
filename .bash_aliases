@@ -179,7 +179,8 @@ function jsonlv {
     $command <"$arg" | lv
 }
 alias lookup='perl -MCocoa::DictionaryServices=lookup -e "print(lookup(@ARGV))"'
-alias lup='perl -MCocoa::DictionaryServices=lookup -e "print(lookup(@ARGV))"'
+alias lup=lookup
+alias dict=lookup
 
 # see: http://tech.bayashi.jp/archives/entry/perl/2011/003303.html
 function pm() {
@@ -247,9 +248,6 @@ if [ "$UNAME" = Darwin ] ; then
     alias iPhoneSimulator='open /Developer/Platforms/iPhoneSimulator.platform/Developer/Applications/iPhone\ Simulator.app'
     alias screen-sharing='open /System/Library/CoreServices/Screen\ Sharing.app/'
     alias ql='qlmanage -p'
-    function dlookup {
-        open "dict://$1"
-    }
     if [ -d '/Applications/Evernote Account Info 1.0.app/' ] ; then
         alias evernote-account-info='/Applications/Evernote\ Account\ Info\ 1.0.app/Contents/MacOS/applet'
     fi
