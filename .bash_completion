@@ -258,3 +258,36 @@ _nephia-setup(){
     COMPREPLY=( $(compgen -W "$opts" -- ${cur} ))
 } &&
 complete -F _nephia-setup nephia-setup
+
+type sips >/dev/null 2>&1 &&
+_sips(){
+    local cur prev opts_all opts_property opts_format opts_format_options
+    cur="${COMP_WORDS[COMP_CWORD]}"
+    prev="${COMP_WORDS[COMP_CWORD-1]}"
+    opts_all="-g --getProperty -X --extractTag -v --verify -x extractProfile -s --setProperty -d --deletePRoperty --deleteTag --copyTag --loadTag --repair -e --embedProfile -E --embedProfileIfNone -m --matchTo -M --matchToWithIntent --deleteColorManagementProperties -r --rotate -f --flip -c --cropToHeightWidth -p --padToHeightWidth --padColor -z --resampleHeightWidth --resampleWidth --resampleHeight -Z --resampleHeightWidthMax -i --addIcon"
+    opts_property="all allxml dipHeight dipWidth pixelHeight pixelWidth typeIdentifier format formatOptions space samplesPerPixel bitsPerSample creation make model software description copyright artist profile hasAlpha description size cmm version class space pcs craetion platform quality deviceManufacturer deviceModel deviceAttributes0 deviceAttributes1 renderingIntent creator copyright md5"
+    opts_format="jpeg tiff png gif jp2 pict bmp qtif psd sgi tga"
+    opts_format_options="low normal high best"
+    case "${prev}" in
+        --help)
+            COMPREPLY=( $(compgen -W "$opts_names" -- ${cur} ))
+            return 0
+            ;;
+	--getProperty|--setProperty|--deleteProperty)
+	    COMPREPLY=( $(compgen -W "$opts_property" -- ${cur} ))
+            return 0
+	    ;;
+	--format)
+	    COMPREPLY=( $(compgen -W "$opts_format" -- ${cur} ))
+            return 0
+	    ;;
+	--formatOptions)
+	    COMPREPLY=( $(compgen -W "$opts_format_options" -- ${cur} ))
+            return 0
+	    ;;
+        *)
+            ;;
+    esac
+    COMPREPLY=( $(compgen -W "$opts_all" -- ${cur} ))
+} &&
+complete -F _sips sips
