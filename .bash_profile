@@ -36,6 +36,14 @@ if [ -d ~/.rbenv/bin ] ; then
     eval "$(rbenv init -)"
 fi
 
+### plenv if exist
+if [ -r "$HOME/.plenv/bin" ] ; then
+    export PATH="$HOME/.plenv/bin:$PATH"
+fi
+if type plenv >/dev/null 2>&1 ; then
+    eval "$(plenv init -)"
+fi
+
 ### MANPATH
 export MANPATH
 
@@ -59,13 +67,5 @@ else
 fi
 
 export TZ=JST-9
-
-### plenv if exist
-if [ -r "$HOME/.plenv/bin" ] ; then
-    export PATH="$HOME/.plenv/bin:$PATH"
-fi
-if type plenv >/dev/null 2>&1 ; then
-    eval "$(plenv init -)"
-fi
 
 BASH_PROFILE_DONE=1
