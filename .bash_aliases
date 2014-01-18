@@ -295,6 +295,14 @@ if type mlterm >/dev/null 2>&1 ; then
     alias mlclient-remote="mlclient --bg=black --fg=gray "
     alias mlclient-local="mlclient --bg=#EEEEE6 --title=local -e 'screen -xR $USER'"
 fi
+if type mlterm >/dev/null 2>&1 ; then
+    alias mlt-local='mlterm --bg=#EEEEE6 --title=mlterm::local -e screen -xR konko'
+    alias mlt-woody='mlterm --bg=black --fg=gray --title=mlterm::woody'
+    alias mlt-tetsuji='mlterm --bg=black --fg=gray --title=mlterm::tetsuji.jp'
+fi
+if type krdc >/dev/null 2>&1 ; then
+    alias krdc-castella='krdc -c -f -p $HOME/doc/passwd/castella.passwd -m localhost:1'
+fi
 
 ###
 ### Cygwin
