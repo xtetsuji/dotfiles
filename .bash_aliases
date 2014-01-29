@@ -161,6 +161,26 @@ function perl-mods2newit-perlbrew {
     arg=$1
     perlbrew list-modules | perlbrew exec --with $1 cpanm
 }
+# https://gist.github.com/hirose31/8647156
+function pmver {
+    local do_cd=false
+    if [ "$1" = '-cd' ]; then
+        do_cd=true
+        shift
+    fi
+    local module=$1
+    perl -M${module} -e "print \$${module}::VERSION,\"\n\""
+    fullpath=$(
+        perldoc -ml ${module} 2>/dev/null
+        [ $? -eq  255 ] && perldoc -l ${module}
+        )
+    echo $fullpath
+    if $do_cd ; then
+        \cd $(dirname $fullpath)
+    fi
+}
+
+
 if type highlight >/dev/null 2>&1 && ! type hl >/dev/null 2>&1 ; then
     alias hl=highlight
 fi
