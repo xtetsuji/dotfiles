@@ -644,9 +644,8 @@ function show-proxyenv {
     env | grep -i _proxy
 }
 
-function clean-path {
+function pathclean {
     export PATH="$( perl -e 'my @paths = split /::*/, $ENV{PATH}; my (%seen, @new_paths); for (@paths) { if(!$seen{$_}++) { push @new_paths, $_; } } print join q(:), @new_paths' )"
-    
 }
 
 
