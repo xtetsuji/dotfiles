@@ -651,6 +651,9 @@ function pathclean {
     export PATH="$( perl -e 'my @paths = split /::*/, $ENV{PATH}; my (%seen, @new_paths); for (@paths) { if(!$seen{$_}++ && -d $_) { push @new_paths, $_; } } print join q(:), @new_paths' )"
 }
 
+function pathview {
+    perl -e 'print join q(), map { qq($_\n) } split /:+/, $ENV{PATH}; '
+}
 
 # ssh と tail を使った簡単リモート通知
 # ただ使い方が面倒
