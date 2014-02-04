@@ -16,6 +16,7 @@ fi
 # Read "perlbrew" in .bashrc path definition fast than in .bash_profile other definitions.
 
 ### PATH
+
 export PATH
 if [ -d ~/bin ] ; then
     PATH=$PATH:~/bin
@@ -37,7 +38,7 @@ if [ -d ~/.rbenv/bin ] ; then
 fi
 
 ### plenv if exist
-if [ -r "$HOME/.plenv/bin" ] ; then
+if [ -d "$HOME/.plenv/bin" ] ; then
     export PATH="$HOME/.plenv/bin:$PATH"
 fi
 if type plenv >/dev/null 2>&1 ; then
