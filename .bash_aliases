@@ -70,17 +70,6 @@ function init-git-flavor {
     git config --global alias.graph "log --graph --date-order --all --pretty=format:'%h %Cred%d %Cgreen%ad %Cblue%cn %Creset%s' --date=short" 
 }
 
-# http://qiita.com/items/2a4dc1d6862da2af0972
-function greppath() {
-    local FOUND=0
-    local IFS=':'
-    local DIR
-    for DIR in ${2}; do
-        [ "${1}" == "${DIR}" ] && FOUND=1
-    done
-    [ ${FOUND} -ge 1 ] && echo "${1}" && return 0 || return 1
-}
-
 # invert of "bg" command
 if ! type stop >/dev/null 2>&1 ; then
     alias stop='kill -STOP '
@@ -653,6 +642,17 @@ function pathclean {
 
 function pathview {
     perl -e 'print join q(), map { qq($_\n) } split /:+/, $ENV{PATH}; '
+}
+
+# http://qiita.com/items/2a4dc1d6862da2af0972
+function greppath() {
+    local FOUND=0
+    local IFS=':'
+    local DIR
+    for DIR in ${2}; do
+        [ "${1}" == "${DIR}" ] && FOUND=1
+    done
+    [ ${FOUND} -ge 1 ] && echo "${1}" && return 0 || return 1
 }
 
 # ssh と tail を使った簡単リモート通知
