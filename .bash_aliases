@@ -75,6 +75,8 @@ if ! type stop >/dev/null 2>&1 ; then
     alias stop='kill -STOP '
 fi
 
+alias crontab='crontab -i'
+
 ###
 ### Utilities
 ###
