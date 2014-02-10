@@ -15,6 +15,7 @@ case "$UNAME" in
  	alias CharacterPalette='open /System/Library/Input\ Methods/CharacterPalette.app/'
 	alias ArchiveUtility='open /System/Library/CoreServices/Archive\ Utility.app/'
 	alias iPhoneSimulator='open /Developer/Platforms/iPhoneSimulator.platform/Developer/Applications/iPhone\ Simulator.app'
+    alias battery-remaining='pmset -g ps'
 	;;
     Linux)
 	alias ls='ls --color=auto'
