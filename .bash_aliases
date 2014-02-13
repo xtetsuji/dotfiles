@@ -215,20 +215,11 @@ function pmgrep() {
 ###
 ### SSH
 ###
-# ~/.ssh/keylist.txt has private key filename per line.
-#alias my-ssh-add='eval ssh-add ~/.ssh/{$(cat ~/.ssh/keylist.txt | xargs echo | sed -e "s/ /,/g")}'
+# "~/.ssh/keylist.txt" has private key filename per line.
 alias my-ssh-add='for key in $(<~/.ssh/keylist.txt) ; do ssh-add ~/.ssh/$key ; done ; unset key'
 alias ssh-keylist="ssh-add -l | sed -e 's;/[^[:space:]]*/;;'"
 alias hup-autossh='killall -HUP autossh'
-
-# SSH_XTERM='env TERM=xterm ssh'
-# alias ssh-tetsuji-portbind='$SSH_XTERM tetsuji.jp.portbind -t screen -xR waffle'
-# alias ssh-waffle-portbind='$SSH_XTERM waffle.portbind -t screen -xR waffle'
-# alias ssh-woody-portbind='$SSH_XTERM woody.portbind -t screen -xR ogata-t'
-# alias autossh-tetsuji-portbind='env TERM=xterm AUTOSSH_LOGLEVEL=0 autossh -M 21100 tetsuji.jp.portbind -t "screen -xR waffle"'
-# alias autossh-waffle-portbind='env TERM=xterm AUTOSSH_LOGLEVEL=0 autossh -M 21100 waffle.portbind -t "screen -xR waffle"'
-# alias autossh-woody-portbind='env TERM=xterm AUTOSSH_LOGLEVEL=0 autossh -M 21200 woody.portbind -t "screen -xR ogata-t"'
-#alias killbgssh="ps ux | grep -E 'ssh -[fn]' | awk '{ print $1 }' | xargs --no-run-if-empty kill "
+alias my-ssh-agent-setup='if ps ux | grep ssh-[a]gent >/dev/null 2>&1 ; then echo "ssh-agent already run" ; exit ; else eval $(ssh-agent) ; my-ssh-add ; fi'
 
 ###
 ### Mac OS X
