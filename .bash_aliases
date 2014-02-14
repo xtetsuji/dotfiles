@@ -219,7 +219,7 @@ function pmgrep() {
 alias my-ssh-add='for key in $(<~/.ssh/keylist.txt) ; do ssh-add ~/.ssh/$key ; done ; unset key'
 alias ssh-keylist="ssh-add -l | sed -e 's;/[^[:space:]]*/;;'"
 alias hup-autossh='killall -HUP autossh'
-alias my-ssh-agent-setup='if ps ux | grep ssh-[a]gent >/dev/null 2>&1 ; then echo "ssh-agent already run" ; exit ; else eval $(ssh-agent) ; my-ssh-add ; fi'
+alias my-ssh-agent-setup='if ps ux | grep ssh-[a]gent >/dev/null 2>&1 ; then echo "ssh-agent already run" ; else eval $(ssh-agent) ; my-ssh-add ; fi'
 
 ###
 ### Mac OS X
