@@ -476,22 +476,22 @@ function cdj {
         echo "Usage: $FUNCNAME <directory_alias>"
         echo "       $FUNCNAME [-h|-v|-l <directory_alias>]"
         echo "-h: help"
-        echo "-v: view defined lists"
-        echo "-l <directory_alias>: view path specify alias."
+        echo "-l: list defined lists"
+        echo "-v <directory_alias>: view path specify alias."
         return
     elif [ "$arg" = "-v" -o "$arg" = "-l" ] ; then 
         ### view detail mode
         for (( i=0; $i<${#CDJ_DIR_MAP[*]}; i=$((i+2)) )) ; do
             key="${CDJ_DIR_MAP[$i]}"
             value="${CDJ_DIR_MAP[$((i+1))]}"
-            if [ "$arg" = "-v" ] ; then
+            if [ "$arg" = "-l" ] ; then
                 if [ ! -d "$value" ] ; then
                     warn=" ***NOT_FOUND***"
                 else
                     warn=""
                 fi
                 printf "%8s => %s%s\n" "$key" "$value" "$warn"
-            elif [ "$arg" = "-l" ] ; then
+            elif [ "$arg" = "-v" ] ; then
                 if [ "$key" = "$subarg" ] ; then
                     echo $value
                     return
