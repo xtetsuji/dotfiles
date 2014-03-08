@@ -661,7 +661,7 @@ function cdlocate {
         return
     fi
     # mdfind search is case insensitive
-    for path in $(locate "$arg" | grep -E "/[^/]*$arg[^/]*$" | sed -e 's/ /+/g') ; do
+    for path in $(locate "$arg" | grep -i -E "/[^/]*$arg[^/]*$" | sed -e 's/ /+/g') ; do
         path=$(echo "$path" | sed -e 's/\+/ /g')
         test -d "$path" || continue
         i=$((i+1))
