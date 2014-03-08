@@ -471,7 +471,7 @@ function cdj {
     declare arg=$1 \
             subarg=$2 \
             dir i key value warn
-    if [ -z "$arg" -o "$arg" = "-h" ] || [ "$arg" = "-l" -a -z "$subarg" ] ; then
+    if [ -z "$arg" -o "$arg" = "-h" ] || [ "$arg" = "-v" -a -z "$subarg" ] ; then
         ### help and usage mode
         echo "Usage: $FUNCNAME <directory_alias>"
         echo "       $FUNCNAME [-h|-v|-l <directory_alias>]"
