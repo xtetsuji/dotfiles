@@ -649,6 +649,46 @@ function greppath() {
     [ ${FOUND} -ge 1 ] && echo "${1}" && return 0 || return 1
 }
 
+# cdlocate
+# cd shortcut by locate
+type locate >/dev/null 2>&1 && \
+function cdlocate {
+    local arg="$1" path i=0 j selnum selpath OUTPUT
+    declare -a pathes
+    if [ -z "$arg" ] || [ "$arg" = "-h" ] ; then
+        echo "Usage:"
+        echo "  $FUNCNAME STRING"
+        return
+    fi
+    # mdfind search is case insensitive
+    for path in $(locate "$arg" | sed -e 's/ /+/g') ; do
+        path=$(echo "$path" | sed -e 's/\+/ /g')
+        test -d "$path" || continue
+        i=$((i+1))
+        pathes[$i]="$path"
+    done
+    if [ -z "${pathes[1]}" ] ; then
+        # Nothing search result.
+        return
+    fi
+    if [ $i -ge $LINES ] ; then
+        OUTPUT=$PAGER
+        test -z "$OUTPUT" && OUTPUT=cat
+    else
+        OUTPUT=cat
+    fi
+    for j in $(seq 1 $i) ; do
+        printf "%2d: %s\n" $j "${pathes[$j]}"
+    done | $OUTPUT
+    read -p "select number: " selnum
+    selpath="${pathes[$selnum]}"
+    if [ -z "$selpath" ] ; then
+        echo "$FUNCNAME: select is wrong." 1>&2
+        return 1
+    fi
+    cd "$selpath"
+}
+
 # cdmdfind
 # cd shortcut by mdfind (Mac OS X Spotlight CLI)
 type mdfind >/dev/null 2>&1 && \
