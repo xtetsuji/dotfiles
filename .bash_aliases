@@ -471,27 +471,27 @@ function cdj {
     declare arg=$1 \
             subarg=$2 \
             dir i key value warn
-    if [ -z "$arg" -o "$arg" = "-h" ] || [ "$arg" = "-l" -a -z "$subarg" ] ; then
+    if [ -z "$arg" -o "$arg" = "-h" ] || [ "$arg" = "-v" -a -z "$subarg" ] ; then
         ### help and usage mode
         echo "Usage: $FUNCNAME <directory_alias>"
         echo "       $FUNCNAME [-h|-v|-l <directory_alias>]"
         echo "-h: help"
-        echo "-v: view defined lists"
-        echo "-l <directory_alias>: view path specify alias."
+        echo "-l: list defined lists"
+        echo "-v <directory_alias>: view path specify alias."
         return
     elif [ "$arg" = "-v" -o "$arg" = "-l" ] ; then 
         ### view detail mode
         for (( i=0; $i<${#CDJ_DIR_MAP[*]}; i=$((i+2)) )) ; do
             key="${CDJ_DIR_MAP[$i]}"
             value="${CDJ_DIR_MAP[$((i+1))]}"
-            if [ "$arg" = "-v" ] ; then
+            if [ "$arg" = "-l" ] ; then
                 if [ ! -d "$value" ] ; then
                     warn=" ***NOT_FOUND***"
                 else
                     warn=""
                 fi
                 printf "%8s => %s%s\n" "$key" "$value" "$warn"
-            elif [ "$arg" = "-l" ] ; then
+            elif [ "$arg" = "-v" ] ; then
                 if [ "$key" = "$subarg" ] ; then
                     echo $value
                     return
@@ -649,10 +649,91 @@ function greppath() {
     [ ${FOUND} -ge 1 ] && echo "${1}" && return 0 || return 1
 }
 
+# cdlocate
+# cd shortcut by locate
+type locate >/dev/null 2>&1 && \
+function cdlocate {
+    local arg="$1" path i=0 j selnum selpath OUTPUT
+    declare -a pathes
+    if [ -z "$arg" ] || [ "$arg" = "-h" ] ; then
+        echo "Usage:"
+        echo "  $FUNCNAME STRING"
+        return
+    fi
+    # mdfind search is case insensitive
+    for path in $(locate "$arg" | grep -i -E "/[^/]*$arg[^/]*$" | sed -e 's/ /+/g') ; do
+        path=$(echo "$path" | sed -e 's/\+/ /g')
+        test -d "$path" || continue
+        i=$((i+1))
+        pathes[$i]="$path"
+    done
+    if [ -z "${pathes[1]}" ] ; then
+        # Nothing search result.
+        return
+    fi
+    if [ $i -ge $LINES ] ; then
+        OUTPUT=$PAGER
+        test -z "$OUTPUT" && OUTPUT=cat
+    else
+        OUTPUT=cat
+    fi
+    for j in $(seq 1 $i) ; do
+        printf "%2d: %s\n" $j "${pathes[$j]}"
+    done | $OUTPUT
+    read -p "select number: " selnum
+    selpath="${pathes[$selnum]}"
+    if [ -z "$selpath" ] ; then
+        echo "$FUNCNAME: select is wrong." 1>&2
+        return 1
+    fi
+    cd "$selpath"
+}
+
+# cdmdfind
+# cd shortcut by mdfind (Mac OS X Spotlight CLI)
+type mdfind >/dev/null 2>&1 && \
+function cdmdfind {
+    local arg="$1" path i=0 j selnum selpath OUTPUT
+    declare -a pathes
+    if [ -z "$arg" ] || [ "$arg" = "-h" ] ; then
+        echo "Usage:"
+        echo "  $FUNCNAME STRING"
+        return
+    fi
+    # mdfind search is case insensitive
+    for path in $(mdfind -name "$arg" | sed -e 's/ /+/g') ; do
+        path=$(echo "$path" | sed -e 's/\+/ /g')
+        test -d "$path" || continue
+        i=$((i+1))
+        pathes[$i]="$path"
+    done
+    if [ -z "${pathes[1]}" ] ; then
+        # Nothing search result.
+        return
+    fi
+    if [ $i -ge $LINES ] ; then
+        OUTPUT=$PAGER
+        test -z "$OUTPUT" && OUTPUT=cat
+    else
+        OUTPUT=cat
+    fi
+    for j in $(seq 1 $i) ; do
+        printf "%2d: %s\n" $j "${pathes[$j]}"
+    done | $OUTPUT
+    read -p "select number: " selnum
+    selpath="${pathes[$selnum]}"
+    if [ -z "$selpath" ] ; then
+        echo "$FUNCNAME: select is wrong." 1>&2
+        return 1
+    fi
+    cd "$selpath"
+}
+
 # ssh と tail を使った簡単リモート通知
 # ただ使い方が面倒
 # http://d.hatena.ne.jp/punitan/20110416/1302928953
 # 2011/12/16
+# 今は srnotifyd と srnotify.pl を使っている
 function snotifyd {
     declare host remote_log line
     declare -r IMAGE_PATH=$HOME/Pictures/min_x40_mini.png
