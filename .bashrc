@@ -46,7 +46,7 @@ if [ "$color_prompt" = yes ] ; then
 fi
 unset color_prompt
 
-export MYSQL_PS1='\u@\h>'
+export MYSQL_PS1='\u@\h> '
 
 ###
 ### Growl
