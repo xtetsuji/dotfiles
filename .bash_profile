@@ -37,6 +37,15 @@ if [ -d ~/.rbenv/bin ] ; then
     eval "$(rbenv init -)"
 fi
 
+### mysql-build
+# http://www.hsbt.org/diary/20130217.html
+if [ -d ~/.mysql/mysql-build/bin ] ; then
+    PATH=$PATH:~/.mysql/mysql-build/bin
+fi
+if [ -d ~/.mysql/default/bin ] ; then
+    PATH="$HOME/.mysql/default/bin:$PATH"
+fi
+
 ### plenv if exist
 if [ -d "$HOME/.plenv/bin" ] ; then
     export PATH="$HOME/.plenv/bin:$PATH"
