@@ -104,7 +104,7 @@ fi
 
 ### add at 2012/03/19
 if type lv >/dev/null 2>&1 ; then
-    export PAGER=lv
+    export PAGER='lv -c'
 elif type jless >/dev/null 2>&1 ; then
     export PAGER=jless
 elif type less >/dev/null 2>&1 ; then
@@ -113,7 +113,7 @@ else
     export PAGER=more
 fi
 
-if [ "$PAGER" != lv ] ; then
+if [ "$PAGER" != lv ] || [ "$PAGER" != "lv -c" ] ; then
     alias lv="$PAGER"
 fi
 
