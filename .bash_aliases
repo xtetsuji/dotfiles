@@ -717,6 +717,10 @@ function cdmdfind {
     else
         OUTPUT=cat
     fi
+    if [ $i = 1 ] ; then
+        cd ${pathes[1]}
+        return
+    fi
     for j in $(seq 1 $i) ; do
         printf "%2d: %s\n" $j "${pathes[$j]}"
     done | $OUTPUT
