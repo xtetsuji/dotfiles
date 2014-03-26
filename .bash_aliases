@@ -107,6 +107,10 @@ if type emacsclient >/dev/null 2>&1 && ! type ec >/dev/null 2>&1 ; then
     alias ec=emacsclient
 fi
 
+# see: http://d.hatena.ne.jp/maji-KY/20110718/1310985449
+alias od='od -tx1z -Ax -v'
+
+
 # debug
 # debug on
 # debug off
