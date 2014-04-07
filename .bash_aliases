@@ -200,15 +200,20 @@ alias dict=lookup
 
 # see: http://tech.bayashi.jp/archives/entry/perl/2011/003303.html
 function pm() {
-  [ -n "$1" ] && perldoc -m $1
+    [ -n "$1" ] && perldoc -m $1
 }
 
 function pv() {
-  [ -n "$1" ] && perl -e "use $1;print qq|$1: \$$1::VERSION\n|;";
+    [ -n "$1" ] && perl -e "use $1;print qq|$1: \$$1::VERSION\n|;";
 }
 
 function pmgrep() {
-  [ -n "$1" ] && [ -n "$2" ] && grep -C3 -n "$1" `perldoc -l $2` | less -r;
+    local PAGER_LOCAL=$PAGER
+    if [ -n "$PAGER_LOCALE " ] ; then
+        PAGER_LOCAL='less -r'
+    fi
+    [ -n "$1" ] && [ -n "$2" ] && \
+        grep --context=3 --line-number "$1" `perldoc -l $2` | $PAGER_LOCAL;
 }
 
 # complete -C perldoc-complete -o nospace -o default perldoc
