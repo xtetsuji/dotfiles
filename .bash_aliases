@@ -176,7 +176,7 @@ function pmver {
     fi
 }
 
-
+# http://search.cpan.org/dist/App-highlight/
 if type highlight >/dev/null 2>&1 && ! type hl >/dev/null 2>&1 ; then
     alias hl=highlight
 fi
