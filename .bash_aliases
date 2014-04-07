@@ -12,14 +12,15 @@ case "$UNAME" in
 	alias ls='ls -FG' # BSD type "ls"
 	alias lsx='ls -xG'
 	# see: http://ascii.jp/elem/000/000/594/594203/
- 	alias CharacterPalette='open /System/Library/Input\ Methods/CharacterPalette.app/'
+	alias CharacterPalette='open /System/Library/Input\ Methods/CharacterPalette.app/'
 	alias ArchiveUtility='open /System/Library/CoreServices/Archive\ Utility.app/'
 	alias iPhoneSimulator='open /Developer/Platforms/iPhoneSimulator.platform/Developer/Applications/iPhone\ Simulator.app'
-    alias battery-remaining='pmset -g ps'
+	alias battery-remaining='pmset -g ps'
 	;;
     Linux)
 	alias ls='ls --color=auto'
-	alias lsx='ls -x --color=always'
+	alias lsx='ls -x --color=always'a
+	alias crontab='crontab -i'
 	;;
     CYGWIN*)
         alias ls='ls --color -F --show-control-chars'
@@ -67,7 +68,7 @@ function init-git-flavor {
     # TODO: Does pager recognized color sequence?
     git config —global push.default simple
     # true or false?
-    git config --global color.ui false
+    git config --global color.ui true
     git config --global alias.graph "log --graph --date-order --all --pretty=format:'%h %Cred%d %Cgreen%ad %Cblue%cn %Creset%s' --date=short" 
 }
 
@@ -76,7 +77,6 @@ if ! type stop >/dev/null 2>&1 ; then
     alias stop='kill -STOP '
 fi
 
-alias crontab='crontab -i'
 
 ###
 ### Utilities
