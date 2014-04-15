@@ -16,6 +16,7 @@ case "$UNAME" in
 	alias ArchiveUtility='open /System/Library/CoreServices/Archive\ Utility.app/'
 	alias iPhoneSimulator='open /Developer/Platforms/iPhoneSimulator.platform/Developer/Applications/iPhone\ Simulator.app'
 	alias battery-remaining='pmset -g ps'
+	type gtar >/dev/null 2>&1 && alias tar=gtar
 	;;
     Linux)
 	alias ls='ls --color=auto'
