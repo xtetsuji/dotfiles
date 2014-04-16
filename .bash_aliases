@@ -260,7 +260,7 @@ if [ "$UNAME" = Darwin ] ; then
         done
     }
     function enpower {
-        local $switch="$1"
+        local switch="$1"
         if [ "$switch" != on ] && [ "$switch" != off ] ; then
             echo "Usage: $FUNCNAME [on|off]"
             return
