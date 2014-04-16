@@ -65,6 +65,10 @@ function extcount {
     # TODO: detection no-having-extension file and dotfile.
 }
 
+if type git >/dev/null 2>&1 && type hub >/dev/null 2>&1 ; then
+    alias git=hub
+fi
+
 function init-git-flavor {
     # TODO: Does pager recognized color sequence?
     git config —global push.default simple
