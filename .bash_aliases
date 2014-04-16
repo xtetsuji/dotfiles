@@ -263,7 +263,7 @@ if [ "$UNAME" = Darwin ] ; then
         local $switch="$1"
         if [ "$switch" != on ] && [ "$switch" != off ] ; then
             echo "Usage: $FUNCNAME [on|off]"
-            exit
+            return
         fi
         networksetup -setairportpower en0 $switch
     }
