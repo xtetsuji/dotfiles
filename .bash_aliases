@@ -259,6 +259,14 @@ if [ "$UNAME" = Darwin ] ; then
             sleep 3
         done
     }
+    function enpower {
+        local $switch="$1"
+        if [ "$switch" != on ] && [ "$switch" != off ] ; then
+            echo "Usage: $FUNCNAME [on|off]"
+            exit
+        fi
+        networksetup -setairportpower en0 $switch
+    }
     alias ssid='airport-info | grep " SSID: " | sed -e "s/.* //"'
     alias CharacterPalette='open /System/Library/Input\ Methods/CharacterPalette.app/'
     alias ArchiveUtility='open /System/Library/CoreServices/Archive\ Utility.app/'
