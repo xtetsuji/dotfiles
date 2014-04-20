@@ -81,7 +81,9 @@ function init-git-flavor {
 if ! type stop >/dev/null 2>&1 ; then
     alias stop='kill -STOP '
 fi
-
+if ! type cont >/dev/null 2>&1 ; then
+    alias cont='kill -CONT '
+fi
 
 ###
 ### Utilities
