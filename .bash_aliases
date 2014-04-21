@@ -547,6 +547,30 @@ function cdj {
     return 1
 }
 
+# cdup
+# ディレクトリをリスト化して上層へたどれる
+function cdup {
+    local -a dirlist
+    local dirstr="$PWD" num=0 i dirnum
+    while [ ! -z "$dirstr" ] ; do
+        dirlist[$((++num))]="$dirstr"
+        dirstr="${dirstr%/*}"
+    done
+    dirlist[$((++num))]=/
+    for i in $( seq 1 $num ) ; do
+        printf "%3d %s\n" $i "${dirlist[$i]}"
+    done
+    read -p "select number: " dirnum
+    if [ -z "$dirnum" ] ; then
+        echo "$FUNCNAME: Abort." 1>&2
+    elif ( echo $dirnum | egrep '^[[:digit:]]+$' > /dev/null ) ; then
+        cd "${dirlist[$dirnum]}"
+    else
+        echo "$FUNCNAME: Something wrong." 1>&2
+    fi
+}
+
+
 # chcvsroot: CVSROOT 環境変数を変更して export する
 function chcvsroot {
     declare arg desc dir i
