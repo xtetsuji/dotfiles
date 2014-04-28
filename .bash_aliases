@@ -117,6 +117,12 @@ fi
 # see: http://d.hatena.ne.jp/maji-KY/20110718/1310985449
 alias od='od -tx1z -Ax -v'
 
+function varioous-hostname {
+    echo "hostname command:"
+    hostname
+    echo "perl \$Config{myhostname}"
+    perl -MConfig -e 'print "$Config{myhostname}\n"'
+}
 
 # debug
 # debug on
