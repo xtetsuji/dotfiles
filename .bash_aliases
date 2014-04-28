@@ -117,11 +117,16 @@ fi
 # see: http://d.hatena.ne.jp/maji-KY/20110718/1310985449
 alias od='od -tx1z -Ax -v'
 
-function varioous-hostname {
+function various-hostname {
     echo "hostname command:"
-    hostname
-    echo "perl \$Config{myhostname}"
-    perl -MConfig -e 'print "$Config{myhostname}\n"'
+    echo "  `hostname`"
+    echo "perl \$Config{myhostname}:"
+    perl -MConfig -e 'print "  $Config{myhostname}\n"'
+    # see: http://ekbo.blogspot.jp/2013/10/mac-scutil.html
+    echo "scutil --get LocalHostName:"
+    echo "  `scutil --get LocalHostName`"
+    echo "scutil --get ComputerName:"
+    echo "  `scutil --get ComputerName`"
 }
 
 # debug
