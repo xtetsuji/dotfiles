@@ -307,7 +307,7 @@ if [ "$UNAME" = Darwin ] ; then
     alias pwdcopy='echo -n $(pwd)/ | pbcopy'
 fi
 
-alias term-growl='killall -TERM Growl'
+alias term-growl='killall -TERM Growl HardwareGrowler'
 
 ###
 ### X / KDE
