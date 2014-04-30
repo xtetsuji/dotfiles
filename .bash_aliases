@@ -17,6 +17,8 @@ case "$UNAME" in
 	alias iPhoneSimulator='open /Developer/Platforms/iPhoneSimulator.platform/Developer/Applications/iPhone\ Simulator.app'
 	alias battery-remaining='pmset -g ps'
 	type gtar >/dev/null 2>&1 && alias tar=gtar
+    # see: http://deeeet.com/writing/2014/04/30/beer-on-terminal/
+    function beers () { ruby -e 'C=`stty size`.scan(/\d+/)[1].to_i;S="\xf0\x9f\x8d\xba";a={};puts "\033[2J";loop{a[rand(C)]=0;a.each{|x,o|;a[x]+=1;print "\033[#{o};#{x}H \033[#{a[x]};#{x}H#{S} \033[0;0H"};$stdout.flush;sleep 0.01}' ; }
 	;;
     Linux)
 	alias ls='ls --color=auto'
