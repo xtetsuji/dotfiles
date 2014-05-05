@@ -90,8 +90,6 @@ fi
 ###
 ### Utilities
 ###
-alias wol-sanporoku='wakeonlan 00:26:18:4F:85:DF'
-alias wol-castella='wakeonlan 00:26:18:4F:85:DF'
 alias portscan='nmap -sT -p1-65535 ' # argument: hostname
 if type colordiff >/dev/null 2>&1 ; then
     alias diff=colordiff
@@ -100,7 +98,7 @@ if type xwavemon >/dev/null 2>&1 ; then
     alias xwavemon='env LANG=C xterm +sb -e wavemon'
 fi
 
-alias iphone-wget='wget --user-agent="Mozilla/5.0 (iPhone; U; CPU iPhone OS 4_0 like Mac OS X; ja-jp) AppleWebKit/532.9 (KHTML, like Gecko) Version/4.0.5 Mobile/8A293 Safari/6531.22.7" '
+alias iphone-wget='wget --user-agent="Mozilla/5.0 (iPhone; CPU iPhone OS 7_1_1 like Mac OS X) AppleWebKit/537.51.2 (KHTML, like Gecko) Version/7.0 Mobile/11D201 Safari/9537.53" '
 
 alias usr1='kill -USR1 '
 alias usr2='kill -USR2 '
