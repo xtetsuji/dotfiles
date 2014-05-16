@@ -203,6 +203,12 @@ function pwdhttpd {
 if type highlight >/dev/null 2>&1 && ! type hl >/dev/null 2>&1 ; then
     alias hl=highlight
 fi
+
+# http://suzuki.tdiary.net/20140516.html#p01
+if [ -f /usr/local/bin/highlight ] ; then
+    alias syntaxhi=/usr/local/bin/highlight
+fi
+
 function jsonlv {
     # TODO: plural arguments
     local command arg
