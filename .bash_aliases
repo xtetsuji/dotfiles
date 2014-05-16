@@ -194,6 +194,11 @@ function pmver {
     fi
 }
 
+function pwdhttpd {
+    plackup -MCwd -MPlack::App::Directory "$@" \
+        -e 'Plack::App::Directory->new({root=>getcwd()})->to_app'
+}
+
 # http://search.cpan.org/dist/App-highlight/
 if type highlight >/dev/null 2>&1 && ! type hl >/dev/null 2>&1 ; then
     alias hl=highlight
