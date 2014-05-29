@@ -32,7 +32,7 @@ deploy:
 			echo "backup as $${f} to $${f}.$(BACKUP_EXT)" ; \
 			cp "~/$${f}" "~/$${f}.$(BACKUP_EXT)" ; \
 		fi ; \
-		ln -i -s "$(PWD)/$${f}" ~/ ; \
+		ln -v -i -s "$(PWD)/$${f}" ~/ ; \
 	done ; true
 
 upload-files: .dotfiles
