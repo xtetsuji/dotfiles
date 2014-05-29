@@ -2,7 +2,7 @@ set nocompatible
 syntax on
 
 " http://nanasi.jp/colorscheme/default_install.html
-colorscheme koehler
+" colorscheme koehler
 
 set smartindent
 set noexpandtab smarttab
