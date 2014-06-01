@@ -70,12 +70,12 @@ _perlbrew()
     cur="${COMP_WORDS[COMP_CWORD]}"
     prev="${COMP_WORDS[COMP_CWORD-1]}"
     opts_names="
-        init
+        init info
         install uninstall available lib alias upgrade-perl
         list use off switch switch-off exec
         self-install self-upgrade
-        install-patchperl install-cpanm install-ack
-        download mirro version help"
+        install-patchperl install-cpanm install-ack install-multiple
+        download mirror clean version help"
     opts_all="$opts_names -q --quiet -v --verbose"
 
     case "${prev}" in
