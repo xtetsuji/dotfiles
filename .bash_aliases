@@ -223,9 +223,9 @@ function jsonlv {
     fi
     $command <"$arg" | lv
 }
-alias lookup='perl -MCocoa::DictionaryServices=lookup -e "print(lookup(@ARGV))"'
-alias lup=lookup
-alias dict=lookup
+
+alias dict='perl -MCocoa::DictionaryServices=lookup -le "print for lookup(@ARGV);"'
+alias available_dictionaries='perl -MCocoa::DictionaryServices=available_dictionaries -le "print for available_dictionaries()"'
 
 # see: http://tech.bayashi.jp/archives/entry/perl/2011/003303.html
 function pm() {
