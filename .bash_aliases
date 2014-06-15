@@ -22,7 +22,7 @@ case "$UNAME" in
 	;;
     Linux)
 	alias ls='ls --color=auto'
-	alias lsx='ls -x --color=always'a
+	alias lsx='ls -x --color=always'
 	alias crontab='crontab -i'
 	;;
     CYGWIN*)
