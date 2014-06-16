@@ -79,14 +79,6 @@ function init-git-flavor {
     git config --global alias.graph "log --graph --date-order --all --pretty=format:'%h %Cred%d %Cgreen%ad %Cblue%cn %Creset%s' --date=short" 
 }
 
-# invert of "bg" command
-if ! type stop >/dev/null 2>&1 ; then
-    alias stop='kill -STOP '
-fi
-if ! type cont >/dev/null 2>&1 ; then
-    alias cont='kill -CONT '
-fi
-
 ###
 ### Utilities
 ###
@@ -100,8 +92,21 @@ fi
 
 alias iphone-wget='wget --user-agent="Mozilla/5.0 (iPhone; CPU iPhone OS 7_1_1 like Mac OS X) AppleWebKit/537.51.2 (KHTML, like Gecko) Version/7.0 Mobile/11D201 Safari/9537.53" '
 
+# signals
 alias usr1='kill -USR1 '
 alias usr2='kill -USR2 '
+
+# invert of "bg" command
+if ! type stop >/dev/null 2>&1 ; then
+    alias stop='kill -STOP '
+elif ! type sigstop >/dev/null 2>&1 ; then
+    alias sigstop='kill -STOP '
+fi
+if ! type cont >/dev/null 2>&1 ; then
+    alias cont='kill -CONT '
+elif ! type sigcont >/dev/null 2>&1 ; then
+    alias sigcont='kill -CONT '
+fi
 
 alias append-quote='sed -e "s/^/> /"'
 alias remove-quote='sed -e "s/^> //"'
