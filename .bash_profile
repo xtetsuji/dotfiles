@@ -54,6 +54,15 @@ if type plenv >/dev/null 2>&1 ; then
     eval "$(plenv init -)"
 fi
 
+
+### rbenv if exist
+if [ -d "$HOME/.rbenv/bin" ] ; then
+    export RBENV_ROOT=$HOME/.rbenv
+    export PATH=$PATH:$RBENV_ROOT/bin
+fi
+
+	
+
 ### MANPATH
 export MANPATH
 
