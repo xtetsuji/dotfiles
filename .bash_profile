@@ -54,14 +54,19 @@ if type plenv >/dev/null 2>&1 ; then
     eval "$(plenv init -)"
 fi
 
-
 ### rbenv if exist
 if [ -d "$HOME/.rbenv/bin" ] ; then
     export RBENV_ROOT=$HOME/.rbenv
     export PATH=$PATH:$RBENV_ROOT/bin
 fi
 
-	
+### Android SDK
+# http://www.yoheim.net/blog.php?q=20140304
+if [ -d "$HOME/Library/$USER/android-sdk/platform-tools" ] ; then
+    # Mac OS X builtin directory "~/Library" is used.
+    export PATH=$PATH:$HOME/Library/$USER/android-sdk/platform-tools
+fi
+
 
 ### MANPATH
 export MANPATH
