@@ -60,6 +60,21 @@ if [ -d "$HOME/.rbenv/bin" ] ; then
     export PATH=$PATH:$RBENV_ROOT/bin
 fi
 
+### golang
+if type go >/dev/null 2>&1 ; then
+    GO_VERSION=$(go version | sed -e 's/.*version go//' -e 's/ .*//')
+    if ! [[ $GO_VERSION =~ ^[0-9][0-9.]+$ ]] ; then
+        GO_VERSION=default
+    fi
+    if [ -d "$HOME/.go" ] ; then
+        export GOPATH=$HOME/.go/$GO_VERSION
+        export PATH=$GOPATH/bin:$PATH
+        if [ ! -d $GOPATH ] ; then
+            mkdir -p $GOPATH
+        fi
+    fi
+fi
+
 ### Android SDK
 # http://www.yoheim.net/blog.php?q=20140304
 if [ -d "$HOME/Library/$USER/android-sdk/platform-tools" ] ; then
