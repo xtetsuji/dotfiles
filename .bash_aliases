@@ -597,6 +597,10 @@ function cdup {
     fi
 }
 
+function cdwhich {
+    arg="$1"
+    cd $( dirname $( which "$arg" ) )
+}
 
 # chcvsroot: CVSROOT 環境変数を変更して export する
 function chcvsroot {
