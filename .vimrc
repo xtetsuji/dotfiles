@@ -1,21 +1,36 @@
 set nocompatible
 syntax on
-
-" http://nanasi.jp/colorscheme/default_install.html
-" colorscheme koehler
+colorscheme ron
 
 set smartindent
 set noexpandtab smarttab
 
-set ignorecase
-set smartcase
-set wrapscan
-set noincsearch
+set tabstop=4
+set shiftwidth=4
+set sts=4
+set laststatus=2
+set cmdheight=1
+set backspace=2
 
-set number
-set nolist
+set hlsearch
+set incsearch
+set noignorecase
+set smartcase
+set showmatch
 
 set laststatus=2
 set showcmd
+set showmode
+set statusline=[%n]\ %f\ %y%h%w%m%r\ 0x%B(%b)\ <%l\,%c%V>%L
+set autowrite nobackup nowritebackup
+set nonumber
+set wildmenu
+set wrap
+set listchars=tab:!.,trail:-
+set expandtab
+set formatoptions+=mM
+set vb t_vb=
 
-let html_number_lines=0
+autocmd BufWritePost  * sleep 1
+autocmd BufWritePost  * checktime
+set autoread
