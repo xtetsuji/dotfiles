@@ -3,6 +3,10 @@
 declare ALIASES=$HOME/.bash_aliases
 declare UNAME=$(uname)
 
+function my-alias-help {
+    :
+}
+
 ###
 ### Basics
 ##
@@ -462,6 +466,16 @@ function cdhist {
     fi
 }
 
+# cdhist の peco 版
+type peco >/dev/null 2>&1 &&
+function cdhistp {
+    local dir
+    dir="$( dirs -v | sort -k 2 | uniq -f 1 | sed -e 's/^ *[0-9]* *//' | peco | sed -e "s;^~;$HOME;" )"
+    if [ ! -z "$dir" ] ; then
+        cd "$dir"
+    fi
+}
+
 # 現在のディレクトリの中にあるディレクトリを番号指定で移動
 function cdlist {
     local -a dirlist opt_f=false
@@ -487,6 +501,16 @@ function cdlist {
     fi
 }
 
+# cdhist の peco 版
+type peco >/dev/null 2>&1 &&
+function cdlistp {
+    local dir
+    dir="$( find . -maxdepth 1 -type d | sed -e 's;^\./;;' | peco )"
+    if [ ! -z "$dir" ] ; then
+        cd "$dir"
+    fi
+}
+
 function cdback {
     #popd $1 >/dev/null
     local num=$1 i
@@ -506,12 +530,12 @@ function cdback {
 alias cdclear='dirs -c'
 
 ### ad-hoc chdir like aliases 
-alias ,=cdback
-alias ..="cd .."
-alias ...=".. ; ..;"
-alias ....="..; ..; ..;"
-alias .....="..; ..; ..; ..;"
-alias ......="..; ..; ..; ..; ..;"
+# alias ,=cdback
+# alias ..="cd .."
+# alias ...=".. ; ..;"
+# alias ....="..; ..; ..;"
+# alias .....="..; ..; ..; ..;"
+# alias ......="..; ..; ..; ..; ..;"
 
 # Jump cd as shortcut key.
 function cdj {
@@ -595,6 +619,26 @@ function cdup {
     else
         echo "$FUNCNAME: Something wrong." 1>&2
     fi
+}
+
+# cdup の peco 版
+function cdupp {
+    local dir
+    local dirstr="$PWD" num=0 i dirnum
+    while [ ! -z "$dirstr" ] ; do
+        dirlist[$((++num))]="$dirstr"
+        dirstr="${dirstr%/*}"
+    done
+    dirlist[$((++num))]=/
+    dir=$( for i in $( seq $num -1 1 ) ; do echo "${dirlist[$i]}" ; done | peco )
+    test ! -z "$dir" && cd "$dir"
+}
+
+# cdback などの peco 版
+function cddownp {
+    #local find_param="-not -ipath .git -and -not -ipath .svn"
+    local dir=$(find . -type d $find_param | grep -E -v '\.(svn|git)' | head -n 10000 | peco)
+    test ! -z "$dir" && cd "$dir"
 }
 
 function cdwhich {
@@ -772,6 +816,13 @@ function cdlocate {
     cd "$selpath"
 }
 
+# cdlocate の peco 版
+type loate >/dev/null 2>&1 && type peco >/dev/null 2>&1 &&
+function cdlocatep {
+    # not write yet ...
+    :
+}
+
 # cdmdfind
 # cd shortcut by mdfind (Mac OS X Spotlight CLI)
 type mdfind >/dev/null 2>&1 && \
@@ -814,6 +865,26 @@ function cdmdfind {
         return 1
     fi
     cd "$selpath"
+}
+
+# cdmdfind の peco 版
+type peco >/dev/null 2>&1 && type mdfind >/dev/null 2>&1 &&
+function cdmdfindp {
+    local dir
+    local arg="$1"
+    if [ -z "$arg" ] || [ "$arg" = "-h" ] ; then
+        echo "Usage:"
+        echo "  $FUNCNAME STRING"
+        return
+    fi
+    dir="$( for path in $(mdfind -name "$arg" | sed -e 's/ /+/g') ; do
+                path=$(echo "$path" | sed -e 's/\+/ /g')
+                test -d "$path" || continue
+                echo $path
+            done | peco )"
+    if [ ! -z "$dir" ] ; then
+        cd "$dir"
+    fi
 }
 
 # ssh と tail を使った簡単リモート通知
