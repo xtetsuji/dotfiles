@@ -877,11 +877,7 @@ function cdmdfindp {
         echo "  $FUNCNAME STRING"
         return
     fi
-    dir="$( for path in $(mdfind -name "$arg" | sed -e 's/ /+/g') ; do
-                path=$(echo "$path" | sed -e 's/\+/ /g')
-                test -d "$path" || continue
-                echo $path
-            done | peco )"
+    dir="$( mdfind -name "$arg" | perl -ne 'chomp; -d and print "$_\n";' | peco )"
     if [ ! -z "$dir" ] ; then
         cd "$dir"
     fi
