@@ -825,10 +825,10 @@ function cdlocatep {
     :
 }
 
-# cdmdfind
+# cdmd
 # cd shortcut by mdfind (Mac OS X Spotlight CLI)
 type mdfind >/dev/null 2>&1 && \
-function cdmdfind {
+function cdmd {
     local arg="$1" path i=0 j selnum selpath OUTPUT
     declare -a pathes
     if [ -z "$arg" ] || [ "$arg" = "-h" ] ; then
@@ -869,9 +869,11 @@ function cdmdfind {
     cd "$selpath"
 }
 
+type cdmd >/dev/null 2>&1 && alias cdmdfind=cdmd
+
 # cdmdfind の peco 版
 type peco >/dev/null 2>&1 && type mdfind >/dev/null 2>&1 &&
-function cdmdfindp {
+function cdmdp {
     local dir
     local arg="$1"
     if [ -z "$arg" ] || [ "$arg" = "-h" ] ; then
@@ -884,6 +886,8 @@ function cdmdfindp {
         cd "$dir"
     fi
 }
+
+type cdmdp >/dev/null 2>&1 && alias cdmdfindp=cdmdp
 
 # killjobs - peco による jobs の kill
 function killjobs {
