@@ -885,6 +885,25 @@ function cdmdfindp {
     fi
 }
 
+# killjobs - peco による jobs の kill
+function killjobs {
+    local jobnumbers
+    local arg="$1"
+    jobnumbers=$( jobs | peco | sed -e 's/^\[//' -e 's/\].*//' -e 's/^/%/' )
+    if [ ! -z "$jobnumbers" ] ; then
+        kill $arg $jobnumbers
+    fi
+}
+
+# fgp - peco による fg
+function fgp {
+    local jobnumber
+    jobnumber=$( jobs | peco | sed -e 's/^\[//' -e 's/\].*//' -e 's/^/%/' )
+    if [ ! -z "$jobnumber" ] ; then
+        fg $jobnumber
+    fi
+}
+
 # ssh と tail を使った簡単リモート通知
 # ただ使い方が面倒
 # http://d.hatena.ne.jp/punitan/20110416/1302928953
