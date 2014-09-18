@@ -472,7 +472,7 @@ function cdhist {
 type peco >/dev/null 2>&1 &&
 function cdhistp {
     local dir
-    dir="$( dirs -v | sort -k 2 | uniq -f 1 | sed -e 's/^ *[0-9]* *//' | peco | sed -e "s;^~;$HOME;" )"
+    dir="$( dirs -v | sort -k 2 | uniq -f 1 | sort -n -k 1 | sed -e 's/^ *[0-9]* *//' | peco | sed -e "s;^~;$HOME;" )"
     if [ ! -z "$dir" ] ; then
         cd "$dir"
     fi
@@ -503,7 +503,7 @@ function cdlist {
     fi
 }
 
-# cdhist の peco 版
+# cdlist の peco 版
 type peco >/dev/null 2>&1 &&
 function cdlistp {
     local dir
