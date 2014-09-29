@@ -3,8 +3,10 @@
 declare ALIASES=$HOME/.bash_aliases
 declare UNAME=$(uname)
 
+# my-alias-help
+# grep function .bash_aliases | perl -ne '/function +(\S+)/ and print "$1\n"' | sort | xargs echo
 function my-alias-help {
-    :
+    perl -ne 'push @funcs, /^function +([\w-]+)/; END { print "@funcs\n"; }' .bash_aliases
 }
 
 ###
@@ -20,6 +22,7 @@ case "$UNAME" in
 	alias ArchiveUtility='open /System/Library/CoreServices/Archive\ Utility.app/'
 	alias iPhoneSimulator='open /Developer/Platforms/iPhoneSimulator.platform/Developer/Applications/iPhone\ Simulator.app'
 	alias battery-remaining='pmset -g ps'
+        alias quicktime="open -a 'QuickTime Player' "
 	test -f /Applications/Emacs.app//Contents/MacOS/bin/emacsclient && \
 	    alias emacsclient="/Applications/Emacs.app//Contents/MacOS/bin/emacsclient"
 	type gtar >/dev/null 2>&1 && alias tar=gtar
