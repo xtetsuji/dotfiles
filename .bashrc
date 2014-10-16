@@ -173,6 +173,7 @@ peco-history() {
   fi
 }
 bind '"\C-x\C-r":"peco-history\n"'
+alias historyp=peco-history
 
 ###
 ### some settings
