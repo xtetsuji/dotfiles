@@ -243,12 +243,11 @@ function jsonlv {
 alias dict='perl -MCocoa::DictionaryServices=lookup -le "print for lookup(@ARGV);"'
 alias available_dictionaries='perl -MCocoa::DictionaryServices=available_dictionaries -le "print for available_dictionaries()"'
 
-# see: http://tech.bayashi.jp/archives/entry/perl/2011/003303.html
-function pm() {
+function module-view() {
     [ -n "$1" ] && perldoc -m $1
 }
 
-function pv() {
+function module-version() {
     [ -n "$1" ] && perl -e "use $1;print qq|$1: \$$1::VERSION\n|;";
 }
 
