@@ -128,7 +128,7 @@ if type emacsclient >/dev/null 2>&1 && ! type ec >/dev/null 2>&1 ; then
     alias ec=emacsclient
 fi
 
-sslv3='curl -sslv3 -kv '
+alias sslv3='curl -sslv3 -kv '
 
 # see: http://d.hatena.ne.jp/maji-KY/20110718/1310985449
 alias od='od -tx1z -Ax -v'
@@ -643,7 +643,7 @@ function cdupp {
 # cdback などの peco 版
 function cddownp {
     #local find_param="-not -ipath .git -and -not -ipath .svn"
-    local dir=$(find . -type d $find_param | grep -E -v '\.(svn|git)' | head -n 10000 | peco)
+    local dir=$(find . -type d | grep -E -v '\.(svn|git)' | peco)
     test ! -z "$dir" && cd "$dir"
 }
 
