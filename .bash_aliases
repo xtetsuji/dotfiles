@@ -949,6 +949,18 @@ peco-history() {
 bind '"\C-x\C-r":"peco-history\n"'
 alias historyp=peco-history
 
+# cdfind / findcd
+# find した結果から cd
+function cdfind () {
+    local arg="$1" dir
+    shift
+    dir=$(find "$arg" -type d "$@" | peco)
+    if [ ! -z "$dir" ] ; then
+        cd "$dir"
+    fi
+}
+alias fundcd=cdfind
+
 # ssh と tail を使った簡単リモート通知
 # ただ使い方が面倒
 # http://d.hatena.ne.jp/punitan/20110416/1302928953
