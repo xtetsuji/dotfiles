@@ -903,6 +903,16 @@ function killjobs {
     fi
 }
 
+# killps - peco による ps リストからの kill
+function killps {
+    local killpids
+    local arg="$1"
+    killpids=$( ps auxwww | peco | perl -ne 'print +(split /\s+/)[1], "\n";' )
+    if [ ! -z "$killpids" ] ; then
+        kill $arg $killpids
+    fi
+}
+
 # fgp - peco による fg
 function fgp {
     local jobnumber
@@ -911,7 +921,6 @@ function fgp {
         fg $jobnumber
     fi
 }
-
 
 # see: http://qiita.com/yungsang/items/09890a06d204bf398eea
 #export HISTCONTROL="ignoredups"
@@ -947,7 +956,6 @@ peco-history() {
   fi
 }
 bind '"\C-x\C-r":"peco-history\n"'
-alias historyp=peco-history
 
 # cdfind / findcd
 # find した結果から cd
