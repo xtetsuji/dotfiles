@@ -952,9 +952,9 @@ alias historyp=peco-history
 # cdfind / findcd
 # find した結果から cd
 function cdfind () {
-    local arg="$1" dir
+    local dir
     shift
-    dir=$(find "$arg" -type d "$@" | peco)
+    dir=$(find "$@" -type d | peco)
     if [ ! -z "$dir" ] ; then
         cd "$dir"
     fi
