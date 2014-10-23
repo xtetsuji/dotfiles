@@ -952,14 +952,15 @@ alias historyp=peco-history
 # cdfind / findcd
 # find した結果から cd
 function cdfind () {
-    local dir
-    shift
-    dir=$(find "$@" -type d | peco)
+    if [ -z "$1" ] || [ "x$0" = "x-h" ] ; then
+        echo "Usage: $FUNCNAME find_argument..."
+        return
+    fi
+    local dir=$(find "$@" -type d | peco)
     if [ ! -z "$dir" ] ; then
         cd "$dir"
     fi
 }
-alias fundcd=cdfind
 
 # ssh と tail を使った簡単リモート通知
 # ただ使い方が面倒
