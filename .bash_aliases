@@ -474,7 +474,7 @@ function cdhist {
 
 # cdhist の peco 版
 type peco >/dev/null 2>&1 &&
-function cdhistp {
+function cdh {
     local dir
     dir="$( dirs -v | sort -k 2 | uniq -f 1 | sort -n -k 1 | sed -e 's/^ *[0-9]* *//' | peco | sed -e "s;^~;$HOME;" )"
     if [ ! -z "$dir" ] ; then
@@ -509,7 +509,7 @@ function cdlist {
 
 # cdlist の peco 版
 type peco >/dev/null 2>&1 &&
-function cdlistp {
+function cdl {
     local dir
     dir="$( find . -maxdepth 1 -type d | sed -e 's;^\./;;' | peco )"
     if [ ! -z "$dir" ] ; then
@@ -628,7 +628,7 @@ function cdup {
 }
 
 # cdup の peco 版
-function cdupp {
+function cdu {
     local dir
     local dirstr="$PWD" num=0 i dirnum
     while [ ! -z "$dirstr" ] ; do
@@ -640,13 +640,7 @@ function cdupp {
     test ! -z "$dir" && cd "$dir"
 }
 
-# cdback などの peco 版
-function cddownp {
-    #local find_param="-not -ipath .git -and -not -ipath .svn"
-    local dir=$(find . -type d | grep -E -v '\.(svn|git)' | peco)
-    test ! -z "$dir" && cd "$dir"
-}
-
+# which したコマンドの場所に cd
 function cdwhich {
     arg="$1"
     cd $( dirname $( which "$arg" ) )
@@ -832,7 +826,7 @@ function cdlocatep {
 # cdmd
 # cd shortcut by mdfind (Mac OS X Spotlight CLI)
 type mdfind >/dev/null 2>&1 && \
-function cdmd {
+function cdmdfind {
     local arg="$1" path i=0 j selnum selpath OUTPUT
     declare -a pathes
     if [ -z "$arg" ] || [ "$arg" = "-h" ] ; then
@@ -873,11 +867,9 @@ function cdmd {
     cd "$selpath"
 }
 
-type cdmd >/dev/null 2>&1 && alias cdmdfind=cdmd
-
 # cdmdfind の peco 版
 type peco >/dev/null 2>&1 && type mdfind >/dev/null 2>&1 &&
-function cdmdp {
+function cdmdfindp {
     local dir
     local arg="$1"
     if [ -z "$arg" ] || [ "$arg" = "-h" ] ; then
@@ -891,7 +883,11 @@ function cdmdp {
     fi
 }
 
-type cdmdp >/dev/null 2>&1 && alias cdmdfindp=cdmdp
+if type  mdfind >/dev/null 2>&1 ; then
+    alias cdi=cdmdfindp
+elif type locate >/dev/null 2>&1 ; then
+    alias cdi=cdlocatep
+fi
 
 # killjobs - peco による jobs の kill
 function killjobs {
@@ -924,8 +920,8 @@ function fgp {
 
 # see: http://qiita.com/yungsang/items/09890a06d204bf398eea
 #export HISTCONTROL="ignoredups"
-# peco-history / historyp / C-x C-r
-peco-history() {
+# peco-history / C-x C-r
+function peco-history() {
   local NUM=$(history | wc -l)
   local FIRST=$((-1*(NUM-1)))
 
@@ -958,7 +954,7 @@ peco-history() {
 bind '"\C-x\C-r":"peco-history\n"'
 
 # cdfind / findcd
-# find した結果から cd
+# find した結果を peco で選別して cd
 function cdfind () {
     if [ -z "$1" ] || [ "x$0" = "x-h" ] ; then
         echo "Usage: $FUNCNAME find_argument..."
