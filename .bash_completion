@@ -291,3 +291,6 @@ _sips(){
     COMPREPLY=( $(compgen -W "$opts_all" -- ${cur} ))
 } &&
 complete -F _sips sips
+
+type cdfind >/dev/null 2>&1 &&
+complete -F _find cdfind
