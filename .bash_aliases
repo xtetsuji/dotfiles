@@ -889,6 +889,12 @@ elif type locate >/dev/null 2>&1 ; then
     alias cdi=cdlocatep
 fi
 
+# pwdreplace - 現在のディレクトリを置換する
+function pwdreplace {
+    local pattern="$1" string="$2"
+    return cd "${PWD/$pattern/$string}"
+}
+
 # killjobs - peco による jobs の kill
 function killjobs {
     local jobnumbers
@@ -956,7 +962,7 @@ bind '"\C-x\C-r":"peco-history\n"'
 # cdfind / findcd
 # find した結果を peco で選別して cd
 function cdfind () {
-    if [ -z "$1" ] || [ "x$0" = "x-h" ] ; then
+    if [ -z "$1" ] || [ "x$1" = "x-h" ] ; then
         echo "Usage: $FUNCNAME find_argument..."
         return
     fi
@@ -964,6 +970,17 @@ function cdfind () {
     if [ ! -z "$dir" ] ; then
         cd "$dir"
     fi
+}
+
+# openfind
+# find した結果を peco で選別して open
+function openfind () {
+    if [ -z "$1" ] || [ "x$1" = "x-h" ] ; then
+        echo "Usage: $FUNCNAME find_argument..."
+        return
+    fi
+    local arg=$(find "$@" | peco)
+    open "$arg"
 }
 
 # ssh と tail を使った簡単リモート通知
