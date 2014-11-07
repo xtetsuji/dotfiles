@@ -52,7 +52,8 @@ alias lv='lv -c'
 if ! type lv >/dev/null 2>&1 && type less >/dev/null 2>&1 ; then
     alias lv='echo "lv is aliased as less" 1>&2 ; less'
 fi
-alias tree='tree -C'
+# -N for showing multibytes character
+alias tree='tree -NC'
 alias mv='mv -i'
 alias en='env LANG=C '
 if type w3m >/dev/null 2>&1 ; then
