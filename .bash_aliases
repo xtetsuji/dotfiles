@@ -9,6 +9,15 @@ function my-alias-help {
     perl -ne 'push @funcs, /^function +([\w-]+)/; END { print "@funcs\n"; }' .bash_aliases
 }
 
+function my-startup {
+    if [ "$MY_STARTUP_DONE" = 1 ] ; then
+	echo "alread done"
+	return
+    fi
+    my-ssh-add
+    MY_STARTUP_DONE=1
+}
+
 ###
 ### Basics
 ##
