@@ -3,6 +3,12 @@
 declare ALIASES=$HOME/.bash_aliases
 declare UNAME=$(uname)
 
+function my {
+    echo "Usage:"
+    echo "  my-starup"
+    echo "  my-ssh-add"
+}
+
 # my-alias-help
 # grep function .bash_aliases | perl -ne '/function +(\S+)/ and print "$1\n"' | sort | xargs echo
 function my-alias-help {
@@ -18,7 +24,7 @@ function my-startup {
     MY_STARTUP_DONE=1
 }
 
-###
+
 ### Basics
 ##
 
