@@ -18,10 +18,14 @@ fi
 if [ -f ~/.bash_aliases ] ; then
     source ~/.bash_aliases
 fi
-### add at 2011/11/07
-if [ -f ~/perl5/perlbrew/etc/bashrc ] ; then
-    source ~/perl5/perlbrew/etc/bashrc
-fi
+
+# ### add at 2011/11/07
+# if [ -n "$PERL_ENVIRONMENT_SETUP" ] && [ -f ~/perl5/perlbrew/etc/bashrc ] ; then
+#     source ~/perl5/perlbrew/etc/bashrc
+#     PERL_ENVIRONMENT_SETUP=1
+# fi
+#
+# perlbrew / plenv setups move to .bash_profile (2015/05/31)
 
 ###
 ### Prompt
@@ -69,7 +73,9 @@ fi
 # export FTP_PROXY=$http_proxy
 ### NOTE: proxy environments are detected chproxy function or on .bash_secret.
 
+###
 ### history
+###
 # see: http://tukaikta.blog135.fc2.com/blog-entry-187.html
 function share_history {
     history -a
@@ -111,10 +117,6 @@ elif type less >/dev/null 2>&1 ; then
     export PAGER=less
 else
     export PAGER=more
-fi
-
-if [ "$PAGER" != lv ] || [ "$PAGER" != "lv -c" ] ; then
-    alias lv="$PAGER"
 fi
 
 if type vi >/dev/null 2>&1 ; then
