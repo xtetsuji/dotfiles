@@ -13,10 +13,9 @@ if [ -n "$BASH_VERSION" ] ; then
     fi
 fi
 
-# Read "perlbrew" in .bashrc path definition fast than in .bash_profile other definitions.
-
+###
 ### PATH
-
+###
 export PATH
 if [ -d ~/bin ] ; then
     PATH=$PATH:~/bin
@@ -37,7 +36,9 @@ if [ -d ~/.rbenv/bin ] ; then
     eval "$(rbenv init -)"
 fi
 
+###
 ### mysql-build
+###
 # http://www.hsbt.org/diary/20130217.html
 if [ -d ~/.mysql/mysql-build/bin ] ; then
     PATH=$PATH:~/.mysql/mysql-build/bin
@@ -46,21 +47,27 @@ if [ -d ~/.mysql/default/bin ] ; then
     PATH="$HOME/.mysql/default/bin:$PATH"
 fi
 
-### plenv if exist
-if [ -d "$HOME/.plenv/bin" ] ; then
-    export PATH="$HOME/.plenv/bin:$PATH"
-fi
+###
+### plenv
+###
 if type plenv >/dev/null 2>&1 ; then
+    export PLENV_ROOT=$HOME/.plenv
+    export PATH=$PLENV_ROOT/bin:$PATH
     eval "$(plenv init -)"
 fi
 
-### rbenv if exist
-if [ -d "$HOME/.rbenv/bin" ] ; then
+
+###
+### rbenv
+###
+if type rbenv >/dev/null 2>&1 ; then
     export RBENV_ROOT=$HOME/.rbenv
     export PATH=$PATH:$RBENV_ROOT/bin
 fi
 
+###
 ### golang
+###
 if type go >/dev/null 2>&1 ; then
     GO_VERSION=$(go version | sed -e 's/.*version go//' -e 's/ .*//')
     if ! [[ $GO_VERSION =~ ^[0-9][0-9.]+$ ]] ; then
@@ -75,7 +82,9 @@ if type go >/dev/null 2>&1 ; then
     fi
 fi
 
+###
 ### Android SDK
+###
 # http://www.yoheim.net/blog.php?q=20140304
 if [ -d "$HOME/Library/$USER/android-sdk/platform-tools" ] ; then
     # Mac OS X builtin directory "~/Library" is used.
@@ -83,14 +92,15 @@ if [ -d "$HOME/Library/$USER/android-sdk/platform-tools" ] ; then
 fi
 
 
-### MANPATH
+###
+### Some PATHes
+###
 export MANPATH
-
-### INFOPATH
 export INFOPATH
 
+###
 ### Locale / Lang
-
+###
 # locale is UTF-8 ordinary on modern Debian and some dists.
 if    [ -f /etc/locale.gen ] \
    && grep -i '^ja_JP\.UTF-8' /etc/locale.gen >/dev/null 2>&1 ; then
