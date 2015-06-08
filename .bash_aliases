@@ -3,10 +3,15 @@
 declare ALIASES=$HOME/.bash_aliases
 declare UNAME=$(uname)
 
+declare MY_PERLBREW_VERSION=5.20
+
 function my {
     echo "Usage:"
     echo "  my-starup"
     echo "  my-ssh-add"
+    echo "  my-alias-help"
+    echo "  my-init-backgrounds"
+    echo "  # my-ssh-agent-setup"
 }
 
 # my-alias-help
@@ -24,6 +29,14 @@ function my-startup {
     MY_STARTUP_DONE=1
 }
 
+function my-init-backgrounds {
+    perlbrew use $MY_PERLBREW_VERSION
+    battery-watchd &
+    macwland &
+    pbstot2memod &
+    srnotifyd &
+    disk-capad &
+}
 
 ### Basics
 ##
@@ -925,7 +938,7 @@ function killjobs {
 function killps {
     local killpids
     local arg="$1"
-    killpids=$( ps auxwww | peco | perl -ne 'print +(split /\s+/)[1], "\n";' )
+    killpids=$( ps auxwww | peco | perl -ne 'print grep { /^\d+$/ } +(split /\s+/)[1], "\n";' )
     if [ ! -z "$killpids" ] ; then
         kill $arg $killpids
     fi
@@ -1020,6 +1033,79 @@ function snotifyd {
     ssh $host env LANG=C tail -q -n 0 -F "$remote_log" \
         | while read line ; do echo "$line" ; growlnotify -s -m "$line" -t $host ; done
     #| perl -e 'system qw/growlnotify -s -m/, $_, '$host' while <STDIN>;'
+}
+
+
+# 現在のディレクトリにいた記録を取ってタスクとして記憶
+# chkd => リストモードで選ばせる
+# chked delete => リストモードで選ばせたものを削除する
+# chkd -m MEMO
+# chkd --memory MEMO => 現在のディレクトリをMEMO付きで覚えさせる
+function chkd {
+    local arg="$1"
+    local listfile="$HOME/.chkdlist"
+    local mode subarg directory comment
+    if [ -z "$arg" -o "x$arg" = x--delete -o "x$arg" = x-d ] ; then
+        mode=list
+        test -n "$arg" && arg=delete || arg=select
+    elif [ "x$arg" = x--help -o "x$arg" = x-h ] ; then
+        echo "Usage:"
+        echo "$FUNCNAME                    => List mode"
+        echo "$FUNCNAME [-d|--delete]      => List and delete mode"
+        echo "$FUNCNAME [-h|--help]        => Help (This message)"
+        echo "$FUNCNAME [-m|--memory] MEMO => Memo This Directory"
+        return
+    elif [ "x$arg" = x-m -o "x$arg" = x--memory ] ; then
+        mode=memory
+        subarg="$2"
+    fi
+    if [ $mode = list ] ; then
+        if [ ! -s "$listfile" ] ; then
+            echo "list file \"$listfile\" is not found or empty" >&2
+            return 1
+        fi
+        # show and select
+        if type peco >/dev/null 2>&1 ; then
+            line=$(peco --prompt "$arg memo>" "$listfile")
+            if [[ $(echo $line | wc -l) > 1 ]] ; then
+                echo "Currently non-support multiple select."
+                return
+            fi
+            # TODO: multiple select
+        else
+
+            cat "$listfile"
+            read -t 10 -p "input line number> " line_number
+            echo $line_number | grep '^[0-9]+$' >/dev/null 2>&1 ||
+                { echo "Please input number" >&2 ; return 1 ; }
+            line=$(cat "$listfile" | sed -ne "${line_number}p")
+        fi
+        if [ -n "$line" ] ; then # $line is non-zero
+            # include TAB code
+            directory="${line/	*/}"
+            comment="${line/*	/}"
+            if [ "$arg" = delete ] ; then
+                # その行以外をもう一度書き戻す
+                grep --extended-regexp --invert-match "^$directory\t" $listfile > $listfile.tmp
+                # ここのよりわけも行数把握して sed がいいな
+                rm -f $listfile
+                mv $listfile.tmp $listfile
+                echo "delete done"
+                return
+            else
+                #echo -e "change directory to \e[34;1m${directory}\e[m by \e[32;1m${comment}\e[m."
+                echo "change directory to ${directory} by ${comment}."
+                cd "$directory"
+            fi
+        else
+            echo "Selected line is not found."
+        fi
+    elif [ $mode = memory ] ; then
+        # 末尾改行いるのかいらないのかどうだっけな
+        echo -e "$(pwd)\t$subarg" >> $listfile
+    else
+        echo "Mode detect faild" 2>&1
+    fi
 }
 
 unset ALIASES
