@@ -1050,10 +1050,10 @@ function chkd {
         test -n "$arg" && arg=delete || arg=select
     elif [ "x$arg" = x--help -o "x$arg" = x-h ] ; then
         echo "Usage:"
-        echo "$FUNCNAME                    => List mode"
-        echo "$FUNCNAME [-d|--delete]      => List and delete mode"
-        echo "$FUNCNAME [-h|--help]        => Help (This message)"
-        echo "$FUNCNAME [-m|--memory] MEMO => Memo This Directory"
+        echo "  $FUNCNAME                    => List mode"
+        echo "  $FUNCNAME [-d|--delete]      => List and delete mode"
+        echo "  $FUNCNAME [-h|--help]        => Help (This message)"
+        echo "  $FUNCNAME [-m|--memory] MEMO => Memo This Directory"
         return
     elif [ "x$arg" = x-m -o "x$arg" = x--memory ] ; then
         mode=memory
