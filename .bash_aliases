@@ -918,8 +918,9 @@ elif type locate >/dev/null 2>&1 ; then
     alias cdi=cdlocatep
 fi
 
-# pwdreplace - 現在のディレクトリを置換する
-function pwdreplace {
+# pwdscd - 現在のディレクトリを置換する
+# pwd -> s/// -> cd
+function pwdscd {
     local pattern="$1" string="$2"
     return cd "${PWD/$pattern/$string}"
 }
