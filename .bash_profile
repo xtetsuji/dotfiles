@@ -63,6 +63,9 @@ fi
 if type rbenv >/dev/null 2>&1 ; then
     export RBENV_ROOT=$HOME/.rbenv
     export PATH=$PATH:$RBENV_ROOT/bin
+    eval "$(rbenv init -)"
+    # Homebrew's rbenv offers RBENV_ROOT=/usr/loca/var/rbenv
+    # But ~/.rbenv is useful when I use for personal.
 fi
 
 ###
