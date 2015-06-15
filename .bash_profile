@@ -54,6 +54,7 @@ if type plenv >/dev/null 2>&1 ; then
     export PLENV_ROOT=$HOME/.plenv
     export PATH=$PLENV_ROOT/bin:$PATH
     eval "$(plenv init -)"
+    test -d $PLENV_ROOT || mkdir $PLENV_ROOT
 fi
 
 
@@ -63,9 +64,10 @@ fi
 if type rbenv >/dev/null 2>&1 ; then
     export RBENV_ROOT=$HOME/.rbenv
     export PATH=$PATH:$RBENV_ROOT/bin
-    eval "$(rbenv init -)"
     # Homebrew's rbenv offers RBENV_ROOT=/usr/loca/var/rbenv
     # But ~/.rbenv is useful when I use for personal.
+    eval "$(rbenv init -)"
+    test -d $RBENV_ROOT || mkdir $RBENV_ROOT
 fi
 
 ###
