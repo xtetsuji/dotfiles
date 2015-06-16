@@ -3,8 +3,6 @@
 declare ALIASES=$HOME/.bash_aliases
 declare UNAME=$(uname)
 
-declare MY_PERLBREW_VERSION=5.20
-
 function my {
     echo "Usage:"
     echo "  my-starup"
@@ -30,7 +28,6 @@ function my-startup {
 }
 
 function my-init-backgrounds {
-    perlbrew use $MY_PERLBREW_VERSION
     battery-watchd &
     macwland &
     pbstot2memod &
@@ -906,6 +903,7 @@ function cdmdfindp {
         echo "  $FUNCNAME STRING"
         return
     fi
+    # TODO: クエリがなかった場合のエラー文言
     dir="$( mdfind -name "$arg" | perl -ne 'chomp; -d and print "$_\n";' | peco )"
     if [ ! -z "$dir" ] ; then
         cd "$dir"

@@ -42,11 +42,14 @@ fi
 if [ "$color_prompt" = yes ] ; then
     PS1='${debian_chroot:+($debian_chroot)}\[\033[01;32m\]\u@\h\[\033[00m\]:\[\033[01;34m\]\w\[\033[00m\]\$ '
     # see: http://j-caw.co.jp/blog/?p=901
-    if [ -f ~/.git-prompt.sh ] ; then
-        source ~/.git-prompt.sh
-        GIT_PS1_SHOWDIRTYSTATE=true
-        PS1='${debian_chroot:+($debian_chroot)}\[\033[01;32m\]\u@\h\[\033[00m\]:\[\033[01;34m\]\w\[\033[00m\]$(__git_ps1 " [\[\033[32m\]%s\[\033[0m\]]")\$ '
-    fi
+    # brew install bash-git-prompt (for Mac)
+
+    # if [ -f "$(brew --prefix bash-git-prompt)/share/gitprompt.sh" ]; then
+    #     GIT_PROMPT_THEME=Default
+    #     source "$(brew --prefix bash-git-prompt)/share/gitprompt.sh"
+    # fi
+    # GIT_PS1_SHOWDIRTYSTATE=true
+    # PS1='${debian_chroot:+($debian_chroot)}\[\033[01;32m\]\u@\h\[\033[00m\]:\[\033[01;34m\]\w\[\033[00m\]$(__git_ps1 " [\[\033[32m\]%s\[\033[0m\]]")\$ '
 fi
 unset color_prompt
 
