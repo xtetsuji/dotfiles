@@ -1107,6 +1107,18 @@ function chkd {
     fi
 }
 
+function cdrepo {
+    local dir=$1
+    local line
+    if [ -z "$dir" ] ; then
+        dir=~
+    fi
+    line=$( find "$dir" -name .git -type d | sed -e "s#^$HOME#~#" -e 's#/\.git$##'| peco )
+    # 空白ディレクトリ対策だけど、これだと ~ が展開されないので
+    # cd "$line"
+    cd "${line/'~'/$HOME}"
+}
+
 unset ALIASES
 unset UNAME
 
