@@ -3,6 +3,8 @@
 #
 # ~/.bash_profile is personal profile for login shell.
 # ~/.bashrc is personal "conversation" profile for subshell.
+#
+# ~/.bash_profile only offers environment varialble.
 
 umask 022
 
@@ -14,27 +16,16 @@ if [ -n "$BASH_VERSION" ] ; then
 fi
 
 ###
-### PATH
+### PATH of fundamental
 ###
 export PATH
-if [ -d ~/bin ] ; then
-    PATH=$PATH:~/bin
-fi
-if [ -d /opt/local/bin ] ; then
-    # for MacPorts
-    PATH=$PATH:/opt/local/bin
-fi
-if [ -d /Developer/usr/bin ] ; then
-    # for Xcode3 on Lion
-    PATH=$PATH:/Developer/usr/bin
-fi
-if [ -d ~/git/@github/xtetsuji/various-commands/bin ] ; then
-    PATH=$PATH:~/git/@github/xtetsuji/various-commands/bin
-fi
-if [ -d ~/.rbenv/bin ] ; then
-    PATH=$PATH:~/.rbenv/bin
-    eval "$(rbenv init -)"
-fi
+for d in ~/bin ~/Dropbox/bin ~/git/@github/xtetsuji/various-commands/bin ; do
+    if [ -d $d ] ; then
+        PATH=$PATH:$d
+    fi
+done
+unset d
+# TODO: each other two directries are same if one is symbolic link of another.
 
 ###
 ### mysql-build
@@ -54,8 +45,8 @@ if type plenv >/dev/null 2>&1 ; then
     export PLENV_ROOT=$HOME/.plenv
     export PATH=$PLENV_ROOT/bin:$PATH
     eval "$(plenv init -)"
+    test -d $PLENV_ROOT || mkdir $PLENV_ROOT
 fi
-
 
 ###
 ### rbenv
@@ -63,11 +54,16 @@ fi
 if type rbenv >/dev/null 2>&1 ; then
     export RBENV_ROOT=$HOME/.rbenv
     export PATH=$PATH:$RBENV_ROOT/bin
+    # Homebrew's rbenv offers RBENV_ROOT=/usr/loca/var/rbenv
+    # But ~/.rbenv is useful when I use for personal.
+    eval "$(rbenv init -)"
+    test -d $RBENV_ROOT || mkdir $RBENV_ROOT
 fi
 
 ###
 ### golang
 ###
+# brew install go
 if type go >/dev/null 2>&1 ; then
     GO_VERSION=$(go version | sed -e 's/.*version go//' -e 's/ .*//')
     if ! [[ $GO_VERSION =~ ^[0-9][0-9.]+$ ]] ; then

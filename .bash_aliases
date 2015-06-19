@@ -3,8 +3,6 @@
 declare ALIASES=$HOME/.bash_aliases
 declare UNAME=$(uname)
 
-declare MY_PERLBREW_VERSION=5.20
-
 function my {
     echo "Usage:"
     echo "  my-starup"
@@ -30,7 +28,6 @@ function my-startup {
 }
 
 function my-init-backgrounds {
-    perlbrew use $MY_PERLBREW_VERSION
     battery-watchd &
     macwland &
     pbstot2memod &
@@ -906,6 +903,7 @@ function cdmdfindp {
         echo "  $FUNCNAME STRING"
         return
     fi
+    # TODO: クエリがなかった場合のエラー文言
     dir="$( mdfind -name "$arg" | perl -ne 'chomp; -d and print "$_\n";' | peco )"
     if [ ! -z "$dir" ] ; then
         cd "$dir"
@@ -918,8 +916,9 @@ elif type locate >/dev/null 2>&1 ; then
     alias cdi=cdlocatep
 fi
 
-# pwdreplace - 現在のディレクトリを置換する
-function pwdreplace {
+# pwdscd - 現在のディレクトリを置換する
+# pwd -> s/// -> cd
+function pwdscd {
     local pattern="$1" string="$2"
     return cd "${PWD/$pattern/$string}"
 }
@@ -1106,6 +1105,18 @@ function chkd {
     else
         echo "Mode detect faild" 2>&1
     fi
+}
+
+function cdrepo {
+    local dir=$1
+    local line
+    if [ -z "$dir" ] ; then
+        dir=~
+    fi
+    line=$( find "$dir" -name .git -type d | sed -e "s#^$HOME#~#" -e 's#/\.git$##'| peco )
+    # 空白ディレクトリ対策だけど、これだと ~ が展開されないので
+    # cd "$line"
+    cd "${line/'~'/$HOME}"
 }
 
 unset ALIASES
