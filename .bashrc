@@ -111,6 +111,7 @@ fi
 if [ -n "$BASH_COMPLETION" ] && [ ! -f ~/.git-completion.bash ] ; then
     echo "Download git-completion.bash to ~/"
     curl https://raw.githubusercontent.com/git/git/master/contrib/completion/git-completion.bash > ~/.git-completion.bash
+    source ~/.git-completion.bash
 fi
 
 
