@@ -101,10 +101,12 @@ export INFOPATH
 if    [ -f /etc/locale.gen ] \
    && grep -i '^ja_JP\.UTF-8' /etc/locale.gen >/dev/null 2>&1 ; then
     export LANG=ja_JP.UTF-8
+    export LV="-Ou"
 elif  [ -f /etc/locale.gen ] \
    && grep -i '^ja_JP\.eucJP' /etc/locale.gen >/dev/null 2>&1 ; then
     export LANG=ja_JP.eucJP
     export JLESSCHARSET=japanese-euc
+    export LV="-Oe"
 elif [ `uname` = Darwin ] ; then
     export LANG=ja_JP.UTF-8
 else
