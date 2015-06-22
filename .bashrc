@@ -107,6 +107,13 @@ elif [ -f /etc/bash_completion ] ; then
 fi
 # and see "~/.bash_completion". It is read by builtin bash_completion.
 
+# git の補完に必要
+if [ -n "$BASH_COMPLETION" ] && [ ! -f ~/.git-completion.bash ] ; then
+    echo "Download git-completion.bash to ~/"
+    curl https://raw.githubusercontent.com/git/git/master/contrib/completion/git-completion.bash > ~/.git-completion.bash
+fi
+
+
 ###
 ### pager and editor
 ###
