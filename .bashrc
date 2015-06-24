@@ -44,12 +44,17 @@ if [ "$color_prompt" = yes ] ; then
     # see: http://j-caw.co.jp/blog/?p=901
     # brew install bash-git-prompt (for Mac)
 
+    # git プロンプト
+    if [ -n "$BASH_COMPLETION" ] && [ ! -f ~/.git-prompt.sh ] ; then
+        curl https://raw.githubusercontent.com/git/git/master/contrib/completion/git-prompt.sh > ~/.git-prompt.sh
+    fi
+    source ~/.git-prompt.sh
     # if [ -f "$(brew --prefix bash-git-prompt)/share/gitprompt.sh" ]; then
     #     GIT_PROMPT_THEME=Default
     #     source "$(brew --prefix bash-git-prompt)/share/gitprompt.sh"
     # fi
     # GIT_PS1_SHOWDIRTYSTATE=true
-    # PS1='${debian_chroot:+($debian_chroot)}\[\033[01;32m\]\u@\h\[\033[00m\]:\[\033[01;34m\]\w\[\033[00m\]$(__git_ps1 " [\[\033[32m\]%s\[\033[0m\]]")\$ '
+    PS1='${debian_chroot:+($debian_chroot)}\[\033[01;32m\]\u@\h\[\033[00m\]:\[\033[01;34m\]\w\[\033[00m\]$(__git_ps1 " [\[\033[32m\]%s\[\033[0m\]]")\$ '
 fi
 unset color_prompt
 
@@ -113,7 +118,6 @@ if [ -n "$BASH_COMPLETION" ] && [ ! -f ~/.git-completion.bash ] ; then
     curl https://raw.githubusercontent.com/git/git/master/contrib/completion/git-completion.bash > ~/.git-completion.bash
     source ~/.git-completion.bash
 fi
-
 
 ###
 ### pager and editor
