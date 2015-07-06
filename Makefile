@@ -12,6 +12,7 @@ usage:
 	@echo "Usage:"
 	@echo "  make list             #=> ls -a"
 	@echo "  make deploy           #=> create symlink"
+	@echo "  make deploy-append    #=> create symlink if not exist"
 	@echo "  make upload-files     #=> rsync to REMOTE_USER@REMOTE_HOST"
 	@echo "  make dry-upload-files #=> dry-run and ditto"
 	@echo "  make update           #=> git pull origin master"
@@ -23,17 +24,21 @@ deploy:
 	@echo "Start deploy dotfiles current directory."
 	@echo "If this is \"dotdir\", curretly it is ignored and copy your hand."
 	for f in .??* ; do \
+		test "$(IGNORE_EXIST_SYMLINK)" = 1 -a -L "$${f}" && continue ; \
 		test "$${f}" = .git -o "$${f}" = .git/ && continue ; \
 		test "$${f}" = .gitignore            && continue ; \
 		test "$${f}" = .DS_Store             && continue ; \
 		test "$${f}" = .xsession -a "$(UNAME)" = Darwin && continue ; \
 		test -d "$${f}" && continue ; \
 		if [ -f "~/$${f}" ] && [ ! -L "~/$${f}" ] ; then \
-			echo "backup as $${f} to $${f}.$(BACKUP_EXT)" ; \
+			echo ">>> backup as $${f} to $${f}.$(BACKUP_EXT)" ; \
 			cp "~/$${f}" "~/$${f}.$(BACKUP_EXT)" ; \
 		fi ; \
 		ln -v -i -s "$(PWD)/$${f}" ~/ ; \
 	done ; true
+
+deploy-append:
+	$(MAKE) deploy IGNORE_EXIST_SYMLINK=1
 
 upload-files: .dotfiles
 	@echo "Start upload files to remote server."
