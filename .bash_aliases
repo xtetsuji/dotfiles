@@ -1119,7 +1119,7 @@ function cdrepo {
     cd "${line/'~'/$HOME}"
 }
 
-function git-cd {
+function cdgit {
     # git の alias で cd を書いてもサブコマンドになってしまうので
     cd $HOME/$( find $HOME -name .git -maxdepth 5 | sed -e "s:^$HOME/::" -e 's:/.git$::'| peco )
 }
