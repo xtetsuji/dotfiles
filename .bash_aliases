@@ -1120,8 +1120,12 @@ function cdrepo {
 }
 
 function cdgit {
-    # git の alias で cd を書いてもサブコマンドになってしまうので
-    cd $HOME/$( find $HOME -name .git -maxdepth 5 | sed -e "s:^$HOME/::" -e 's:/.git$::'| peco )
+    # git cd を書いてもサブコマンドになってカレントシェルでディレクトリ移動できない
+    # maxdepth が 5 なのは速度的な問題
+    local dir="$( find "$HOME" -name .git -maxdepth 5 | sed -e "s:^$HOME/::" -e 's:/.git$::'| peco )"
+    if [ -n "$dir" ] ; then
+        cd "$HOME/$dir"
+    fi
 }
 
 unset ALIASES
