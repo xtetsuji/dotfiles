@@ -13,6 +13,7 @@ usage:
 	@echo "  make list             #=> ls -a"
 	@echo "  make deploy           #=> create symlink"
 	@echo "  make deploy-append    #=> create symlink if not exist"
+	@echo "  make delete-symlink   #=> delete symlink"
 	@echo "  make upload-files     #=> rsync to REMOTE_USER@REMOTE_HOST"
 	@echo "  make dry-upload-files #=> dry-run and ditto"
 	@echo "  make update           #=> git pull origin master"
@@ -39,6 +40,13 @@ deploy:
 
 deploy-append:
 	$(MAKE) deploy IGNORE_EXIST_SYMLINK=1
+
+delete-symlink:
+	cd ~ ; for f in .??* ; do \
+		if [ -L "$${f}" ] ; then \
+			ls -l $${f} ; \
+			rm -i -v $${f} ; \
+		fi ; done
 
 upload-files: .dotfiles
 	@echo "Start upload files to remote server."
