@@ -6,5 +6,6 @@
         today = log --oneline --since='12 hour ago'
         cancel = reset --soft HEAD^
 
-[push]
-        default = simple
+# [push]
+#        default = simple
+
