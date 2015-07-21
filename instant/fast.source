@@ -1,0 +1,9 @@
+# -*- shell-script -*-
+# working server settings
+#
+# SYNOPSIS:
+#   curl $THIS_URL >foobar && source foobar
+#   wget -o foobar $THIS_URL && source foobar
+
+alias lv=less
+
