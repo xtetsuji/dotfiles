@@ -2,8 +2,12 @@
 # tiny bash settings for working server
 #
 # SYNOPSIS:
-#   curl $THIS_URL >foobar && source foobar
-#   wget -o foobar $THIS_URL && source foobar
+#   eval "$(curl -L $THIS_URL)"
+#
+#   nickname => THIS_URL=http://is.gd/xtfastsource
+#
+#   # curl $THIS_URL >foobar && source foobar
+#   # wget -o foobar $THIS_URL && source foobar
 
 alias lv=less
 
