@@ -1,5 +1,5 @@
 # -*- shell-script -*-
-# working server settings
+# tiny bash settings for working server
 #
 # SYNOPSIS:
 #   curl $THIS_URL >foobar && source foobar
@@ -7,3 +7,27 @@
 
 alias lv=less
 
+function exist_test {
+    local command="$1"
+    if ! type $command >/dev/null 2>&1 ; then
+        return 1
+    else
+        return 0
+    fi
+}
+
+function software-versions {
+    bash --version | sed -e 1p
+
+    if exist_test perl ; then
+        perl -v | sed -n -e 2p
+    else
+        echo "perl is not installed."
+    fi
+
+    if exist_test ruby ; then
+        ruby -v
+    else
+        wcho "ruby is not installed."
+    fi
+}
