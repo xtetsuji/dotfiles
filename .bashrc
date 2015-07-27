@@ -6,6 +6,8 @@ test -z "$PS1" && return
 
 UNAME="$(uname)"
 
+# コマンド入力や通知などのインタラクティブなもの
+
 ###
 ### read some config
 ###
