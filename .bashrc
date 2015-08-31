@@ -6,6 +6,8 @@ test -z "$PS1" && return
 
 UNAME="$(uname)"
 
+# コマンド入力や通知などのインタラクティブなもの
+
 ###
 ### read some config
 ###
@@ -118,8 +120,8 @@ fi
 if [ -n "$BASH_COMPLETION" ] && [ ! -f ~/.git-completion.bash ] ; then
     echo "Download git-completion.bash to ~/"
     curl https://raw.githubusercontent.com/git/git/master/contrib/completion/git-completion.bash > ~/.git-completion.bash
-    source ~/.git-completion.bash
 fi
+source ~/.git-completion.bash
 
 ###
 ### pager and editor
