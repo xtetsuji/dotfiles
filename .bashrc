@@ -48,7 +48,9 @@ if [ "$color_prompt" = yes ] ; then
     if [ -n "$BASH_COMPLETION" ] && [ ! -f ~/.git-prompt.sh ] ; then
         curl https://raw.githubusercontent.com/git/git/master/contrib/completion/git-prompt.sh > ~/.git-prompt.sh
     fi
-    source ~/.git-prompt.sh
+    if [ -f ~/.git-prompt.sh ] ; then
+        source ~/.git-prompt.sh
+    fi
     # if [ -f "$(brew --prefix bash-git-prompt)/share/gitprompt.sh" ]; then
     #     GIT_PROMPT_THEME=Default
     #     source "$(brew --prefix bash-git-prompt)/share/gitprompt.sh"
