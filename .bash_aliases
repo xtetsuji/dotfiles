@@ -479,7 +479,12 @@ function cd {
     elif ( echo "$1" | egrep "^\.\.\.+$" > /dev/null ) ; then
 	cd $( echo "$1" | perl -ne 'print "../" x ( tr/\./\./ - 1 )' )
     else
-	pushd "$1" > /dev/null
+        if [ "x$1" = "x-p" ] && [ -n "$2" ] ; then
+            mkdir -v -p "$2"
+            pushd "$2" >/dev/null
+        else
+	    pushd "$1" > /dev/null
+        fi
     fi
 }
 
