@@ -497,7 +497,8 @@ function cdhist {
     if [ -z "$dirnum" ] ; then
 	echo "$FUNCNAME: Abort." 1>&2
     elif ( echo $dirnum | egrep '^[[:digit:]]+$' > /dev/null ) ; then
-	cd "$( echo ${DIRSTACK[$dirnum]} | sed -e "s;^~;$HOME;" )"
+        cd "$( echo ${DIRSTACK[$dirnum]} | sed -e "s;^~;$HOME;" )"
+        echo "Prefer cdh over cdhist by peco"
     else
 	echo "$FUNCNAME: Wrong." 1>&2
     fi
@@ -533,6 +534,7 @@ function cdlist {
 	echo "$FUNCNAME: Abort." 1>&2
     elif ( echo $dirnum | egrep '^[[:digit:]]+$' > /dev/null ) ; then
 	cd "${dirlist[$dirnum]}"
+        echo "Prefer cdl over cdlist by peco"
     else
 	echo "$FUNCNAME: Something wrong." 1>&2
     fi
@@ -653,6 +655,7 @@ function cdup {
         echo "$FUNCNAME: Abort." 1>&2
     elif ( echo $dirnum | egrep '^[[:digit:]]+$' > /dev/null ) ; then
         cd "${dirlist[$dirnum]}"
+        echo "Prefer cdu over cdup by peco"
     else
         echo "$FUNCNAME: Something wrong." 1>&2
     fi
