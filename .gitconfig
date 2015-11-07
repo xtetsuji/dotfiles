@@ -5,6 +5,7 @@
 	graph = log --graph --date-order --all --pretty=format:'%h %Cred%d %Cgreen%ad %Cblue%cn %Creset%s' --date=short
         today = log --oneline --since='12 hour ago'
         cancel = reset --soft HEAD^
+        reset-merge = reset --merge
 
 # [push]
 #        default = simple
