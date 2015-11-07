@@ -48,7 +48,7 @@ if [ "$color_prompt" = yes ] ; then
 
     # git プロンプト
     if [ -n "$BASH_COMPLETION" ] && [ ! -f ~/.git-prompt.sh ] ; then
-        curl https://raw.githubusercontent.com/git/git/master/contrib/completion/git-prompt.sh > ~/.git-prompt.sh
+        curl --silent https://raw.githubusercontent.com/git/git/master/contrib/completion/git-prompt.sh > ~/.git-prompt.sh
     fi
     if [ -f ~/.git-prompt.sh ] ; then
         source ~/.git-prompt.sh
@@ -119,7 +119,7 @@ fi
 # git の補完に必要
 if [ ! -f ~/.git-completion.bash ] ; then
     echo "Download git-completion.bash to ~/"
-    curl https://raw.githubusercontent.com/git/git/master/contrib/completion/git-completion.bash > ~/.git-completion.bash
+    curl --silent https://raw.githubusercontent.com/git/git/master/contrib/completion/git-completion.bash > ~/.git-completion.bash
 fi
 source ~/.git-completion.bash
 
