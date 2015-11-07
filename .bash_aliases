@@ -340,7 +340,7 @@ if [ "$UNAME" = Darwin ] ; then
     alias CharacterPalette='open /System/Library/Input\ Methods/CharacterPalette.app/'
     alias ArchiveUtility='open /System/Library/CoreServices/Archive\ Utility.app/'
     alias iPhoneSimulator='open /Developer/Platforms/iPhoneSimulator.platform/Developer/Applications/iPhone\ Simulator.app'
-    alias screen-sharing='open /System/Library/CoreServices/Screen\ Sharing.app/'
+    alias cocoa-screenshare='open "/System/Library/CoreServices/Screen\ Sharing.app/"'
     alias ql='qlmanage -p'
     if [ -d '/Applications/Evernote Account Info 1.0.app/' ] ; then
         alias evernote-account-info='/Applications/Evernote\ Account\ Info\ 1.0.app/Contents/MacOS/applet'
@@ -479,7 +479,12 @@ function cd {
     elif ( echo "$1" | egrep "^\.\.\.+$" > /dev/null ) ; then
 	cd $( echo "$1" | perl -ne 'print "../" x ( tr/\./\./ - 1 )' )
     else
-	pushd "$1" > /dev/null
+        if [ "x$1" = "x-p" ] && [ -n "$2" ] ; then
+            mkdir -v -p "$2"
+            pushd "$2" >/dev/null
+        else
+	    pushd "$1" > /dev/null
+        fi
     fi
 }
 
@@ -492,7 +497,8 @@ function cdhist {
     if [ -z "$dirnum" ] ; then
 	echo "$FUNCNAME: Abort." 1>&2
     elif ( echo $dirnum | egrep '^[[:digit:]]+$' > /dev/null ) ; then
-	cd "$( echo ${DIRSTACK[$dirnum]} | sed -e "s;^~;$HOME;" )"
+        cd "$( echo ${DIRSTACK[$dirnum]} | sed -e "s;^~;$HOME;" )"
+        echo "Prefer cdh over cdhist by peco"
     else
 	echo "$FUNCNAME: Wrong." 1>&2
     fi
@@ -528,6 +534,7 @@ function cdlist {
 	echo "$FUNCNAME: Abort." 1>&2
     elif ( echo $dirnum | egrep '^[[:digit:]]+$' > /dev/null ) ; then
 	cd "${dirlist[$dirnum]}"
+        echo "Prefer cdl over cdlist by peco"
     else
 	echo "$FUNCNAME: Something wrong." 1>&2
     fi
@@ -648,6 +655,7 @@ function cdup {
         echo "$FUNCNAME: Abort." 1>&2
     elif ( echo $dirnum | egrep '^[[:digit:]]+$' > /dev/null ) ; then
         cd "${dirlist[$dirnum]}"
+        echo "Prefer cdu over cdup by peco"
     else
         echo "$FUNCNAME: Something wrong." 1>&2
     fi
