@@ -1121,19 +1121,10 @@ function cdrepo {
     if [ -z "$dir" ] ; then
         dir=~
     fi
-    line=$( find "$dir" -name .git -type d | sed -e "s#^$HOME#~#" -e 's#/\.git$##'| peco )
+    line=$( find "$dir" -maxdepth 4 -name .git -type d | sed -e "s#^$HOME#~#" -e 's#/\.git$##' -e 's#//##g '| peco )
     # 空白ディレクトリ対策だけど、これだと ~ が展開されないので
     # cd "$line"
     cd "${line/'~'/$HOME}"
-}
-
-function cdgit {
-    # git cd を書いてもサブコマンドになってカレントシェルでディレクトリ移動できない
-    # maxdepth が 5 なのは速度的な問題
-    local dir="$( find "$HOME" -name .git -maxdepth 5 | sed -e "s:^$HOME/::" -e 's:/.git$::'| peco )"
-    if [ -n "$dir" ] ; then
-        cd "$HOME/$dir"
-    fi
 }
 
 unset ALIASES
