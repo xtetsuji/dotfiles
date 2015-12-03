@@ -41,7 +41,7 @@ fi
 ###
 ### plenv
 ###
-if type plenv >/dev/null 2>&1 ; then
+if [ -d $HOME/.plenv ] ; then
     export PLENV_ROOT=$HOME/.plenv
     export PATH=$PLENV_ROOT/bin:$PATH
     eval "$(plenv init -)"
@@ -51,7 +51,7 @@ fi
 ###
 ### rbenv
 ###
-if type rbenv >/dev/null 2>&1 ; then
+if [ -d $HOME/.rbenv ] ; then
     export RBENV_ROOT=$HOME/.rbenv
     export PATH=$PATH:$RBENV_ROOT/bin
     # Homebrew's rbenv offers RBENV_ROOT=/usr/loca/var/rbenv
