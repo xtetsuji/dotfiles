@@ -32,6 +32,22 @@ fi
 ###
 ### Prompt
 ###
+emoji_prompt=no
+if [ `uname` = Darwin ] ; then
+    emoji_prompt=yes
+fi
+if [ $emoji_prompt = no ] ; then
+    PROMPT_ICON=''
+elif [ `uname` = Darwin ] ; then
+    # パソコンアイコン
+    PROMPT_ICON='\360\237\222\273'
+elif [ -f /etc/debian_version ] ; then
+    # うずまき
+    #PROMPT_ICON='\360\237\214\200'
+    :
+else
+    PROMPT_ICON=''
+fi
 case "$TERM" in
     xterm-color) color_prompt=yes;;
     xterm-256color) color_prompt=yes;;
@@ -42,7 +58,7 @@ if [ -z "$debian_chroot" -a -r /etc/debian_chroot ] ; then
     debian_chroot=$(cat /etc/debian_chroot)
 fi
 if [ "$color_prompt" = yes ] ; then
-    PS1='${debian_chroot:+($debian_chroot)}\[\033[01;32m\]\u@\h\[\033[00m\]:\[\033[01;34m\]\w\[\033[00m\]\$ '
+    #PS1="${PROMPT_ICON} "'${debian_chroot:+($debian_chroot)}\[\033[01;32m\]\u@\h\[\033[00m\]:\[\033[01;34m\]\w\[\033[00m\]\$ '
     # see: http://j-caw.co.jp/blog/?p=901
     # brew install bash-git-prompt (for Mac)
 
@@ -58,7 +74,7 @@ if [ "$color_prompt" = yes ] ; then
     #     source "$(brew --prefix bash-git-prompt)/share/gitprompt.sh"
     # fi
     # GIT_PS1_SHOWDIRTYSTATE=true
-    PS1='${debian_chroot:+($debian_chroot)}\[\033[01;32m\]\u@\h\[\033[00m\]:\[\033[01;34m\]\w\[\033[00m\]$(__git_ps1 " [\[\033[32m\]%s\[\033[0m\]]")\$ '
+    PS1="${PROMPT_ICON} "'${debian_chroot:+($debian_chroot)}\[\033[01;32m\]\u@\h\[\033[00m\]:\[\033[01;34m\]\w\[\033[00m\]$(__git_ps1 " [\[\033[32m\]%s\[\033[0m\]]")\$ '
 fi
 unset color_prompt
 
