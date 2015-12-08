@@ -3,6 +3,12 @@
 # $Id: .screenrc,v 1.9 2008/06/17 01:36:39 ogata Exp $
 # $Source: /var/cvs/dot/daichi/.screenrc,v $
 
+# TODO:
+#  時刻入れる
+#  絵文字活用
+#  縦分割生かす
+#  tmux を意識
+
 defencoding utf8
 escape ^z^z
 
@@ -35,7 +41,7 @@ pow_detach_msg "Screen session of \$LOGNAME \$:cr:\$:nl:ended."
 # set every new windows hardstatus line to somenthing descriptive
 # defhstatus "screen: ^En (^Et)"
 
-defscrollback 10000
+defscrollback 100000
 
 # don't kill window after the process died
 #zombie " ^M"
@@ -172,6 +178,9 @@ bind n colon 'number '
 #bind e encoding euc
 bind s select
 bind b select
+
+bind R resize
+bind E colon 'encoding '
 
 # 2005/03/18
 #backtick 0 0 0 uim-fep-tick
