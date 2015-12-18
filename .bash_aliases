@@ -929,6 +929,29 @@ function pwdscd {
     return cd "${PWD/$pattern/$string}"
 }
 
+function jobs2 {
+    #local line=$(builtin jobs | peco)
+    local line=$(jobs | peco)
+    local choice
+    if [ -n "$line" ] ; then
+        echo $line
+        read -p "Choice [fg|bg|disown|kill|SIG***]: " choice
+        jobspec=$(<<<"$line" sed -e 's/^\[//' -e 's/\].*//')
+        case $choice in
+            fg|bg|disown|kill)
+               $choice $jobspec
+               ;;
+            SIG*)
+                local signal=$(<<<"$choice" sed -e 's/^SIG//')
+                kill -$signal $jobspec
+                ;;
+            *)
+                fg $jobspec
+                ;;
+        esac
+    fi
+}
+
 # killjobs - peco による jobs の kill
 function killjobs {
     local jobnumbers
