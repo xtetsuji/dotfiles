@@ -933,23 +933,57 @@ function jobs2 {
     #local line=$(builtin jobs | peco)
     local line=$(jobs | peco)
     local choice
-    if [ -n "$line" ] ; then
-        echo $line
-        read -p "Choice [fg|bg|disown|kill|SIG***]: " choice
-        jobspec=$(<<<"$line" sed -e 's/^\[//' -e 's/\].*//')
-        case $choice in
-            fg|bg|disown|kill)
-               $choice $jobspec
-               ;;
-            SIG*)
-                local signal=$(<<<"$choice" sed -e 's/^SIG//')
-                kill -$signal $jobspec
-                ;;
-            *)
-                fg $jobspec
-                ;;
-        esac
+    if [ -z "$line" ] ; then
+        return
     fi
+    echo $line
+    read -p "Choice [fg|bg|disown|kill|SIG***]: " choice
+    jobspec=$(<<<"$line" sed -e 's/^\[//' -e 's/\].*//')
+    case $choice in
+        fg|bg|disown|kill)
+            $choice $jobspec
+            ;;
+        SIG*)
+            local signal=$(<<<"$choice" sed -e 's/^SIG//')
+            kill -$signal $jobspec
+            ;;
+        pbcopy)
+            <<<"$line" pbcopy
+            ;;
+        *)
+            fg $jobspec
+            ;;
+    esac
+}
+
+function ps2 {
+    local lines=$(ps "$@" | peco)
+    local choice pid
+    if [ -z "$lines" ] ; then
+        return
+    fi
+    echo $lines
+    pids=$(<<<"$lines" perl -ne 'push @pids, (grep { /^\d+$/ } split / /, $_)[0]; END { print join " ", @pids; }')
+    if [ -z "$pids" ] ; then
+        echo "PID read error"
+        return 1
+    fi
+    echo "pids $pids"
+    read -p "Choice [kill|SIG***|pbcopy]: " choice
+    case $choice in
+        kill)
+            $choice -HUP $pid
+            ;;
+        SIG*)
+            local signal=$(<<<"$choice" sed -e 's/^SIG//')
+            kill -$signal $pids
+            ;;
+        pbcopy)
+            <<<"$lines" pbcopy
+            ;;
+        *)
+            ;;
+    esac
 }
 
 # killjobs - peco による jobs の kill
