@@ -125,12 +125,6 @@ if type xwavemon >/dev/null 2>&1 ; then
     alias xwavemon='env LANG=C xterm +sb -e wavemon'
 fi
 
-alias iphone-wget='wget --user-agent="Mozilla/5.0 (iPhone; CPU iPhone OS 7_1_1 like Mac OS X) AppleWebKit/537.51.2 (KHTML, like Gecko) Version/7.0 Mobile/11D201 Safari/9537.53" '
-
-# signals
-alias usr1='kill -USR1 '
-alias usr2='kill -USR2 '
-
 # invert of "bg" command
 if ! type stop >/dev/null 2>&1 ; then
     alias stop='kill -STOP '
@@ -340,9 +334,6 @@ if [ "$UNAME" = Darwin ] ; then
     alias iPhoneSimulator='open /Developer/Platforms/iPhoneSimulator.platform/Developer/Applications/iPhone\ Simulator.app'
     alias cocoa-screenshare='open "/System/Library/CoreServices/Screen\ Sharing.app/"'
     alias ql='qlmanage -p'
-    if [ -d '/Applications/Evernote Account Info 1.0.app/' ] ; then
-        alias evernote-account-info='/Applications/Evernote\ Account\ Info\ 1.0.app/Contents/MacOS/applet'
-    fi
     # see various-commands/alt-md5sum more.
     if type alt-md5sum >/dev/null 2>&1 && ! type md5sum >/dev/null 2>&1 ; then
         alias md5sum=alt-md5sum
