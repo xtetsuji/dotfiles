@@ -32,22 +32,23 @@ fi
 ###
 ### Prompt
 ###
-emoji_prompt=no
-if [ `uname` = Darwin ] ; then
-    emoji_prompt=yes
-fi
-if [ $emoji_prompt = no ] ; then
-    PROMPT_ICON=''
-elif [ `uname` = Darwin ] ; then
-    # パソコンアイコン
-    PROMPT_ICON='\360\237\222\273'
-elif [ -f /etc/debian_version ] ; then
-    # うずまき
-    #PROMPT_ICON='\360\237\214\200'
-    :
-else
-    PROMPT_ICON=''
-fi
+case $(uname) in
+    Darwin)
+        emoji_prompt=yes
+        PROMPT_ICON='\360\237\222\273'
+        ;;
+    Linux)
+        if  [ -f /etc/debian_versin ] ; then
+            # うずまき
+            PROMPT_ICON='\360\237\214\200'
+        fi
+        ;;
+    *)
+        emoji_prompt=no
+        PROMPT_ICON=''
+        ;;
+esac
+
 case "$TERM" in
     xterm-color) color_prompt=yes;;
     xterm-256color) color_prompt=yes;;
@@ -61,20 +62,9 @@ if [ "$color_prompt" = yes ] ; then
     #PS1="${PROMPT_ICON} "'${debian_chroot:+($debian_chroot)}\[\033[01;32m\]\u@\h\[\033[00m\]:\[\033[01;34m\]\w\[\033[00m\]\$ '
     # see: http://j-caw.co.jp/blog/?p=901
     # brew install bash-git-prompt (for Mac)
-
     # git プロンプト
-    if [ -n "$BASH_COMPLETION" ] && [ ! -f ~/.git-prompt.sh ] ; then
-        curl --silent https://raw.githubusercontent.com/git/git/master/contrib/completion/git-prompt.sh > ~/.git-prompt.sh
-    fi
-    if [ -f ~/.git-prompt.sh ] ; then
-        source ~/.git-prompt.sh
-    fi
-    # if [ -f "$(brew --prefix bash-git-prompt)/share/gitprompt.sh" ]; then
-    #     GIT_PROMPT_THEME=Default
-    #     source "$(brew --prefix bash-git-prompt)/share/gitprompt.sh"
-    # fi
-    # GIT_PS1_SHOWDIRTYSTATE=true
-    PS1="${PROMPT_ICON} "'${debian_chroot:+($debian_chroot)}\[\033[01;32m\]\u@\h\[\033[00m\]:\[\033[01;34m\]\w\[\033[00m\]$(__git_ps1 " [\[\033[32m\]%s\[\033[0m\]]")\$ '
+    http-get-source https://raw.githubusercontent.com/git/git/master/contrib/completion/git-prompt.sh ~/.git-prompt.sh
+    PS1="${PROMPT_ICON} "'(\j)${debian_chroot:+($debian_chroot)}\[\033[01;32m\]\u@\h\[\033[00m\]:\[\033[01;34m\]\w\[\033[00m\]$(__git_ps1 " [\[\033[32m\]%s\[\033[0m\]]")\$ '
 fi
 unset color_prompt
 

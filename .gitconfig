@@ -11,3 +11,7 @@
 # [push]
 #        default = simple
 
+[github]
+	user = xtetsuji
+[ghi]
+	token = !security find-internet-password -a xtetsuji -s github.com -l 'ghi token' -w

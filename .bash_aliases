@@ -987,6 +987,7 @@ function ps2 {
 }
 
 # killjobs - peco による jobs の kill
+# jobs2 が上位互換となっています
 function killjobs {
     local jobnumbers
     local arg="$1"
@@ -1007,6 +1008,7 @@ function killps {
 }
 
 # fgp - peco による fg
+# jobs2 が上位互換です
 function fgp {
     local jobnumber
     jobnumber=$( jobs | peco | sed -e 's/^\[//' -e 's/\].*//' -e 's/^/%/' )
@@ -1180,6 +1182,19 @@ function cdrepo {
     # 空白ディレクトリ対策だけど、これだと ~ が展開されないので
     # cd "$line"
     cd "${line/'~'/$HOME}"
+}
+
+function http-get-source {
+    local url=$1
+    local file=$2
+    if [ ! -f $file ] ; then
+        curl --silent $url > $file
+    fi
+    if [ -s $file ] ; then
+        source $file
+    elif [ -f $file ] ; then
+        echo "$FUNCNAME: $file is empty" >&2
+    fi
 }
 
 unset ALIASES
