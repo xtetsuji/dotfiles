@@ -30,8 +30,15 @@ fi
 # perlbrew / plenv setups move to .bash_profile (2015/05/31)
 
 ###
+### Emoji support
+###
+# ${EMOJI_NUMBER[$i]} の定義
+eval $( perl -E 'printf "EMOJI_NUMBER=(%s)\n", join " ", map { pack "H*", "3${_}efb88fe283a3" } 0..9' )
+
+###
 ### Prompt
 ###
+SCREEN_VERSION=$(screen -version | sed -e 's/^Screen version //' -e 's/ .*//')
 case $(uname) in
     Darwin)
         emoji_prompt=yes
@@ -55,13 +62,12 @@ case "$TERM" in
     screen) color_prompt=yes;; # Is modern screen OK!?
     screen-256color) color_prompt=yes;;
 esac
+
 if [ -z "$debian_chroot" -a -r /etc/debian_chroot ] ; then
     debian_chroot=$(cat /etc/debian_chroot)
 fi
+
 if [ "$color_prompt" = yes ] ; then
-    #PS1="${PROMPT_ICON} "'${debian_chroot:+($debian_chroot)}\[\033[01;32m\]\u@\h\[\033[00m\]:\[\033[01;34m\]\w\[\033[00m\]\$ '
-    # see: http://j-caw.co.jp/blog/?p=901
-    # brew install bash-git-prompt (for Mac)
     # git プロンプト
     http-get-source https://raw.githubusercontent.com/git/git/master/contrib/completion/git-prompt.sh ~/.git-prompt.sh
     PS1="${PROMPT_ICON} "'(\j)${debian_chroot:+($debian_chroot)}\[\033[01;32m\]\u@\h\[\033[00m\]:\[\033[01;34m\]\w\[\033[00m\]$(__git_ps1 " [\[\033[32m\]%s\[\033[0m\]]")\$ '
@@ -122,12 +128,11 @@ elif [ -f /etc/bash_completion ] ; then
 fi
 # and see "~/.bash_completion". It is read by builtin bash_completion.
 
-# git の補完に必要
-if [ ! -f ~/.git-completion.bash ] ; then
-    echo "Download git-completion.bash to ~/"
-    curl --silent https://raw.githubusercontent.com/git/git/master/contrib/completion/git-completion.bash > ~/.git-completion.bash
-fi
-source ~/.git-completion.bash
+# git-completion
+http-get-source https://raw.githubusercontent.com/git/git/master/contrib/completion/git-completion.bash ~/.git-completion.bash
+
+# for my xssh command completion same as ssh.
+shopt -u hostcomplete && complete -F _ssh xssh
 
 ###
 ### pager and editor
