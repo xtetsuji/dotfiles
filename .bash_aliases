@@ -998,6 +998,7 @@ function killjobs {
 }
 
 # killps - peco による ps リストからの kill
+# ps2 が上位互換となっています
 function killps {
     local killpids
     local arg="$1"
