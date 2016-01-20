@@ -61,6 +61,13 @@ if [ -d $HOME/.rbenv ] ; then
 fi
 
 ###
+### nodebrew
+###
+if [ -d $HOME/.nodebrew/current/bin ] ; then
+    export PATH=$HOME/.nodebrew/current/bin:$PATH
+fi
+
+###
 ### golang
 ###
 # brew install go
