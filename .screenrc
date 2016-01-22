@@ -48,6 +48,7 @@ defscrollback 100000
 
 # don't kill window after the process died
 #zombie " ^M"
+zombie kr #  k: destory window, r: resurrect window
 
 ################
 #
