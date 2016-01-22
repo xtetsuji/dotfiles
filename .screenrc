@@ -9,6 +9,9 @@
 #  縦分割生かす
 #  tmux を意識
 
+# 参考
+#   http://yskwkzhr.blogspot.jp/2010/11/screenrc.html
+
 defencoding utf8
 escape ^z^z
 
@@ -147,7 +150,9 @@ screen -t local 0
 # caption always "%3n %t%? @%u%?%? [%h]%?"
 # hardstatus alwaysignore
 # hardstatus alwayslastline "%w"
-hardstatus alwayslastline "%H[%n]: [%-Lw%{= BW}%50>%n%f* %t%{-}%+Lw%<]"
+#hardstatus alwayslastline "%H[%n]: [%-Lw%{= BW}%50>%n%f* %t%{-}%+Lw%<]"
+hardstatus alwayslastline "[%m/%d %02c] %H[%n]: [%-Lw%{= BW}%50>%n%f* %t%{-}%+Lw%<] %-17<%=(%l)"
+# 
 
 # koreha betsuni iranai kana.
 # bind = resize =
