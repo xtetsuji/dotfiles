@@ -924,12 +924,11 @@ function pwdscd {
 }
 
 function jobs2 {
-    #local line=$(builtin jobs | peco)
-    local line=$(jobs | peco)
-    local choice
-    if [ -z "$line" ] ; then
+    if [ $(jobs | wc -l) = 0 ] ; then
         return
     fi
+    local line=$(jobs | peco)
+    local choice
     echo $line
     read -p "Choice [fg|bg|disown|kill|SIG***]: " choice
     jobspec=$(<<<"$line" sed -e 's/^\[//' -e 's/\].*//')
