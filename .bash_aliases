@@ -546,7 +546,7 @@ function cdlist {
 type peco >/dev/null 2>&1 &&
 function cdl {
     local dir
-    dir="$( find . -maxdepth 1 -type d | sed -e 's;^\./;;' | peco )"
+    dir="$( find . -maxdepth 1 -type d | sed -e 's;^\./;;' | grep -v '^\.$' | peco )"
     if [ ! -z "$dir" ] ; then
         cd "$dir"
     fi
@@ -934,11 +934,12 @@ function pwdscd {
 }
 
 function jobs2 {
-    if [ $(jobs | wc -l) = 0 ] ; then
-        return
-    fi
+    #local line=$(builtin jobs | peco)
     local line=$(jobs | peco)
     local choice
+    if [ -z "$line" ] ; then
+        return
+    fi
     echo $line
     read -p "Choice [fg|bg|disown|kill|SIG***]: " choice
     jobspec=$(<<<"$line" sed -e 's/^\[//' -e 's/\].*//')
