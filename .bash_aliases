@@ -351,7 +351,17 @@ fi
 alias term-growl='killall -TERM Growl HardwareGrowler'
 
 # TODO: screen をログインシェルにしてもいいのでは？
-alias sxr="screen -xR"
+if ! type sc >/dev/null 2>&1 ; then
+    function sc {
+        case "$TERM" in
+            screen*)
+                screen "$@"
+                ;;
+            *)
+                screen -xR "$@"
+        esac
+    }
+fi
 
 ###
 ### X / KDE
