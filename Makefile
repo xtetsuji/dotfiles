@@ -65,6 +65,7 @@ dry-upload-files:
 	echo $(REMOTE_HOST) >> $@
 
 update:
+	git fetch
 	git pull origin master
 
 clean:
