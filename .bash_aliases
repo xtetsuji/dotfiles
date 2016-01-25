@@ -151,6 +151,10 @@ alias sslv3='curl -sslv3 -kv '
 # see: http://d.hatena.ne.jp/maji-KY/20110718/1310985449
 alias od='od -tx1z -Ax -v'
 
+alias reload='source ~/.bash_profile'
+alias gip="curl -s checkip.dyndns.org | sed -e 's/.Current IP Address: //' -e 's/<.$//'"
+alias clocktick='while :; do printf "%s\r" "$(date +%T)"; sleep 1 ; done'
+
 function various-hostname {
     echo "hostname command:"
     echo "  `hostname`"
@@ -335,6 +339,7 @@ if [ "$UNAME" = Darwin ] ; then
     alias cocoa-screenshare='open "/System/Library/CoreServices/Screen\ Sharing.app/"'
     alias ql='qlmanage -p 2>/dev/null'
     alias mute='/usr/bin/osascript -e "set volume 0"'
+    alias imgdim='sips -g pixelHeight -g pixelWidth $1'
     # see various-commands/alt-md5sum more.
     if type alt-md5sum >/dev/null 2>&1 && ! type md5sum >/dev/null 2>&1 ; then
         alias md5sum=alt-md5sum
