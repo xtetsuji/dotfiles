@@ -334,6 +334,7 @@ if [ "$UNAME" = Darwin ] ; then
     alias iPhoneSimulator='open /Developer/Platforms/iPhoneSimulator.platform/Developer/Applications/iPhone\ Simulator.app'
     alias cocoa-screenshare='open "/System/Library/CoreServices/Screen\ Sharing.app/"'
     alias ql='qlmanage -p 2>/dev/null'
+    alias mute='/usr/bin/osascript -e "set volume 0"'
     # see various-commands/alt-md5sum more.
     if type alt-md5sum >/dev/null 2>&1 && ! type md5sum >/dev/null 2>&1 ; then
         alias md5sum=alt-md5sum
