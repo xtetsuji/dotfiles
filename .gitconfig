@@ -7,6 +7,9 @@
         cancel = reset --soft HEAD^
         # see: http://ikeyasu.hatenablog.com/entries/2011/05/25
         reset-merge = reset --merge
+	s = status
+	ci = commit
+	co = checkout
 
 # [push]
 #        default = simple
