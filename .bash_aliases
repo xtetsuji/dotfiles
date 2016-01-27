@@ -948,7 +948,7 @@ function jobs2 {
     fi
     echo $line
     read -p "Choice [fg|bg|disown|kill|SIG***]: " choice
-    jobspec=$(<<<"$line" sed -e 's/^\[//' -e 's/\].*//')
+    jobspec=$(<<<"$line" sed -e 's/^\[/%/' -e 's/\].*//')
     case $choice in
         fg|bg|disown|kill)
             $choice $jobspec
