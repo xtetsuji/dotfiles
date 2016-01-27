@@ -8,6 +8,7 @@
         # see: http://ikeyasu.hatenablog.com/entries/2011/05/25
         reset-merge = reset --merge
 	s = status
+	st = status
 	ci = commit
 	co = checkout
 
