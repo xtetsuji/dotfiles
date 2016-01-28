@@ -946,8 +946,9 @@ function jobs2 {
     if [ -z "$line" ] ; then
         return
     fi
+    #trap 'kill -INT $jobspec' INT
     echo $line
-    read -p "Choice [fg|bg|disown|kill|SIG***]: " choice
+    read -p "Choice [fg|bg|disown|kill|SIG***|^C]: " choice
     jobspec=$(<<<"$line" sed -e 's/^\[/%/' -e 's/\].*//')
     case $choice in
         fg|bg|disown|kill)

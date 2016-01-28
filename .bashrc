@@ -42,7 +42,8 @@ SCREEN_VERSION=$(screen -version | sed -e 's/^Screen version //' -e 's/ .*//')
 case $(uname) in
     Darwin)
         emoji_prompt=yes
-        PROMPT_ICON='\360\237\222\273'
+        PROMPT_ICON='\360\237\222\273' # computer
+        #PROMPT_ICON='' # apple
         ;;
     Linux)
         if  [ -f /etc/debian_versin ] ; then
