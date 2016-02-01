@@ -35,8 +35,9 @@ function my-init-backgrounds {
     disk-capad &
 }
 
+###
 ### Basics
-##
+###
 
 case "$UNAME" in
     Darwin) ### Mac OS X
@@ -113,6 +114,8 @@ function init-git-flavor {
     git config --global color.ui true
     git config --global alias.graph "log --graph --date-order --all --pretty=format:'%h %Cred%d %Cgreen%ad %Cblue%cn %Creset%s' --date=short" 
 }
+
+alias dachoclub="ionice -c2 -n7 nice -n 19 "
 
 ###
 ### Utilities
@@ -948,15 +951,24 @@ function jobs2 {
     fi
     #trap 'kill -INT $jobspec' INT
     echo $line
-    read -p "Choice [fg|bg|disown|kill|SIG***|^C]: " choice
+    read -p "Choice [fg|bg|cont|stop|disown|kill|SIG***|NUMBER|^C]: " choice
     jobspec=$(<<<"$line" sed -e 's/^\[/%/' -e 's/\].*//')
     case $choice in
         fg|bg|disown|kill)
             $choice $jobspec
             ;;
+        cont)
+            kill -CONT $jobspec
+            ;;
+        stop)
+            kill -STOP $jobspec
+            ;;
         SIG*)
             local signal=$(<<<"$choice" sed -e 's/^SIG//')
             kill -$signal $jobspec
+            ;;
+        [0-9]*)
+            kill -$choice $jobspec
             ;;
         pbcopy)
             <<<"$line" pbcopy
