@@ -2,24 +2,36 @@
 	name = OGATA Tetsuji
 	email = tetsuji.ogata@gmail.com
 [alias]
-	graph = log --graph --date-order --all --pretty=format:'%h %Cred%d %Cgreen%ad %Cblue%cn %Creset%s' --date=short
-        today = log --oneline --since='12 hour ago'
-        cancel = reset --soft HEAD^
-        # see: http://ikeyasu.hatenablog.com/entries/2011/05/25
-        reset-merge = reset --merge
-	s = status
+        mpush  = push origin master
+	update = !git fetch && git pull origin master
+
+	### current view shortcut
+	s  = status
 	st = status
 	ci = commit
 	co = checkout
-	update = !git fetch && git pull origin master
 
-	# http://qiita.com/peccul/items/90dd469e2f72babbc106
+	### funny view
+        graph  = log --graph --date-order --all --pretty=format:'%h %Cred%d %Cgreen%ad %Cblue%cn %Creset%s' --date=short
+        today  = log --oneline --since='12 hour ago'
+	sgraph = log --oneline --graph
+
+	### diff methods
 	difff = diff --name-only
 	# staged diff
 	diffs = diff --cached
 	dp = diff --no-prefix
 	dsp = diff --cached --no-prefix
-	co = checkout
+
+        ### reset methods
+	cancel      = reset --soft HEAD^
+        reset-merge = reset --merge
+	unstage     = reset HEAD
+
+	# see: http://ikeyasu.hatenablog.com/entries/2011/05/25
+	# http://qiita.com/peccul/items/90dd469e2f72babbc106
+
+        ### some log methods
 	logg = log --graph --all --decorate
 	log1 = log --pretty='format:%C(yellow)%h%Creset %C(magenta)%cd%Creset %s %Cgreen(%an)%Creset %Cred%d%Creset%C(black bold)%ar%Creset' --date=iso
 	# lg = log --graph --pretty=format:'%Cred%h%Creset - %s%C(yellow)%d%Creset %Cgreen(%cr:%cd) %C(bold blue)<%an>%Creset' --abbrev-commit --date=relative
@@ -29,8 +41,6 @@
 	log2 = log --graph --all --format=format:'%C(bold blue)%h%C(reset) - %C(bold cyan)%aD%C(reset) %C(bold green)(%ar)%C(reset)%C(bold yellow)%d%C(reset)%n''          %C(white)%s%C(reset) %C(bold white)― %an%C(reset)' --abbrev-commit
 	log3 = log --graph --date-order -C -M --pretty=format:"<%h> %ad [%an] %Cgreen%d%Creset %s" --all --date=short
 	log4 = log --graph --pretty='format:%C(yellow)%h%Cblue%d%Creset %s %C(black bold)%an, %ar%Creset'
-	sgraph = !"git log --oneline --graph"
-	unstage = reset HEAD
 
 # [push]
 #        default = simple
