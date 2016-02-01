@@ -107,7 +107,6 @@ function share_history {
     history -c
     history -r
 }
-PROMPT_COMMAND='share_history'
 shopt -u histappend
 shopt -s checkwinsize
 ### add at 2012/07/01
@@ -116,6 +115,18 @@ shopt -s checkwinsize
 # ignorespace：空白から始まるコマンドを履歴に残さない
 # ignoreboth:上記の両方を設定
 export HISTCONTROL=ignoreboth
+
+###
+### PROMPT_COMMAND
+###
+if [ "$PS1" ] ; then
+    function prompt_command {
+        share_history
+    }
+fi
+if type prompt_command >/dev/null 2>&1 ; then
+    PRMPT_COMMAND=prompt_command
+fi
 
 ###
 ### bash_completion
