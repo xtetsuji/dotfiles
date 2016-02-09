@@ -148,6 +148,14 @@ alias find-backups='find . -maxdepth 1 -name "?*~" -o -name "?*.bak" -o -name ".
 if type emacsclient >/dev/null 2>&1 && ! type ec >/dev/null 2>&1 ; then
     alias ec=emacsclient
 fi
+function edit {
+    local arg="$1"
+    if [ -z "$arg" ] ; then
+        echo "$FUNCNAME argument"
+        return
+    fi
+    emacsclient $arg &
+}
 
 alias sslv3='curl -sslv3 -kv '
 
