@@ -149,11 +149,13 @@ screen -t local 0
 #screen -t messages 2 sudo tail -f /var/log/messages
 
 # caption always "%3n %t%? @%u%?%? [%h]%?"
+caption always '%?%F%{= gW}%:%{= Kk}%?%2n%f%07=%t%='
 # hardstatus alwaysignore
 # hardstatus alwayslastline "%w"
 #hardstatus alwayslastline "%H[%n]: [%-Lw%{= BW}%50>%n%f* %t%{-}%+Lw%<]"
 hardstatus alwayslastline "[%m/%d %02c] %H[%n]: [%-Lw%{= BW}%50>%n%f* %t%{-}%+Lw%<] %-17<%=(%l)"
-# 
+#hardstatus alwayslastline '%m/%d %02c %{= .g}%H%{-} %L=%-w%45L>%{=u g.}%n %t%{-}%+w %-17<%=%{= .y}(%l)'
+
 
 # koreha betsuni iranai kana.
 # bind = resize =
