@@ -33,7 +33,7 @@ deploy:
 		test -d "$${f}" && continue ; \
 		if [ -f "~/$${f}" ] && [ ! -L "~/$${f}" ] ; then \
 			echo ">>> backup as $${f} to $${f}.$(BACKUP_EXT)" ; \
-			cp "~/$${f}" "~/$${f}.$(BACKUP_EXT)" ; \
+			cp -v "~/$${f}" "~/$${f}.$(BACKUP_EXT)" ; \
 		fi ; \
 		ln -v -i -s "$(PWD)/$${f}" ~/ ; \
 	done ; true
