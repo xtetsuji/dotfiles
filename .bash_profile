@@ -117,6 +117,23 @@ export MANPATH
 export INFOPATH
 
 ###
+### ssh-agent
+###
+# http://www.gcd.org/blog/2006/09/100/
+MY_SSH_AUTH_SOCK_PATH="/tmp/ssh-agent-$USER"
+if [ -S "$SSH_AUTH_SOCK" ]; then
+    case $SSH_AUTH_SOCK in
+	/tmp/*/agent.[0-9]*)
+	    ln -snf "$SSH_AUTH_SOCK" $MY_SSH_AUTH_SOCK_PATH \
+                && export SSH_AUTH_SOCK=$MY_SSH_AUTH_SOCK_PATH
+    esac
+elif [ -S $MY_SSH_AUTH_SOCK_PATH ]; then
+    export SSH_AUTH_SOCK=$MY_SSH_AUTH_SOCK_PATH
+else
+    : #echo "no ssh-agent"
+fi
+
+###
 ### Locale / Lang
 ###
 # locale is UTF-8 ordinary on modern Debian and some dists.
