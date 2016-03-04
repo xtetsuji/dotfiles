@@ -12,30 +12,25 @@
 # 参考
 #   http://yskwkzhr.blogspot.jp/2010/11/screenrc.html
 
-defencoding utf8
 escape ^z^z
 
+defencoding utf8
+defscrollback 100000
 
-# This is how one can set a reattach password:
-# password ODSJQf.4IJN7E    # "1234"
+# F
+# clear scrollback buffer
+bind ^F eval 'scrollback 0' 'scrollback 100000' 'echo "scrollback buffer cleared"'
+bind F fi
+bind f flow
 
-# no annoying audible bell, please
 vbell on
-
-# detach on hangup
 autodetach on
-
-# don't display the copyright page
 startup_message off
+
+zombie kr #  k: destory window, r: resurrect window
 
 # emulate .logout message
 pow_detach_msg "Screen session of \$LOGNAME \$:cr:\$:nl:ended."
-
-# advertise hardstatus support to $TERMCAP
-# termcapinfo  * '' 'hs:ts=\E_:fs=\E\\:ds=\E_\E\\'
-
-# make the shell in every window a login shell
-#shell -$SHELL
 
 # autoaka testing
 # shellaka '> |tcsh'
@@ -44,11 +39,6 @@ pow_detach_msg "Screen session of \$LOGNAME \$:cr:\$:nl:ended."
 # set every new windows hardstatus line to somenthing descriptive
 # defhstatus "screen: ^En (^Et)"
 
-defscrollback 100000
-
-# don't kill window after the process died
-#zombie " ^M"
-zombie kr #  k: destory window, r: resurrect window
 
 ################
 #
@@ -118,6 +108,10 @@ termcapinfo kterm XT
 # keybindings
 #
 
+# disables vbell toggle binding to use ^G as cancel.
+# "vbell on" always
+bind ^G
+
 #remove some stupid / dangerous key bindings
 bind k
 bind ^k
@@ -126,24 +120,131 @@ bind ^\
 bind \\
 bind ^h
 bind h
-#make them better
-bind 'K' kill
-#bind 'I' login on
-#bind 'O' login off
+bind K kill
 bind '}' history
+
+# number
+bind n colon 'number '
+bind N colon 'number '
+
+# subcommand: c and t
+bind c colon 'screen -t '
+bind ^c screen
+bind ^t time
+
+# encoding
+bind ^u eval 'encoding utf8'  'info'
+bind ^e eval 'encoding eucjp' 'info'
+bind E colon 'encoding '
+#bind u eval 'encoding utf8'  '!!!echo "LANG=ja_JP.utf8; export LANG"'  'info'
+#bind e eval 'encoding eucjp' '!!!echo "LANG=ja_JP.eucJP; export LANG"' 'info'
+
+#bind C eval split focus screen focus
+
+# switch focus to other region(like vi)
+# orverride default `k'(kill), `t'(time), `b'(break) mappings.
+bind j focus down
+bind k focus up
+bind h focus left
+bind l focus right
+bind t focus top
+bind b focus bottom
+# l: redisplay -> right
+# L: redisplay
+bind L redisplay
+
+# continuous switch focus to other region(like vi)
+bind ^j eval           'focus down'   'command -c cfocus'
+bind ^k eval           'focus up'     'command -c cfocus'
+bind ^h eval           'focus left'   'command -c cfocus'
+bind ^l eval           'focus right'  'command -c cfocus' 
+bind -c cfocus ^j eval 'focus down'   'command -c cfocus'
+bind -c cfocus ^k eval 'focus up'     'command -c cfocus'
+bind -c cfocus ^h eval 'focus left'   'command -c cfocus'
+bind -c cfocus ^l eval 'focus right'  'command -c cfocus'
+bind -c cfocus ^t eval 'focus top'    'command -c cfocus'
+bind -c cfocus ^b eval 'focus bottom' 'command -c cfocus'
+
+# swap region to neighbour's
+# orverride default `W'(width) mapping.
+#  ^z W [N|P]
+bind W eval 'command -c swap' 'echo "swap region to: [N]ext [P]rev"'
+bind -c swap N eval 'select -' 'focus down' 'other' 'focus up'   'other' 'focus down'
+bind -c swap P eval 'select -' 'focus up'   'other' 'focus down' 'other' 'focus up'
+
+# continuous resize region
+# orverride default `r'(wrap) mapping.
+#   ^z r [jkJK=nx]
+bind r eval 'command -c cresize'
+bind -c cresize j eval 'resize +1'     'command -c cresize'
+bind -c cresize k eval 'resize -1'     'command -c cresize'
+bind -c cresize J eval 'resize +10'    'command -c cresize'
+bind -c cresize K eval 'resize -10'    'command -c cresize'
+bind -c cresize h eval 'resize -v +1'  'command -c cresize'
+bind -c cresize l eval 'resize -v -1'  'command -c cresize'
+bind -c cresize H eval 'resize -v +10' 'command -c cresize'
+bind -c cresize L eval 'resize -v -10' 'command -c cresize'
+bind -c cresize = eval 'resize ='      'command -c cresize'
+bind -c cresize n eval 'resize min'    'command -c cresize'
+bind -c cresize x eval 'resize max'    'command -c cresize'
+
+# continuous switch to other window
+#   ^z [^n|^p] ...
+bind ^N eval 'next' 'command -c cselect'
+bind ^P eval 'prev' 'command -c cselect'
+bind -c cselect ^N eval 'next' 'command -c cselect'
+bind -c cselect ^P eval 'prev' 'command -c cselect'
+bind -c cselect ^K eval 'kill' 'command -c cselect'
+
+#bind R resize
+bind R source ~/.screenrc
+bind o other
+
+# refuses yet another hack in rpm packaged screenrc.
+# both ] and ^] does write the paste (default unnamed) buffer.
+bind ^] paste .
+
+# list of all windows is displayed in the blank window(-b) for visual window selection.
+# override default `w'(windows) mapping.
+bind w  windowlist -b
+bind ^W windowlist -b -m # sorting by most-recentry-used list.
+
+# switch to window
+bind s select
+bind b select
+
+# grouping
+bind g colon 'group '
+
+#bindkey -m ' ' eval "stuff ' '" writebuf "exec sh -c 'pbcopy < /tmp/screen-exchange'" "echo 'copy and write to pasteboard'"
+
+# move cursor to begining of scrollback buffer(and move to the leftmost column of the window top)
+bindkey -m ;b stuff "g/:\015\006\002"
+
+
+
+# 2005/03/18
+#backtick 0 0 0 uim-fep-tick
+#hardstatus alwayslastline "%H[%n]:%0` [%-Lw%{= BW}%50>%n%f* %t%{-}%+Lw%<]"
+#hardstatus alwayslastline "%H[%n]: [%-Lw%{= BW}%50>%n%f* %t%{-}%+Lw%<]"
+#bind j exec | uim-fep -S
+#bind k eval 'exec cat' kill redisplay
+#bind ^j exec | uim-fep -S
+#bind ^k eval 'exec cat' kill redisplay
+
 
 # Yet another hack:
 # Prepend/append register [/] to the paste if ^a^] is pressed.
 # This lets me have autoindent mode in vi.
 register [ "\033:se noai\015a"
 register ] "\033:se ai\015a"
-bind ^] paste [.]
+
 
 ################
 #
 # default windows
 #
-screen -t local 0
+#screen -t local 0
 #screen -t root 1 sudo su -
 #screen -t liece 2 emacs -nw -e liece
 #screen -t messages 2 sudo tail -f /var/log/messages
@@ -174,29 +275,3 @@ terminfo kterm* 'AF=\E[3%p1%dm:AB=\E[4%p1%dm'
 termcap  vt100 'AF=\E[3%dm:AB=\E[4%dm'
 terminfo vt100* 'AF=\E[3%p1%dm:AB=\E[4%p1%dm'
 
-bind w windowlist -b
-bind c colon 'screen -t '
-bind C eval split focus screen focus
-bind n colon 'number '
-#bind j focus down
-#bind k focus up
-#bind t focus top # load is ^t
-#bind b focus bottom
-#bind s encoding sjis
-#bind e encoding euc
-bind s select
-bind b select
-
-bind R resize
-bind E colon 'encoding '
-
-# 2005/03/18
-#backtick 0 0 0 uim-fep-tick
-#hardstatus alwayslastline "%H[%n]:%0` [%-Lw%{= BW}%50>%n%f* %t%{-}%+Lw%<]"
-#hardstatus alwayslastline "%H[%n]: [%-Lw%{= BW}%50>%n%f* %t%{-}%+Lw%<]"
-#bind j exec | uim-fep -S
-#bind k eval 'exec cat' kill redisplay
-#bind ^j exec | uim-fep -S
-#bind ^k eval 'exec cat' kill redisplay
-
-bind o other
