@@ -175,7 +175,7 @@ bind -c swap P eval 'select -' 'focus up'   'other' 'focus down' 'other' 'focus 
 # continuous resize region
 # orverride default `r'(wrap) mapping.
 #   ^z r [jkJK=nx]
-bind r eval 'command -c cresize'
+bind r eval 'echo "cresize mode"' 'command -c cresize'
 bind -c cresize j eval 'resize +1'     'command -c cresize'
 bind -c cresize k eval 'resize -1'     'command -c cresize'
 bind -c cresize J eval 'resize +10'    'command -c cresize'
