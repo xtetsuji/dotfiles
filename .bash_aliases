@@ -4,35 +4,50 @@ declare ALIASES=$HOME/.bash_aliases
 declare UNAME=$(uname)
 
 function my {
-    echo "Usage:"
-    echo "  my-starup"
-    echo "  my-ssh-add"
-    echo "  my-alias-help"
-    echo "  my-init-backgrounds"
-    echo "  # my-ssh-agent-setup"
+    local subcommand=$1
+    case "$subcommand" in
+        startup)
+            my-startup
+            return $?
+            ;;
+        ssh-add)
+            my-ssh-add
+            return $?
+            ;;
+        init-backgrounds)
+            my-init-backgrounds
+            return $?
+            ;;
+        *)
+            my-usage
+            return $?
+            ;;
+    esac
 }
 
-# my-alias-help
-# grep function .bash_aliases | perl -ne '/function +(\S+)/ and print "$1\n"' | sort | xargs echo
-function my-alias-help {
-    perl -ne 'push @funcs, /^function +([\w-]+)/; END { print "@funcs\n"; }' .bash_aliases
+function my-usage {
+    echo "Usage:"
+    echo "  my starup"
+    echo "  my ssh-add"
+    echo "  my alias-help"
+    echo "  my init-backgrounds"
 }
 
 function my-startup {
     if [ "$MY_STARTUP_DONE" = 1 ] ; then
-	echo "alread done"
-	return
+        echo "already done (MY_STARTUP_DONE is true)"
+        return
     fi
     my-ssh-add
-    MY_STARTUP_DONE=1
+    my-init-backgrounds
+    export MY_STARTUP_DONE=1
 }
 
 function my-init-backgrounds {
-    battery-watchd &
-    macwland &
-    pbstot2memod &
-    srnotifyd &
-    disk-capad &
+    local cmd
+    for cmd in battery-watchd macwland pbstot2transd ; do
+        $cmd &
+    done
 }
 
 ###
@@ -112,7 +127,7 @@ function init-git-flavor {
     git config --global push.default simple
     # true or false?
     git config --global color.ui true
-    git config --global alias.graph "log --graph --date-order --all --pretty=format:'%h %Cred%d %Cgreen%ad %Cblue%cn %Creset%s' --date=short" 
+    git config --global alias.graph "log --graph --date-order --all --pretty=format:'%h %Cred%d %Cgreen%ad %Cblue%cn %Creset%s' --date=short"
 }
 
 alias dachoclub="ionice -c2 -n7 nice -n 19 "
@@ -587,7 +602,7 @@ function cdback {
 
 alias cdclear='dirs -c'
 
-### ad-hoc chdir like aliases 
+### ad-hoc chdir like aliases
 # alias ,=cdback
 # alias ..="cd .."
 # alias ...=".. ; ..;"
@@ -604,7 +619,7 @@ function cdj {
 #         cvs  ~/cvs
 #         etc  /etc
 #         );
-    test -n "$DEBUG" && echo "DEBUG: dir arg=$arg #CDJ_DIR_MAP=${#CDJ_DIR_MAP[*]}" 
+    test -n "$DEBUG" && echo "DEBUG: dir arg=$arg #CDJ_DIR_MAP=${#CDJ_DIR_MAP[*]}"
     declare arg=$1 \
             subarg=$2 \
             dir i key value warn
@@ -616,7 +631,7 @@ function cdj {
         echo "-l: list defined lists"
         echo "-v <directory_alias>: view path specify alias."
         return
-    elif [ "$arg" = "-v" -o "$arg" = "-l" ] ; then 
+    elif [ "$arg" = "-v" -o "$arg" = "-l" ] ; then
         ### view detail mode
         for (( i=0; $i<${#CDJ_DIR_MAP[*]}; i=$((i+2)) )) ; do
             key="${CDJ_DIR_MAP[$i]}"
