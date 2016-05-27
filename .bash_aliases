@@ -6,16 +6,8 @@ declare UNAME=$(uname)
 function my {
     local subcommand=$1
     case "$subcommand" in
-        startup)
-            my-startup
-            return $?
-            ;;
-        ssh-add)
-            my-ssh-add
-            return $?
-            ;;
-        init-backgrounds)
-            my-init-backgrounds
+        startup|ssh-add|init-backgrounds)
+            $subcommand
             return $?
             ;;
         *)
@@ -46,6 +38,7 @@ function my-startup {
 function my-init-backgrounds {
     local cmd
     for cmd in battery-watchd macwland pbstot2transd ; do
+        echo "exec and backgroud $cmd"
         $cmd &
     done
 }
@@ -974,10 +967,10 @@ function jobs2 {
     fi
     #trap 'kill -INT $jobspec' INT
     echo $line
-    read -p "Choice [fg|bg|cont|stop|disown|kill|SIG***|NUMBER|^C]: " choice
+    read -p "Choice [fg|bg|cont|stop|disown|kill|SIG***|NUMBER|pbcopy]: " choice
     jobspec=$(<<<"$line" sed -e 's/^\[/%/' -e 's/\].*//')
     case $choice in
-        fg|bg|disown|kill)
+        fg|bg|disown|kill|"kill -*")
             $choice $jobspec
             ;;
         cont)
