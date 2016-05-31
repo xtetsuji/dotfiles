@@ -49,25 +49,25 @@ function my-init-backgrounds {
 
 case "$UNAME" in
     Darwin) ### Mac OS X
-	alias ls='ls -FG' # BSD type "ls"
-	alias lsx='ls -xG'
-	# see: http://ascii.jp/elem/000/000/594/594203/
-	alias CharacterPalette='open /System/Library/Input\ Methods/CharacterPalette.app/'
-	alias ArchiveUtility='open /System/Library/CoreServices/Archive\ Utility.app/'
-	alias iPhoneSimulator='open /Developer/Platforms/iPhoneSimulator.platform/Developer/Applications/iPhone\ Simulator.app'
-	alias battery-remaining='pmset -g ps'
+    alias ls='ls -FG' # BSD type "ls"
+    alias lsx='ls -xG'
+    # see: http://ascii.jp/elem/000/000/594/594203/
+    alias CharacterPalette='open /System/Library/Input\ Methods/CharacterPalette.app/'
+    alias ArchiveUtility='open /System/Library/CoreServices/Archive\ Utility.app/'
+    alias iPhoneSimulator='open /Developer/Platforms/iPhoneSimulator.platform/Developer/Applications/iPhone\ Simulator.app'
+    alias battery-remaining='pmset -g ps'
         alias quicktime="open -a 'QuickTime Player' "
-	test -f /Applications/Emacs.app/Contents/MacOS/bin/emacsclient && \
-	    alias emacsclient="/Applications/Emacs.app/Contents/MacOS/bin/emacsclient"
-	type gtar >/dev/null 2>&1 && alias tar=gtar
+    test -f /Applications/Emacs.app/Contents/MacOS/bin/emacsclient && \
+        alias emacsclient="/Applications/Emacs.app/Contents/MacOS/bin/emacsclient"
+    type gtar >/dev/null 2>&1 && alias tar=gtar
     # see: http://deeeet.com/writing/2014/04/30/beer-on-terminal/
         function beers () { ruby -e 'C=`stty size`.scan(/\d+/)[1].to_i;S=ARGV.shift||"\xf0\x9f\x8d\xba";a={};puts "\033[2J";loop{a[rand(C)]=0;a.each{|x,o|;a[x]+=1;print "\033[#{o};#{x}H \033[#{a[x]};#{x}H#{S} \033[0;0H"};$stdout.flush;sleep 0.01}' ; }
-	;;
+    ;;
     Linux)
-	alias ls='ls --color=auto'
-	alias lsx='ls -x --color=always'
-	alias crontab='crontab -i'
-	;;
+    alias ls='ls --color=auto'
+    alias lsx='ls -x --color=always'
+    alias crontab='crontab -i'
+    ;;
     CYGWIN*)
         alias ls='ls --color -F --show-control-chars'
         ;;
@@ -454,44 +454,44 @@ fi
 # 再度アタッチした screen から、現在の ssh-agent に接続する
 function attach-agent {
     if     [ $TERM != screen ]   \
-	&& [ $TERM != screen-w ] \
-	&& [ $TERM != mlterm ]   \
+    && [ $TERM != screen-w ] \
+    && [ $TERM != mlterm ]   \
         && [ $TERM != screen.mlterm ] ; then
-	return 1
+    return 1
     fi
     declare sock childpid
     for sock in $( find /tmp -type s -name agent.\* -user $USER 2> /dev/null ) ; do
-	childpid=$( echo $sock | awk -F. '{ print $2 }' ) # ordinaly "sh"'s pid
-	if ps ux | grep $childpid | grep -v grep > /dev/null ; then
-# 	    eval $( ( cat /proc/$childpid/environ ; echo ) | tr "\000" "\n" | egrep ^SSH_AGENT_PID )
-# 	    if [ -z $SSH_AGENT_PID ] ; then
-# 		echo "${FUNCNAME}: error! SSH_AGENT_PID unknonw"
-# 		unset SSH_AGENT_PID
-# 		return 1
-# 	    elif ! ( ps ux | grep $SSH_AGENT_PID | grep -v grep > /dev/null ) ; then
-# 		echo "${FUNCNAME}: error! no process found corresponding SSH_AGENT_PID=$SSH_AGENT_PID"
-# 		unset SSH_AGENT_PID
-# 		return 1
-# 	    fi
-# 	    export SSH_AGENT_PID
-	    export SSH_AUTH_SOCK=$sock
-	    if ssh-add -l &> /dev/null ; then
-		# unsetenv for old (woody) version screen.
-#		screen -X unsetenv SSH_AGENT_PID
-		if [ $TERM = screen ] || [ $TERM = screen-w ] || [ $TERM = screen.mlterm ] ; then
-		    #screen -X setenv SSH_AGENT_PID $SSH_AGENT_PID
-		    screen -X unsetenv SSH_AUTH_SOCK
-		    screen -X setenv SSH_AUTH_SOCK $SSH_AUTH_SOCK
-		fi
-		echo "OK, success that $TERM attaches to the ssh-agent!"
-		echo "'ssh-add -l' output is..."
-		ssh-add -l | sed -e 's;/[^[:space:]]*/;;'
-		set | egrep ^SSH_
-		return 0
-	    else
-		unset SSH_AGENT_PID SSH_AUTH_SOCK
-	    fi
-	fi
+    childpid=$( echo $sock | awk -F. '{ print $2 }' ) # ordinaly "sh"'s pid
+    if ps ux | grep $childpid | grep -v grep > /dev/null ; then
+#         eval $( ( cat /proc/$childpid/environ ; echo ) | tr "\000" "\n" | egrep ^SSH_AGENT_PID )
+#         if [ -z $SSH_AGENT_PID ] ; then
+#         echo "${FUNCNAME}: error! SSH_AGENT_PID unknonw"
+#         unset SSH_AGENT_PID
+#         return 1
+#         elif ! ( ps ux | grep $SSH_AGENT_PID | grep -v grep > /dev/null ) ; then
+#         echo "${FUNCNAME}: error! no process found corresponding SSH_AGENT_PID=$SSH_AGENT_PID"
+#         unset SSH_AGENT_PID
+#         return 1
+#         fi
+#         export SSH_AGENT_PID
+        export SSH_AUTH_SOCK=$sock
+        if ssh-add -l &> /dev/null ; then
+        # unsetenv for old (woody) version screen.
+#        screen -X unsetenv SSH_AGENT_PID
+        if [ $TERM = screen ] || [ $TERM = screen-w ] || [ $TERM = screen.mlterm ] ; then
+            #screen -X setenv SSH_AGENT_PID $SSH_AGENT_PID
+            screen -X unsetenv SSH_AUTH_SOCK
+            screen -X setenv SSH_AUTH_SOCK $SSH_AUTH_SOCK
+        fi
+        echo "OK, success that $TERM attaches to the ssh-agent!"
+        echo "'ssh-add -l' output is..."
+        ssh-add -l | sed -e 's;/[^[:space:]]*/;;'
+        set | egrep ^SSH_
+        return 0
+        else
+        unset SSH_AGENT_PID SSH_AUTH_SOCK
+        fi
+    fi
     done
     echo "screen-agent: no ssh-agent runs?"
     return 0
@@ -501,16 +501,16 @@ function attach-agent {
 # Initial release at 2005/03/22(Tue)
 function cd {
     if [ -z "$1" ] ; then
-	# cd 連打で余計な $DIRSTACK を増やさない
-	test "$PWD" != "$HOME" && pushd $HOME > /dev/null
+    # cd 連打で余計な $DIRSTACK を増やさない
+    test "$PWD" != "$HOME" && pushd $HOME > /dev/null
     elif ( echo "$1" | egrep "^\.\.\.+$" > /dev/null ) ; then
-	cd $( echo "$1" | perl -ne 'print "../" x ( tr/\./\./ - 1 )' )
+    cd $( echo "$1" | perl -ne 'print "../" x ( tr/\./\./ - 1 )' )
     else
         if [ "x$1" = "x-p" ] && [ -n "$2" ] ; then
             mkdir -v -p "$2"
             pushd "$2" >/dev/null
         else
-	    pushd "$1" > /dev/null
+        pushd "$1" > /dev/null
         fi
     fi
 }
@@ -522,12 +522,12 @@ function cdhist {
     dirs -v | sort -k 2 | uniq -f 1 | sort -n -k 1 | head -n $(( LINES - 3 ))
     read -p "select number: " dirnum
     if [ -z "$dirnum" ] ; then
-	echo "$FUNCNAME: Abort." 1>&2
+    echo "$FUNCNAME: Abort." 1>&2
     elif ( echo $dirnum | egrep '^[[:digit:]]+$' > /dev/null ) ; then
         cd "$( echo ${DIRSTACK[$dirnum]} | sed -e "s;^~;$HOME;" )"
         echo "Prefer cdh over cdhist by peco"
     else
-	echo "$FUNCNAME: Wrong." 1>&2
+    echo "$FUNCNAME: Wrong." 1>&2
     fi
 }
 
@@ -546,9 +546,9 @@ function cdlist {
     local -a dirlist opt_f=false
     local i d num=0 dirnum opt opt_f
     while getopts ":f" opt ; do
-	case $opt in
-	    f ) opt_f=true ;;
-	esac
+    case $opt in
+        f ) opt_f=true ;;
+    esac
     done
     shift $(( OPTIND -1 ))
     dirlist[0]=..
@@ -558,12 +558,12 @@ function cdlist {
     for i in $( seq 0 $num ) ; do printf "%3d %s%b\n" $i "$( $opt_f && echo -n "$PWD/" )${dirlist[$i]}" ; done
     read -p "select number: " dirnum
     if [ -z "$dirnum" ] ; then
-	echo "$FUNCNAME: Abort." 1>&2
+    echo "$FUNCNAME: Abort." 1>&2
     elif ( echo $dirnum | egrep '^[[:digit:]]+$' > /dev/null ) ; then
-	cd "${dirlist[$dirnum]}"
+    cd "${dirlist[$dirnum]}"
         echo "Prefer cdl over cdlist by peco"
     else
-	echo "$FUNCNAME: Something wrong." 1>&2
+    echo "$FUNCNAME: Something wrong." 1>&2
     fi
 }
 
@@ -653,7 +653,7 @@ function cdj {
         if [ "$key" = "$arg" ] ; then
             if [ -n "$subarg" ] ; then
                 dir="$value/$subarg"
-	    else
+        else
                 dir="$value"
             fi
             cd "$dir"

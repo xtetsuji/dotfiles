@@ -123,8 +123,8 @@ export INFOPATH
 MY_SSH_AUTH_SOCK_PATH="/tmp/ssh-agent-$USER"
 if [ -S "$SSH_AUTH_SOCK" ]; then
     case $SSH_AUTH_SOCK in
-	/tmp/*/agent.[0-9]*)
-	    ln -snf "$SSH_AUTH_SOCK" $MY_SSH_AUTH_SOCK_PATH \
+    /tmp/*/agent.[0-9]*)
+        ln -snf "$SSH_AUTH_SOCK" $MY_SSH_AUTH_SOCK_PATH \
                 && export SSH_AUTH_SOCK=$MY_SSH_AUTH_SOCK_PATH
     esac
 elif [ -S $MY_SSH_AUTH_SOCK_PATH ]; then

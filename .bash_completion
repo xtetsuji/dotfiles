@@ -1,7 +1,7 @@
 # -*- shell-script -*-
 
 # DEFINITIONS
-_foo() 
+_foo()
 {
     # Tiny sample of bash_completion. Enable debug echo.
     local cur prev opts
@@ -273,18 +273,18 @@ _sips(){
             COMPREPLY=( $(compgen -W "$opts_names" -- ${cur} ))
             return 0
             ;;
-	--getProperty|--setProperty|--deleteProperty)
-	    COMPREPLY=( $(compgen -W "$opts_property" -- ${cur} ))
+    --getProperty|--setProperty|--deleteProperty)
+        COMPREPLY=( $(compgen -W "$opts_property" -- ${cur} ))
             return 0
-	    ;;
-	--format)
-	    COMPREPLY=( $(compgen -W "$opts_format" -- ${cur} ))
+        ;;
+    --format)
+        COMPREPLY=( $(compgen -W "$opts_format" -- ${cur} ))
             return 0
-	    ;;
-	--formatOptions)
-	    COMPREPLY=( $(compgen -W "$opts_format_options" -- ${cur} ))
+        ;;
+    --formatOptions)
+        COMPREPLY=( $(compgen -W "$opts_format_options" -- ${cur} ))
             return 0
-	    ;;
+        ;;
         *)
             ;;
     esac
