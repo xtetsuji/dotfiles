@@ -173,6 +173,8 @@ alias sslv3='curl -sslv3 -kv '
 # see: http://d.hatena.ne.jp/maji-KY/20110718/1310985449
 alias od='od -tx1z -Ax -v'
 
+alias screenutf8=/usr/local/Cellar/screenutf8/4.3.1/bin/screen
+
 # debug
 # debug on
 # debug off
