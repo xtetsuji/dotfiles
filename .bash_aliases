@@ -3,12 +3,20 @@
 declare ALIASES=$HOME/.bash_aliases
 declare UNAME=$(uname)
 
+###
+### my
+###
+
 function my {
     local subcommand=$1
+    local subcommand_list="startup|ssh-add|init-backgrounds|subcommand_list|usage"
     case "$subcommand" in
-        startup|ssh-add|init-backgrounds)
-            $subcommand
+        $subcommand_list)
+            my-$subcommand
             return $?
+            ;;
+        subcommand_list)
+            echo ${subcommand_list//|/ }
             ;;
         *)
             my-usage
@@ -19,10 +27,10 @@ function my {
 
 function my-usage {
     echo "Usage:"
-    echo "  my starup"
-    echo "  my ssh-add"
-    echo "  my alias-help"
-    echo "  my init-backgrounds"
+    local subcommand
+    for subcommand in $(my subcommand_list) ; do
+        echo "  my $subcommand"
+    done
 }
 
 function my-startup {
@@ -47,71 +55,73 @@ function my-init-backgrounds {
 ### Basics
 ###
 
+function exists { type $1 >/dev/null 2>&1 ; return $? ; }
+#alias reload='source ~/.bash_profile'
+alias reload='exec $SHELL -l'
+
 case "$UNAME" in
     Darwin) ### Mac OS X
-    alias ls='ls -FG' # BSD type "ls"
-    alias lsx='ls -xG'
-    # see: http://ascii.jp/elem/000/000/594/594203/
-    alias CharacterPalette='open /System/Library/Input\ Methods/CharacterPalette.app/'
-    alias ArchiveUtility='open /System/Library/CoreServices/Archive\ Utility.app/'
-    alias iPhoneSimulator='open /Developer/Platforms/iPhoneSimulator.platform/Developer/Applications/iPhone\ Simulator.app'
-    alias battery-remaining='pmset -g ps'
+        alias ls='ls -FG' # BSD type "ls"
+        alias lsx='ls -xG'
+        # see: http://ascii.jp/elem/000/000/594/594203/
+        alias CharacterPalette='open /System/Library/Input\ Methods/CharacterPalette.app/'
+        alias ArchiveUtility='open /System/Library/CoreServices/Archive\ Utility.app/'
+        alias iPhoneSimulator='open /Developer/Platforms/iPhoneSimulator.platform/Developer/Applications/iPhone\ Simulator.app'
+        alias battery-remaining='pmset -g ps'
         alias quicktime="open -a 'QuickTime Player' "
-    test -f /Applications/Emacs.app/Contents/MacOS/bin/emacsclient && \
+        test -f /Applications/Emacs.app/Contents/MacOS/bin/emacsclient && \
         alias emacsclient="/Applications/Emacs.app/Contents/MacOS/bin/emacsclient"
-    type gtar >/dev/null 2>&1 && alias tar=gtar
-    # see: http://deeeet.com/writing/2014/04/30/beer-on-terminal/
+        type gtar >/dev/null 2>&1 && alias tar=gtar
+        # see: http://deeeet.com/writing/2014/04/30/beer-on-terminal/
         function beers () { ruby -e 'C=`stty size`.scan(/\d+/)[1].to_i;S=ARGV.shift||"\xf0\x9f\x8d\xba";a={};puts "\033[2J";loop{a[rand(C)]=0;a.each{|x,o|;a[x]+=1;print "\033[#{o};#{x}H \033[#{a[x]};#{x}H#{S} \033[0;0H"};$stdout.flush;sleep 0.01}' ; }
-    ;;
+        ;;
     Linux)
-    alias ls='ls --color=auto'
-    alias lsx='ls -x --color=always'
-    alias crontab='crontab -i'
-    ;;
+        alias ls='ls --color=auto'
+        alias lsx='ls -x --color=always'
+        alias crontab='crontab -i'
+        ;;
     CYGWIN*)
         alias ls='ls --color -F --show-control-chars'
         ;;
     *)
         ;;
 esac
-if ! type lst >/dev/null 2>&1 ; then
-    alias lst='ls -t'
-fi
 
 alias grep='grep --color=auto'
-alias fgrep='fgrep --color=auto'
-alias egrep='egrep --color=auto'
+alias grepc='\grep --color=always'
 
-alias lv='lv -c'
-if ! type lv >/dev/null 2>&1 && type less >/dev/null 2>&1 ; then
-    alias lv='echo "lv is aliased as less" 1>&2 ; less'
-fi
-# -N for showing multibytes character
-alias tree='tree -NC'
-alias mv='mv -i'
 alias en='env LANG=C '
-if type w3m >/dev/null 2>&1 ; then
-    alias htmlv='w3m -T text/html '
-fi
-function ymd {
-    sep=$1
-    env LANG=C date +"%Y${sep}%m${sep}%d"
-}
-function hms {
-    sep=$1
-    env LANG=C date +"%H${sep}%M${sep}%S"
-}
-alias cldate="en date +'%a %b %d %T %Y'"
-alias epoch='date +%s'
-function exists { type $1 >/dev/null 2>&1 ; return $? ; }
+alias mv='mv -i'
+alias tree='tree -NC'
 
+### pager
+alias lv='lv -c'
+alias less='less -R'
+# tree -N for showing multibytes character
+if exists w3m ; then
+    alias w3mhtml='w3m -T text/html '
+fi
+
+### date
+function ymd { env LANG=C date +"%Y${1}%m${1}%d" ; }
+function hms { env LANG=C date +"%H${1}%M${1}%S" ; }
+alias cldate="en date +'%a %b %d %T %Y'" # changelog date
+alias epoch='date +%s'
+alias clocktick='while true ; do printf "[%s]\r" "$(date +%T)"; sleep 1 ; done'
+
+### file
 function extcount {
     local dir="${1:-.}"
-    find "$dir" -type f |  sed -e 's/.*\.//' | grep -v '/' | sort | uniq -c | sort -rnk1
+    find "$dir" -type f \
+        | sed -e 's/.*\.//' \
+        | grep -v '/' \
+        | grep -v '^\.' \
+        | sort | uniq -c | sort -rnk1
     # TODO: detection no-having-extension file and dotfile.
 }
 
-if type git >/dev/null 2>&1 && type hub >/dev/null 2>&1 ; then
+### git
+if exists git && ! exists hub ; then
     alias git=hub
 fi
 
@@ -123,68 +133,45 @@ function init-git-flavor {
     git config --global alias.graph "log --graph --date-order --all --pretty=format:'%h %Cred%d %Cgreen%ad %Cblue%cn %Creset%s' --date=short"
 }
 
-alias dachoclub="ionice -c2 -n7 nice -n 19 "
+### process
+alias dacho-club="ionice -c2 -n7 nice -n 19 "
+# invert of "bg" command
+if ! exists stop ; then
+    alias stop='kill -STOP '
+elif ! exists sigstop ; then
+    alias sigstop='kill -STOP '
+fi
+if ! exists cont; then
+    alias cont='kill -CONT '
+elif ! exists sigcont ; then
+    alias sigcont='kill -CONT '
+fi
 
 ###
 ### Utilities
 ###
 alias portscan='nmap -sT -p1-65535 ' # argument: hostname
-if type colordiff >/dev/null 2>&1 ; then
+if exists colordiff ; then
     alias diff=colordiff
 fi
-if type xwavemon >/dev/null 2>&1 ; then
+if ! exists xwavemon ; then
     alias xwavemon='env LANG=C xterm +sb -e wavemon'
 fi
 
-# invert of "bg" command
-if ! type stop >/dev/null 2>&1 ; then
-    alias stop='kill -STOP '
-elif ! type sigstop >/dev/null 2>&1 ; then
-    alias sigstop='kill -STOP '
-fi
-if ! type cont >/dev/null 2>&1 ; then
-    alias cont='kill -CONT '
-elif ! type sigcont >/dev/null 2>&1 ; then
-    alias sigcont='kill -CONT '
-fi
 
 alias append-quote='sed -e "s/^/> /"'
 alias remove-quote='sed -e "s/^> //"'
 
 alias find-backups='find . -maxdepth 1 -name "?*~" -o -name "?*.bak" -o -name ".[^.]?*~" -o name ".[^.]*.bak"'
 
-if type emacsclient >/dev/null 2>&1 && ! type ec >/dev/null 2>&1 ; then
+if exists emacsclient && ! exists ec ; then
     alias ec=emacsclient
 fi
-function edit {
-    local arg="$1"
-    if [ -z "$arg" ] ; then
-        echo "$FUNCNAME argument"
-        return
-    fi
-    emacsclient $arg &
-}
 
 alias sslv3='curl -sslv3 -kv '
 
 # see: http://d.hatena.ne.jp/maji-KY/20110718/1310985449
 alias od='od -tx1z -Ax -v'
-
-alias reload='source ~/.bash_profile'
-alias gip="curl -s checkip.dyndns.org | sed -e 's/.Current IP Address: //' -e 's/<.$//'"
-alias clocktick='while :; do printf "%s\r" "$(date +%T)"; sleep 1 ; done'
-
-function various-hostname {
-    echo "hostname command:"
-    echo "  `hostname`"
-    echo "perl \$Config{myhostname}:"
-    perl -MConfig -e 'print "  $Config{myhostname}\n"'
-    # see: http://ekbo.blogspot.jp/2013/10/mac-scutil.html
-    echo "scutil --get LocalHostName:"
-    echo "  `scutil --get LocalHostName`"
-    echo "scutil --get ComputerName:"
-    echo "  `scutil --get ComputerName`"
-}
 
 # debug
 # debug on
@@ -1227,7 +1214,7 @@ function cdrepo {
 function http-get-source {
     local url=$1
     local file=$2
-    if [ ! -f $file ] ; then
+    if [ -n "$HTTP_GET_SOURCE_FORCE" ] || [ ! -f $file ] ; then
         curl --silent $url > $file
     fi
     if [ -s $file ] ; then

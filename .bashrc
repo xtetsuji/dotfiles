@@ -58,9 +58,9 @@ case $(uname) in
 esac
 
 case "$TERM" in
-    xterm-color) color_prompt=yes;;
-    xterm-256color) color_prompt=yes;;
-    screen) color_prompt=yes;; # Is modern screen OK!?
+    xterm-color)     color_prompt=yes;;
+    xterm-256color)  color_prompt=yes;;
+    screen)          color_prompt=yes;; # Is modern screen OK!?
     screen-256color) color_prompt=yes;;
 esac
 
@@ -140,8 +140,15 @@ elif [ -f /etc/bash_completion ] ; then
 fi
 # and see "~/.bash_completion". It is read by builtin bash_completion.
 
+# bash_color
+http-get-source \
+    https://raw.githubusercontent.com/maxtsepkov/bash_colors/master/bash_colors.sh \
+    ~/.bash_colors
+
 # git-completion
-http-get-source https://raw.githubusercontent.com/git/git/master/contrib/completion/git-completion.bash ~/.git-completion.bash
+http-get-source \
+    https://raw.githubusercontent.com/git/git/master/contrib/completion/git-completion.bash \
+    ~/.git-completion.bash
 
 # for my xssh command completion same as ssh.
 shopt -u hostcomplete && complete -F _ssh xssh
@@ -208,4 +215,3 @@ export AWS_RDS_HOME=$HOME/tmp/RDSCli-1.6.001
 export AWS_CREDENTIAL_FILE=$AWS_RDS_HOME/credential-file-path
 
 unset UNAME
-
