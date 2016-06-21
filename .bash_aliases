@@ -173,7 +173,13 @@ alias sslv3='curl -sslv3 -kv '
 # see: http://d.hatena.ne.jp/maji-KY/20110718/1310985449
 alias od='od -tx1z -Ax -v'
 
-alias screenutf8=/usr/local/Cellar/screenutf8/4.3.1/bin/screen
+if [ -d /usr/local/Cellar/screenutf8 ] ; then
+    screenutf8_path=$(brew info screenutf8 | grep ^/usr/local/Cellar/screenutf8/ | sed -e 's/ .*//')
+    if [ -n "$screenutf8_path" ] && [ -f "$screenutf8_path/bin/screen" ] ; then
+        alias screenutf8=$screenutf8_path/bin/screen
+    fi
+    unset screenutf8_path
+fi
 
 # debug
 # debug on
