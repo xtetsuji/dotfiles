@@ -590,14 +590,6 @@ function cdback {
 
 alias cdclear='dirs -c'
 
-### ad-hoc chdir like aliases
-# alias ,=cdback
-# alias ..="cd .."
-# alias ...=".. ; ..;"
-# alias ....="..; ..; ..;"
-# alias .....="..; ..; ..; ..;"
-# alias ......="..; ..; ..; ..; ..;"
-
 # Jump cd as shortcut key.
 function cdj {
     ### cdj needs CDJ_DIR_MAP array definition:
@@ -962,7 +954,7 @@ function jobs2 {
     fi
     #trap 'kill -INT $jobspec' INT
     echo $line
-    read -p "Choice [fg|bg|cont|stop|disown|kill|SIG***|NUMBER|pbcopy]: " choice
+    read -p "Choice [fg|bg|cont|stop|disown|kill|kill -*|SIG***|NUMBER|pbcopy]: " choice
     jobspec=$(<<<"$line" sed -e 's/^\[/%/' -e 's/\].*//')
     case $choice in
         fg|bg|disown|kill|"kill -*")
@@ -1003,10 +995,10 @@ function ps2 {
         return 1
     fi
     echo "pids $pids"
-    read -p "Choice [kill|SIG***|pbcopy]: " choice
+    read -p "Choice [kill|kill -*|SIG***|pbcopy]: " choice
     case $choice in
-        kill)
-            $choice -HUP $pid
+        kill|"kill -*")
+            $choice $pid
             ;;
         SIG*)
             local signal=$(<<<"$choice" sed -e 's/^SIG//')
