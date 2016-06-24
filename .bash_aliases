@@ -179,6 +179,7 @@ if [ -d /usr/local/Cellar/screenutf8 ] ; then
         alias screenutf8=$screenutf8_path/bin/screen
     fi
     unset screenutf8_path
+    alias screen=screenutf8
 fi
 
 # debug
@@ -916,25 +917,42 @@ function cdmdfind {
 }
 
 # cdmdfind の peco 版
-type peco >/dev/null 2>&1 && type mdfind >/dev/null 2>&1 &&
 function cdmdfindp {
-    local dir
+    local dir result_num query
+    local result_tmpfile="/tmp/cdmdfindp.$$.$USER"
     local arg="$1"
+    arg="${arg//\'/}"
+    arg="${arg//\"/}"
+    # see: http://baqamore.hatenablog.com/entry/2014/08/28/185103
+    query="kMDItemContentType = public.folder && kMDItemFSName = \"*${arg}*\"c"
+
     if [ -z "$arg" ] || [ "$arg" = "-h" ] ; then
         echo "Usage:"
         echo "  $FUNCNAME STRING"
         return
     fi
-    # TODO: クエリがなかった場合のエラー文言
-    dir="$( mdfind -name "$arg" | perl -ne 'chomp; -d and print "$_\n";' | peco )"
-    if [ ! -z "$dir" ] ; then
-        cd "$dir"
+    mdfind "$query" > $result_tmpfile
+    #echo "matched dirs:" ; cat $result_tmpfile
+    result_num=$( wc -l <$result_tmpfile )
+    #echo "result_num=$result_num"
+    if [ $result_num = 0 ] ; then
+        echo "$FUNCNAME: matched directory is not found"
+    elif [ $result_num = 1 ] ; then
+        cd "$(<$result_tmpfile)"
+    else
+        dir="$( peco <$result_tmpfile )"
+        if [ -n "$dir" ] ; then
+            cd "$dir"
+        else
+            echo "canceled"
+        fi
     fi
+    #rm $result_tmpfile
 }
 
-if type  mdfind >/dev/null 2>&1 ; then
+if exists mdfind ; then
     alias cdi=cdmdfindp
-elif type locate >/dev/null 2>&1 ; then
+elif exists locate ;then
     alias cdi=cdlocatep
 fi
 
