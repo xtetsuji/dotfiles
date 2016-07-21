@@ -121,7 +121,7 @@ function extcount {
 }
 
 ### git
-if exists git && ! exists hub ; then
+if exists hub ; then
     alias git=hub
 fi
 
@@ -177,6 +177,9 @@ if [ -d /usr/local/Cellar/screenutf8 ] ; then
     screenutf8_path=$(brew info screenutf8 | grep ^/usr/local/Cellar/screenutf8/ | sed -e 's/ .*//')
     if [ -n "$screenutf8_path" ] && [ -f "$screenutf8_path/bin/screen" ] ; then
         alias screenutf8=$screenutf8_path/bin/screen
+        export SCREEN_COMMAND=$screenutf8_path/bin/screen
+    else
+        export SCREEN_COMMAND=screen
     fi
     unset screenutf8_path
     alias screen=screenutf8
