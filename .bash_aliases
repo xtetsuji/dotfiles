@@ -181,6 +181,7 @@ if [ -d /usr/local/Cellar/screenutf8 ] ; then
     else
         export SCREEN_COMMAND=screen
     fi
+    export PHS_SCREEN_COMMAND=$SCREEN_COMMAND
     unset screenutf8_path
     alias screen=screenutf8
 fi
