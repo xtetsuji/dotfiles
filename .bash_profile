@@ -148,6 +148,7 @@ elif  [ -f /etc/locale.gen ] \
     export LV="-Oe"
 elif [ `uname` = Darwin ] ; then
     export LANG=ja_JP.UTF-8
+    export LV="-Ou"
 else
     export LANG=C
 fi
