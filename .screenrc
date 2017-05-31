@@ -157,7 +157,7 @@ bind L redisplay
 bind ^j eval           'focus down'   'command -c cfocus'
 bind ^k eval           'focus up'     'command -c cfocus'
 bind ^h eval           'focus left'   'command -c cfocus'
-bind ^l eval           'focus right'  'command -c cfocus' 
+bind ^l eval           'focus right'  'command -c cfocus'
 bind -c cfocus ^j eval 'focus down'   'command -c cfocus'
 bind -c cfocus ^k eval 'focus up'     'command -c cfocus'
 bind -c cfocus ^h eval 'focus left'   'command -c cfocus'
@@ -215,6 +215,9 @@ bind b select
 
 # grouping
 bind g colon 'group '
+
+# shortcut listed ssh
+bind @ eval 'select 0' 'stuff "phs "'
 
 #bindkey -m ' ' eval "stuff ' '" writebuf "exec sh -c 'pbcopy < /tmp/screen-exchange'" "echo 'copy and write to pasteboard'"
 
@@ -274,4 +277,3 @@ termcap  kterm* 'AF=\E[3%dm:AB=\E[4%dm'
 terminfo kterm* 'AF=\E[3%p1%dm:AB=\E[4%p1%dm'
 termcap  vt100 'AF=\E[3%dm:AB=\E[4%dm'
 terminfo vt100* 'AF=\E[3%p1%dm:AB=\E[4%p1%dm'
-
