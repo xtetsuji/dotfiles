@@ -5,6 +5,7 @@
 test -z "$PS1" && return
 
 UNAME="$(uname)"
+BREW_PREFIX="$(brew --prefix)"
 
 # コマンド入力や通知などのインタラクティブなもの
 
@@ -21,27 +22,12 @@ if [ -f ~/.bash_aliases ] ; then
     source ~/.bash_aliases
 fi
 
-# ### add at 2011/11/07
-# if [ -n "$PERL_ENVIRONMENT_SETUP" ] && [ -f ~/perl5/perlbrew/etc/bashrc ] ; then
-#     source ~/perl5/perlbrew/etc/bashrc
-#     PERL_ENVIRONMENT_SETUP=1
-# fi
-#
-# perlbrew / plenv setups move to .bash_profile (2015/05/31)
-
-###
-### Emoji support
-###
-# ${EMOJI_NUMBER[$i]} の定義
-eval $( perl -E 'printf "EMOJI_NUMBER=(%s)\n", join " ", map { pack "H*", "3${_}efb88fe283a3" } 0..9' )
-
 ###
 ### Prompt
 ###
 SCREEN_VERSION=$(screen -version | sed -e 's/^Screen version //' -e 's/ .*//')
-case $(uname) in
+case $UNAME in
     Darwin)
-        emoji_prompt=yes
         PROMPT_ICON='\360\237\222\273' # computer
         #PROMPT_ICON='' # apple
         ;;
@@ -71,7 +57,8 @@ fi
 if [ "$color_prompt" = yes ] ; then
     # git プロンプト
     http-get-source https://raw.githubusercontent.com/git/git/master/contrib/completion/git-prompt.sh ~/.git-prompt.sh
-    PS1="${PROMPT_ICON} "'(\j)${debian_chroot:+($debian_chroot)}\[\033[01;32m\]\u@\h\[\033[00m\]:\[\033[01;34m\]\w\[\033[00m\]$(__git_ps1 " [\[\033[32m\]%s\[\033[0m\]]")\$ '
+    # ひとまず絵文字 ($PROMPT_ICON) は入れない
+    PS1='[%:\j @\A]${debian_chroot:+($debian_chroot)}\[\033[01;32m\]\u@\h\[\033[00m\]:\[\033[01;34m\]\w\[\033[00m\]$(__git_ps1 " [\[\033[32m\]%s\[\033[0m\]]")\$ '
 fi
 unset color_prompt
 
@@ -131,13 +118,11 @@ fi
 ###
 ### bash_completion
 ###
-if type brew >/dev/null 2>&1 && [ -f $(brew --prefix)/etc/bash_completion ] ; then
-    # Mac homebrew
-    source $(brew --prefix)/etc/bash_completion
-elif [ -f /etc/bash_completion ] ; then
-    # Debian
-    source /etc/bash_completion
-fi
+for f in $BREW_PREFIX/etc/bash_completion /etc/bash_completion ; do
+    test -f $f && source $f
+done
+unset f
+
 # and see "~/.bash_completion". It is read by builtin bash_completion.
 
 # bash_color
@@ -160,8 +145,6 @@ shopt -u hostcomplete && complete -F _ssh xssh
 ### add at 2012/03/19
 if type lv >/dev/null 2>&1 ; then
     export PAGER='lv -c'
-elif type jless >/dev/null 2>&1 ; then
-    export PAGER=jless
 elif type less >/dev/null 2>&1 ; then
     export PAGER=less
 else
