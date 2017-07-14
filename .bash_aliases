@@ -56,8 +56,6 @@ function my-init-backgrounds {
 ###
 
 function exists { type $1 >/dev/null 2>&1 ; return $? ; }
-#alias reload='source ~/.bash_profile'
-alias reload='exec $SHELL -l'
 
 case "$UNAME" in
     Darwin) ### Mac OS X
