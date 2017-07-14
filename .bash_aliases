@@ -112,17 +112,6 @@ function init-git-flavor {
 
 ### process
 alias dacho-club="ionice -c2 -n7 nice -n 19 "
-# invert of "bg" command
-if ! exists stop ; then
-    alias stop='kill -STOP '
-elif ! exists sigstop ; then
-    alias sigstop='kill -STOP '
-fi
-if ! exists cont; then
-    alias cont='kill -CONT '
-elif ! exists sigcont ; then
-    alias sigcont='kill -CONT '
-fi
 
 ###
 ### Utilities
