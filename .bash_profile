@@ -9,15 +9,11 @@
 umask 022
 
 ### read bashrc
-if [ -n "$BASH_VERSION" ] ; then
-    if [ -f ~/.bashrc ] ; then
-        . ~/.bashrc
-    fi
+if [ -n "$BASH_VERSION" ] && [ -f ~/.bashrc ] ; then
+    source ~/.bashrc
 fi
 
-###
 ### PATH of fundamental
-###
 export PATH
 for d in ~/bin ~/Dropbox/bin ~/git/@github/xtetsuji/various-commands/bin ; do
     if [ -d $d ] ; then
