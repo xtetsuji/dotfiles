@@ -140,7 +140,8 @@ alias sslv3='curl -sslv3 -kv '
 alias od='od -tx1z -Ax -v'
 
 if [ -d /usr/local/Cellar/screenutf8 ] ; then
-    screenutf8_path=$(brew info screenutf8 | grep ^/usr/local/Cellar/screenutf8/ | sed -e 's/ .*//')
+    #screenutf8_path=$(brew info screenutf8 | grep ^/usr/local/Cellar/screenutf8/ | sed -e 's/ .*//')
+    screenutf8_path=/usr/local/Cellar/screenutf8/4.4.0
     if [ -n "$screenutf8_path" ] && [ -f "$screenutf8_path/bin/screen" ] ; then
         alias screenutf8=$screenutf8_path/bin/screen
         export SCREEN_COMMAND=$screenutf8_path/bin/screen
