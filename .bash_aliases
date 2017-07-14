@@ -91,14 +91,11 @@ alias grepc='\grep --color=always'
 alias en='env LANG=C '
 alias mv='mv -i'
 alias tree='tree -NC'
+# tree -N for showing multibytes character
 
 ### pager
 alias lv='lv -c'
 alias less='less -R'
-# tree -N for showing multibytes character
-if exists w3m ; then
-    alias w3mhtml='w3m -T text/html '
-fi
 
 ### date
 function ymd { env LANG=C date +"%Y${1}%m${1}%d" ; }
