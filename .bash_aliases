@@ -97,24 +97,6 @@ alias tree='tree -NC'
 alias lv='lv -c'
 alias less='less -R'
 
-### date
-function ymd { env LANG=C date +"%Y${1}%m${1}%d" ; }
-function hms { env LANG=C date +"%H${1}%M${1}%S" ; }
-alias cldate="en date +'%a %b %d %T %Y'" # changelog date
-alias epoch='date +%s'
-alias clocktick='while true ; do printf "[%s]\r" "$(date +%T)"; sleep 1 ; done'
-
-### file
-function extcount {
-    local dir="${1:-.}"
-    find "$dir" -type f \
-        | sed -e 's/.*\.//' \
-        | grep -v '/' \
-        | grep -v '^\.' \
-        | sort | uniq -c | sort -rnk1
-    # TODO: detection no-having-extension file and dotfile.
-}
-
 ### git
 if exists hub ; then
     alias git=hub
