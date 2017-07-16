@@ -34,6 +34,16 @@ if [ -d ~/.mysql/default/bin ] ; then
     PATH="$HOME/.mysql/default/bin:$PATH"
 fi
 
+function xtenv-cache-eval {
+    local init_script_generate_command="$1"
+    local cache_file_name="$2"
+    local cache_file_path="$XTENV_CACHE_DIR/$cache_file_name"
+    if [ ! -f "$cache_file_path" ] ; then
+        $init_script_generate_command > $cache_file_path
+    fi
+    eval "$(< "$cache_file_path" )"
+}
+
 ###
 ### plenv
 ###
