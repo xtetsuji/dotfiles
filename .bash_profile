@@ -91,13 +91,6 @@ if type go >/dev/null 2>&1 ; then
 fi
 
 ###
-### Android SDK
-###
-# http://www.yoheim.net/blog.php?q=20140304
-if [ -d "$HOME/Library/$USER/android-sdk/platform-tools" ] ; then
-    # Mac OS X builtin directory "~/Library" is used.
-    export PATH=$PATH:$HOME/Library/$USER/android-sdk/platform-tools
-fi
 
 ###
 ### byobu
