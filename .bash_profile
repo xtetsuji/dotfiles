@@ -23,15 +23,9 @@ done
 unset d
 # TODO: each other two directries are same if one is symbolic link of another.
 
-###
-### mysql-build
-###
-# http://www.hsbt.org/diary/20130217.html
-if [ -d ~/.mysql/mysql-build/bin ] ; then
-    PATH=$PATH:~/.mysql/mysql-build/bin
-fi
-if [ -d ~/.mysql/default/bin ] ; then
-    PATH="$HOME/.mysql/default/bin:$PATH"
+XTENV_CACHE_DIR=~/.config/xtenv/cache
+if [ ! -d $XTENV_CACHE_DIR ] ; then
+    mkdir -p $XTENV_CACHE_DIR
 fi
 
 function xtenv-cache-eval {
