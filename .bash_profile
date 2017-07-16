@@ -87,7 +87,9 @@ fi
 ###
 # brew install go
 if type go >/dev/null 2>&1 ; then
-    GO_VERSION=$(go version | sed -e 's/.*version go//' -e 's/ .*//')
+    #GO_VERSION=$(go version | sed -e 's/.*version go//' -e 's/ .*//')
+    # go version コマンド実行が結構コストかかるので暫定的に固定
+    GO_VERSION=1.8
     if ! [[ $GO_VERSION =~ ^[0-9][0-9.]+$ ]] ; then
         GO_VERSION=default
     fi
