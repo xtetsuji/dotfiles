@@ -44,7 +44,8 @@ function xtenv-cache-eval {
 if [ -d $HOME/.plenv ] ; then
     export PLENV_ROOT=$HOME/.plenv
     export PATH=$PLENV_ROOT/bin:$PATH
-    eval "$(plenv init -)"
+    #eval "$(plenv init -)"
+    xtenv-cache-eval "plenv init -" "plenv.init"
     test -d $PLENV_ROOT || mkdir $PLENV_ROOT
 fi
 
