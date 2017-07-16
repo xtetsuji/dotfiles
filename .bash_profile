@@ -50,34 +50,6 @@ if [ -d $HOME/.plenv ] ; then
 fi
 
 ###
-### rbenv
-###
-if [ -d $HOME/.rbenv ] ; then
-    export RBENV_ROOT=$HOME/.rbenv
-    export PATH=$PATH:$RBENV_ROOT/bin
-    # Homebrew's rbenv offers RBENV_ROOT=/usr/loca/var/rbenv
-    # But ~/.rbenv is useful when I use for personal.
-    eval "$(rbenv init -)"
-    test -d $RBENV_ROOT || mkdir $RBENV_ROOT
-fi
-
-###
-### pyenv
-###
-if [ -d $HOME/.pyenv ] ; then
-    export PYENV_ROOT=$HOME/.pyenv
-    export PATH=$PYENV_ROOT/bin:$PATH
-    eval "$(pyenv init -)"
-fi
-
-###
-### nodebrew
-###
-if [ -d $HOME/.nodebrew/current/bin ] ; then
-    export PATH=$HOME/.nodebrew/current/bin:$PATH
-fi
-
-###
 ### golang
 ###
 # brew install go
@@ -128,3 +100,50 @@ export LV="-Ou"
 export TZ=JST-9
 
 BASH_PROFILE_DONE=1
+
+: test for xtetsuji
+
+
+: <<'COMMENT_OUT'
+# temporary commented out some *build *env settings.
+# low frequency in use for me.
+
+###
+### mysql-build
+###
+# http://www.hsbt.org/diary/20130217.html
+if [ -d ~/.mysql/mysql-build/bin ] ; then
+    PATH=$PATH:~/.mysql/mysql-build/bin
+fi
+if [ -d ~/.mysql/default/bin ] ; then
+    PATH="$HOME/.mysql/default/bin:$PATH"
+fi
+
+###
+### rbenv
+###
+if [ -d $HOME/.rbenv ] ; then
+    export RBENV_ROOT=$HOME/.rbenv
+    export PATH=$PATH:$RBENV_ROOT/bin
+    # Homebrew's rbenv offers RBENV_ROOT=/usr/loca/var/rbenv
+    # But ~/.rbenv is useful when I use for personal.
+    eval "$(rbenv init -)"
+    test -d $RBENV_ROOT || mkdir $RBENV_ROOT
+fi
+
+###
+### pyenv
+###
+if [ -d $HOME/.pyenv ] ; then
+    export PYENV_ROOT=$HOME/.pyenv
+    export PATH=$PYENV_ROOT/bin:$PATH
+    eval "$(pyenv init -)"
+fi
+
+###
+### nodebrew
+###
+if [ -d $HOME/.nodebrew/current/bin ] ; then
+    export PATH=$HOME/.nodebrew/current/bin:$PATH
+fi
+COMMENT_OUT
