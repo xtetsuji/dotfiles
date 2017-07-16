@@ -103,15 +103,6 @@ if type go >/dev/null 2>&1 ; then
 fi
 
 ###
-
-###
-### byobu
-###
-if type brew >/dev/null 2>&1 ; then
-    export BYOBU_PREFIX=$(brew --prefix)
-fi
-
-###
 ### Some PATHes
 ###
 export MANPATH
