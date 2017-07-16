@@ -128,23 +128,8 @@ fi
 ###
 ### Locale / Lang
 ###
-# locale is UTF-8 ordinary on modern Debian and some dists.
-if    [ -f /etc/locale.gen ] \
-   && grep -i '^ja_JP\.UTF-8' /etc/locale.gen >/dev/null 2>&1 ; then
-    export LANG=ja_JP.UTF-8
-    export LV="-Ou"
-elif  [ -f /etc/locale.gen ] \
-   && grep -i '^ja_JP\.eucJP' /etc/locale.gen >/dev/null 2>&1 ; then
-    export LANG=ja_JP.eucJP
-    export JLESSCHARSET=japanese-euc
-    export LV="-Oe"
-elif [ `uname` = Darwin ] ; then
-    export LANG=ja_JP.UTF-8
-    export LV="-Ou"
-else
-    export LANG=C
-fi
-
+export LANG=ja_JP.UTF-8
+export LV="-Ou"
 export TZ=JST-9
 
 BASH_PROFILE_DONE=1
