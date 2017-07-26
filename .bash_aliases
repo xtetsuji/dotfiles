@@ -62,11 +62,6 @@ case "$UNAME" in
         alias ls='ls -FG' # BSD type "ls"
         alias lsx='ls -xG'
         # see: http://ascii.jp/elem/000/000/594/594203/
-        alias CharacterPalette='open /System/Library/Input\ Methods/CharacterPalette.app/'
-        alias ArchiveUtility='open /System/Library/CoreServices/Archive\ Utility.app/'
-        alias iPhoneSimulator='open /Developer/Platforms/iPhoneSimulator.platform/Developer/Applications/iPhone\ Simulator.app'
-        alias battery-remaining='pmset -g ps'
-        alias quicktime="open -a 'QuickTime Player' "
         test -f /Applications/Emacs.app/Contents/MacOS/bin/emacsclient && \
         alias emacsclient="/Applications/Emacs.app/Contents/MacOS/bin/emacsclient"
         type gtar >/dev/null 2>&1 && alias tar=gtar
@@ -123,10 +118,6 @@ fi
 if ! exists xwavemon ; then
     alias xwavemon='env LANG=C xterm +sb -e wavemon'
 fi
-
-
-alias append-quote='sed -e "s/^/> /"'
-alias remove-quote='sed -e "s/^> //"'
 
 alias find-backups='find . -maxdepth 1 -name "?*~" -o -name "?*.bak" -o -name ".[^.]?*~" -o name ".[^.]*.bak"'
 
