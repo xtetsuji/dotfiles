@@ -23,11 +23,19 @@ done
 unset d
 # TODO: each other two directries are same if one is symbolic link of another.
 
+
+###
+### xtenv
+###
 XTENV_CACHE_DIR=~/.config/xtenv/cache
 if [ ! -d $XTENV_CACHE_DIR ] ; then
     mkdir -p $XTENV_CACHE_DIR
 fi
 
+# xtenv-cache-eval CMD CACHE_FILE_NAME
+# CMD の出力結果を CACHE_FILE_NAME にキャッシュしつつ eval する
+# すでに CACHE_FILE_NAME があれば CMD を実行しない
+# TODO: キャシュ有効期限を設定する？
 function xtenv-cache-eval {
     local init_script_generate_command="$1"
     local cache_file_name="$2"
@@ -39,7 +47,7 @@ function xtenv-cache-eval {
 }
 
 ###
-### plenv
+### plenv on xtenv
 ###
 if [ -d $HOME/.plenv ] ; then
     export PLENV_ROOT=$HOME/.plenv
