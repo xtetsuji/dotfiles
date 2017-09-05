@@ -23,7 +23,6 @@ done
 unset d
 # TODO: each other two directries are same if one is symbolic link of another.
 
-
 ###
 ### xtenv
 ###
@@ -45,6 +44,15 @@ function xtenv-cache-eval {
     fi
     eval "$(< "$cache_file_path" )"
 }
+
+
+###
+### chdrip on xtenv
+###
+if type drip 2>&1 >/dev/null ; then
+    xtenv-cache-eval "drip drip-init" "drip.init"
+fi
+
 
 ###
 ### plenv on xtenv
