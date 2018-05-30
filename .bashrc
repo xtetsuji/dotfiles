@@ -56,7 +56,9 @@ fi
 
 if [ "$color_prompt" = yes ] ; then
     # git プロンプト
-    http-get-source https://raw.githubusercontent.com/git/git/master/contrib/completion/git-prompt.sh ~/.git-prompt.sh
+    http-get-source \
+        https://raw.githubusercontent.com/git/git/master/contrib/completion/git-prompt.sh \
+        ~/.config/cache/http-get-source/git-prompt.sh
     # ひとまず絵文字 ($PROMPT_ICON) は入れない
     #PS1='[%:\j @\A]${debian_chroot:+($debian_chroot)}\[\033[01;32m\]\u@\h\[\033[00m\]:\[\033[01;34m\]\w\[\033[00m\]$(__git_ps1 " [\[\033[32m\]%s\[\033[0m\]]")\$ '
     PS1='\[\033[01;33m\]\u@\h\[\033[00m\]:\[\033[01;34m\]\w\[\033[00m\]$(__git_ps1 " [\[\033[32m\]%s\[\033[0m\]]")\$ '
@@ -145,12 +147,12 @@ unset f
 # bash_color
 http-get-source \
     https://raw.githubusercontent.com/maxtsepkov/bash_colors/master/bash_colors.sh \
-    ~/.bash_colors
+    ~/.config/cache/http-get-source/bash_colors
 
 # git-completion
 http-get-source \
     https://raw.githubusercontent.com/git/git/master/contrib/completion/git-completion.bash \
-    ~/.git-completion.bash
+    ~/.config/cache/http-get-source/git-completion.bash
 
 # for my xssh command completion same as ssh.
 shopt -u hostcomplete && complete -F _ssh xssh
