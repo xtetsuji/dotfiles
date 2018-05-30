@@ -158,12 +158,10 @@ shopt -u hostcomplete && complete -F _ssh xssh
 ###
 ### pager and editor
 ###
-
-### add at 2012/03/19
 if type lv >/dev/null 2>&1 ; then
     export PAGER='lv -c'
 elif type less >/dev/null 2>&1 ; then
-    export PAGER=less
+    export PAGER='less -R'
 else
     export PAGER=more
 fi
