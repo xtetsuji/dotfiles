@@ -129,7 +129,7 @@ if [ "$PS1" ] ; then
     }
 fi
 if type prompt_command >/dev/null 2>&1 ; then
-    PRMPT_COMMAND=prompt_command
+    PROMPT_COMMAND=prompt_command
 fi
 
 ###
