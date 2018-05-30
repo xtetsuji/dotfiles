@@ -209,9 +209,4 @@ set bell-style visible
 # avoid Ctrl-D logout.
 IGNOREEOF=3
 
-### add at 2012/04/25
-export JAVA_HOME=/System/Library/Frameworks/JavaVM.framework/Home
-export AWS_RDS_HOME=$HOME/tmp/RDSCli-1.6.001
-export AWS_CREDENTIAL_FILE=$AWS_RDS_HOME/credential-file-path
-
 unset UNAME
