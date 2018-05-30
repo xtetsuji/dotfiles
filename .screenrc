@@ -253,7 +253,10 @@ register ] "\033:se ai\015a"
 #screen -t messages 2 sudo tail -f /var/log/messages
 
 # caption always "%3n %t%? @%u%?%? [%h]%?"
-caption always '%?%F%{= gW}%:%{= Kk}%?%2n%f%07=%t%='
+
+caption always '%?%F%{= yk}%:%{= Kk}%?%2n%f%07=%t%='
+#screen -X caption always '%?%F%{= mk}%:%{= Kk}%?%2n%f%07=%t%=' # caption config: remote
+
 # hardstatus alwaysignore
 # hardstatus alwayslastline "%w"
 #hardstatus alwayslastline "%H[%n]: [%-Lw%{= BW}%50>%n%f* %t%{-}%+Lw%<]"
