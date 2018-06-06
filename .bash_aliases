@@ -192,6 +192,11 @@ function perl-mods2newit-perlbrew {
 }
 # https://gist.github.com/hirose31/8647156
 function pmver {
+    if [ -z "$1" ] ; then
+        echo "Usage:"
+        echo "  pmver [-cd] MODULE_NAME"
+        return
+    fi
     local do_cd=false
     if [ "$1" = '-cd' ]; then
         do_cd=true
