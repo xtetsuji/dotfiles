@@ -321,7 +321,7 @@ fi
 
 alias term-growl='killall -TERM Growl HardwareGrowler'
 
-# TODO: screen をログインシェルにしてもいいのでは？
+# TODO: screen をログインシェルにしてもいいのでは？ → screen の new-screen で無限再帰になる危険性があるのでダメ
 if ! type sc >/dev/null 2>&1 ; then
     function sc {
         case "$TERM" in
