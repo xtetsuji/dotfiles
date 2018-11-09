@@ -117,9 +117,6 @@ export TZ=JST-9
 
 BASH_PROFILE_DONE=1
 
-: test for xtetsuji
-
-
 : <<'COMMENT_OUT'
 # temporary commented out some *build *env settings.
 # low frequency in use for me.
