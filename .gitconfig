@@ -42,6 +42,7 @@
 	log3 = log --graph --date-order -C -M --pretty=format:"<%h> %ad [%an] %Cgreen%d%Creset %s" --all --date=short
 	log4 = log --graph --pretty='format:%C(yellow)%h%Cblue%d%Creset %s %C(black bold)%an, %ar%Creset'
 
+        whole-grep = !git-whole-grep.sh
 # [push]
 #        default = simple
 
