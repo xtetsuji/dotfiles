@@ -75,41 +75,37 @@ function exists { type $1 >/dev/null 2>&1 ; return $? ; }
 case "$UNAME" in
     Darwin) ### Mac OS X
         alias ls='ls -FG' # BSD type "ls"
-        alias lsx='ls -xG'
         # see: http://ascii.jp/elem/000/000/594/594203/
         test -f /Applications/Emacs.app/Contents/MacOS/bin/emacsclient && \
         alias emacsclient="/Applications/Emacs.app/Contents/MacOS/bin/emacsclient"
-        type gtar >/dev/null 2>&1 && alias tar=gtar
         # see: http://deeeet.com/writing/2014/04/30/beer-on-terminal/
         function beers () { ruby -e 'C=`stty size`.scan(/\d+/)[1].to_i;S=ARGV.shift||"\xf0\x9f\x8d\xba";a={};puts "\033[2J";loop{a[rand(C)]=0;a.each{|x,o|;a[x]+=1;print "\033[#{o};#{x}H \033[#{a[x]};#{x}H#{S} \033[0;0H"};$stdout.flush;sleep 0.01}' ; }
         ;;
     Linux)
         alias ls='ls --color=auto'
-        alias lsx='ls -x --color=always'
         alias crontab='crontab -i'
         ;;
     CYGWIN*)
         alias ls='ls --color -F --show-control-chars'
         ;;
-    *)
-        ;;
 esac
 
 alias grep='grep --color=auto'
-alias grepc='\grep --color=always'
-
 alias en='env LANG=C '
 alias mv='mv -i'
-alias tree='tree -NC'
-# tree -N for showing multibytes character
-
-### pager
+alias tree='tree -NC' # tree -N for showing multibytes character
 alias lv='lv -c'
 alias less='less -R'
 
-### git
-if exists hub ; then
-    alias git=hub
+exists gtar      && alias tar=gtar
+exists hub       && alias git=hub
+exists colordiff && alias diff=colordiff
+exists wavemon   && alias xwavemon='env LANG=C xterm +sb -e wavemon'
+alias od='od -tx1z -Ax -v' # http://d.hatena.ne.jp/maji-KY/20110718/1310985449
+exists highlight && alias hl=highlight # http://search.cpan.org/dist/App-highlight/
+# http://suzuki.tdiary.net/20140516.html#p01
+if [ -f /usr/local/bin/highlight ] ; then
+    alias syntaxhi=/usr/local/bin/highlight
 fi
 
 function init-git-flavor {
@@ -119,31 +115,6 @@ function init-git-flavor {
     git config --global color.ui true
     git config --global alias.graph "log --graph --date-order --all --pretty=format:'%h %Cred%d %Cgreen%ad %Cblue%cn %Creset%s' --date=short"
 }
-
-### process
-alias dacho-club="ionice -c2 -n7 nice -n 19 "
-
-###
-### Utilities
-###
-alias portscan='nmap -sT -p1-65535 ' # argument: hostname
-if exists colordiff ; then
-    alias diff=colordiff
-fi
-if ! exists xwavemon ; then
-    alias xwavemon='env LANG=C xterm +sb -e wavemon'
-fi
-
-alias find-backups='find . -maxdepth 1 -name "?*~" -o -name "?*.bak" -o -name ".[^.]?*~" -o name ".[^.]*.bak"'
-
-if exists emacsclient && ! exists ec ; then
-    alias ec=emacsclient
-fi
-
-alias sslv3='curl -sslv3 -kv '
-
-# see: http://d.hatena.ne.jp/maji-KY/20110718/1310985449
-alias od='od -tx1z -Ax -v'
 
 if [ -d /usr/local/Cellar/screenutf8 ] ; then
     #screenutf8_path=$(brew info screenutf8 | grep ^/usr/local/Cellar/screenutf8/ | sed -e 's/ .*//')
@@ -158,31 +129,6 @@ if [ -d /usr/local/Cellar/screenutf8 ] ; then
     unset screenutf8_path
     alias screen=screenutf8
 fi
-
-# debug
-# debug on
-# debug off
-function debug {
-    local arg="$1"
-    if [ "x$arg" = "x--help" ] ; then
-        echo "Usage:"
-        echo "  debug"
-        echo "  debug on"
-        echo "  debug off"
-        return
-    fi
-    if [ -z "$arg" ] ; then
-        echo "DEBUG is:"
-        echo $DEBUG
-    elif [ "$arg" = off -o "$arg" = "0" ] ; then
-        echo "unset DEBUG."
-        DEBUG=
-        unset DEBUG
-    elif [ "$arg" = on -o "$arg" = "1" ] ; then
-        echo "set DEBUG."
-        export DEBUG=1
-    fi
-}
 
 ###
 ### Perl
@@ -234,30 +180,6 @@ function pwdhttpd {
         -e 'Plack::App::Directory->new({root=>getcwd()})->to_app'
 }
 
-# http://search.cpan.org/dist/App-highlight/
-if type highlight >/dev/null 2>&1 && ! type hl >/dev/null 2>&1 ; then
-    alias hl=highlight
-fi
-
-# http://suzuki.tdiary.net/20140516.html#p01
-if [ -f /usr/local/bin/highlight ] ; then
-    alias syntaxhi=/usr/local/bin/highlight
-fi
-
-function jsonlv {
-    # TODO: plural arguments
-    local command arg
-    arg="$1"
-    if type json_xs >/dev/null 2>&1 ; then
-        command=json_xs
-    elif type json_pp >/dev/null 2>&1 ; then
-        command=json_pp
-    else
-        # :-(
-        command=cat
-    fi
-    $command <"$arg" | lv
-}
 
 alias dict='perl -MCocoa::DictionaryServices=lookup -le "print for lookup(@ARGV);"'
 alias available_dictionaries='perl -MCocoa::DictionaryServices=available_dictionaries -le "print for available_dictionaries()"'
