@@ -3,6 +3,21 @@
 declare ALIASES=$HOME/.bash_aliases
 declare UNAME=$(uname)
 
+# xtenv-cache-eval CMD CACHE_FILE_NAME
+# CMD の出力結果を CACHE_FILE_NAME にキャッシュしつつ eval する
+# すでに CACHE_FILE_NAME があれば CMD を実行しない
+# TODO: キャシュ有効期限を設定する？
+function xtenv-cache-eval {
+    test $# = 2 || { echo "$FUNCNAME COMMANDS FILENAME" ; return 1 ; }
+    local init_script_generate_command="$1"
+    local cache_file_name="$2"
+    local cache_file_path="$XTENV_CACHE_DIR/$cache_file_name"
+    if [ ! -f "$cache_file_path" ] ; then
+        $init_script_generate_command > $cache_file_path
+    fi
+    eval "$(< "$cache_file_path" )"
+}
+
 ###
 ### my
 ###
