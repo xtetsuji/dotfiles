@@ -19,54 +19,6 @@ function xtenv-cache-eval {
 }
 
 ###
-### my
-###
-
-function my {
-    local subcommand=$1
-    local subcommand_list="startup|ssh-add|init-backgrounds|subcommand_list|usage"
-    case "$subcommand" in
-        $subcommand_list)
-            my-$subcommand
-            return $?
-            ;;
-        subcommand_list)
-            echo ${subcommand_list//|/ }
-            ;;
-        *)
-            my-usage
-            return $?
-            ;;
-    esac
-}
-
-function my-usage {
-    echo "Usage:"
-    local subcommand
-    for subcommand in $(my subcommand_list) ; do
-        echo "  my $subcommand"
-    done
-}
-
-function my-startup {
-    if [ "$MY_STARTUP_DONE" = 1 ] ; then
-        echo "already done (MY_STARTUP_DONE is true)"
-        return
-    fi
-    my-ssh-add
-    my-init-backgrounds
-    export MY_STARTUP_DONE=1
-}
-
-function my-init-backgrounds {
-    local cmd
-    for cmd in battery-watchd macwland pbstot2transd ; do
-        echo "exec and backgroud $cmd"
-        $cmd &
-    done
-}
-
-###
 ### Basics
 ###
 
@@ -179,7 +131,6 @@ function pwdhttpd {
     plackup -MCwd -MPlack::App::Directory "$@" \
         -e 'Plack::App::Directory->new({root=>getcwd()})->to_app'
 }
-
 
 alias dict='perl -MCocoa::DictionaryServices=lookup -le "print for lookup(@ARGV);"'
 alias available_dictionaries='perl -MCocoa::DictionaryServices=available_dictionaries -le "print for available_dictionaries()"'
@@ -697,9 +648,10 @@ function pathclean {
     export PATH="$( perl -e 'my @paths = split /::*/, $ENV{PATH}; my (%seen, @new_paths); for (@paths) { if(!$seen{$_}++ && -d $_) { push @new_paths, $_; } } print join q(:), @new_paths' )"
 }
 
-function pathview {
-    perl -e 'print join q(), map { qq($_\n) } split /:+/, $ENV{PATH}; '
-}
+# pathview: output extermanl command
+# function pathview {
+#     perl -e 'print join q(), map { qq($_\n) } split /:+/, $ENV{PATH}; '
+# }
 
 # http://qiita.com/items/2a4dc1d6862da2af0972
 function greppath() {
