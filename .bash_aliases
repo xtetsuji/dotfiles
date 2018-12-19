@@ -145,15 +145,6 @@ alias available_dictionaries='perl -MCocoa::DictionaryServices=available_diction
 #fi
 
 ###
-### SSH
-###
-# "~/.ssh/keylist.txt" has private key filename per line.
-alias my-ssh-add='for key in $(grep -v "^ *#" ~/.ssh/keylist.txt) ; do ssh-add ~/.ssh/$key ; done ; unset key'
-alias ssh-keylist="ssh-add -l | sed -e 's;/[^[:space:]]*/;;'"
-alias hup-autossh='killall -HUP autossh ; killall -USR1 autossh ; '
-alias my-ssh-agent-setup='if ps ux | grep ssh-[a]gent >/dev/null 2>&1 ; then echo "ssh-agent already run" ; else eval $(ssh-agent) ; my-ssh-add ; fi'
-
-###
 ### Mac OS X
 ###
 #if type growlnotify >/dev/null 2>&1 ; then
