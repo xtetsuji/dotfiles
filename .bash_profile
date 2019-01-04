@@ -31,14 +31,12 @@ if [ ! -d $XTENV_CACHE_DIR ] ; then
     mkdir -p $XTENV_CACHE_DIR
 fi
 
-
 ###
 ### chdrip on xtenv
 ###
 if type drip 2>&1 >/dev/null ; then
     xtenv-cache-eval "drip drip-init" "drip.init"
 fi
-
 
 ###
 ### plenv on xtenv
@@ -100,6 +98,11 @@ fi
 export LANG=ja_JP.UTF-8
 export LV="-Ou"
 export TZ=JST-9
+
+###
+### Information
+###
+export icloud_drive=$HOME/Library/Mobile\ Documents/com~apple~CloudDocs
 
 BASH_PROFILE_DONE=1
 
