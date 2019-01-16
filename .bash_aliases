@@ -635,24 +635,32 @@ function show-proxyenv {
     env | grep -i _proxy
 }
 
-function pathclean {
-    export PATH="$( perl -e 'my @paths = split /::*/, $ENV{PATH}; my (%seen, @new_paths); for (@paths) { if(!$seen{$_}++ && -d $_) { push @new_paths, $_; } } print join q(:), @new_paths' )"
-}
-
-# pathview: output extermanl command
-# function pathview {
-#     perl -e 'print join q(), map { qq($_\n) } split /:+/, $ENV{PATH}; '
-# }
-
-# http://qiita.com/items/2a4dc1d6862da2af0972
-function greppath() {
-    local FOUND=0
-    local IFS=':'
-    local DIR
-    for DIR in ${2}; do
-        [ "${1}" == "${DIR}" ] && FOUND=1
-    done
-    [ ${FOUND} -ge 1 ] && echo "${1}" && return 0 || return 1
+function pathctl {
+    local pathctl_out=_pathctl.sh
+    local subcommand=${1:-}
+    if [ -z "$subcommand" ] ; then
+        $pathctl_out help
+        return
+    fi
+    shift
+    case "$subcommand" in
+        add|delete|clean)
+            # 編集系
+            local new_path=$( $pathctl_out edited-path-string-by-$subcommand "$@" )
+            test $? = 0 || return 1
+            test "$PATH" = "$new_path" && { echo "PATH is not modified" ; return ; }
+            test -z "$new_path" && { echo "new path is empty. error." ; return 1 ; }
+            export PATH=$new_path
+            ;;
+        view|grep|dump)
+            $pathctl_out $subcommand "$@"
+            ;;
+        *)
+            echo "$FUNCNAME: unknown subcommand ($subcommand)"
+            return 1
+            ;;
+    esac
+    return $?
 }
 
 # cdlocate
