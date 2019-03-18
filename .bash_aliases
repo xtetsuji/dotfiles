@@ -168,13 +168,7 @@ if [ "$UNAME" = Darwin ] ; then
         fi
         networksetup -setairportpower en0 $switch
     }
-    alias ssid='airport-info | grep " SSID: " | sed -e "s/.* //"'
-    alias CharacterPalette='open /System/Library/Input\ Methods/CharacterPalette.app/'
-    alias ArchiveUtility='open /System/Library/CoreServices/Archive\ Utility.app/'
-    alias iPhoneSimulator='open /Developer/Platforms/iPhoneSimulator.platform/Developer/Applications/iPhone\ Simulator.app'
-    alias cocoa-screenshare='open "/System/Library/CoreServices/Screen\ Sharing.app/"'
     alias ql='qlmanage -p 2>/dev/null'
-    alias mute='/usr/bin/osascript -e "set volume 0"'
     alias imgdim='sips -g pixelHeight -g pixelWidth $1'
     # see various-commands/alt-md5sum more.
     if type alt-md5sum >/dev/null 2>&1 && ! type md5sum >/dev/null 2>&1 ; then
@@ -184,13 +178,9 @@ if [ "$UNAME" = Darwin ] ; then
     fi
     alias pbtee='cat | pbcopy ; sleep 1 ; pbpaste'
     #alias pbtee='cat | tee >(pbpaste)' # FIXME: does not work.
-    alias pb-append-quote='pbpaste | append-quote | pbcopy'
-    alias pb-remove-quote='pbpaste | remove-quote | pbcopy'
     alias pb-iconv-change='pbpaste | iconv -c -f UTF-8-MAC -t UTF-8 | pbcopy'
     alias pwdcopy='echo -n $(pwd)/ | pbcopy'
 fi
-
-alias term-growl='killall -TERM Growl HardwareGrowler'
 
 # TODO: screen をログインシェルにしてもいいのでは？ → screen の new-screen で無限再帰になる危険性があるのでダメ
 if ! type sc >/dev/null 2>&1 ; then
