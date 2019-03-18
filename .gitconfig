@@ -46,6 +46,12 @@
 # [push]
 #        default = simple
 
+[color]
+	ui = auto
+
+[push]
+	default = simple
+
 [github]
 	user = xtetsuji
 [ghi]

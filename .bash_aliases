@@ -60,14 +60,6 @@ if [ -f /usr/local/bin/highlight ] ; then
     alias syntaxhi=/usr/local/bin/highlight
 fi
 
-function init-git-flavor {
-    # TODO: Does pager recognized color sequence?
-    git config --global push.default simple
-    # true or false?
-    git config --global color.ui true
-    git config --global alias.graph "log --graph --date-order --all --pretty=format:'%h %Cred%d %Cgreen%ad %Cblue%cn %Creset%s' --date=short"
-}
-
 if [ -d /usr/local/Cellar/screenutf8 ] ; then
     #screenutf8_path=$(brew info screenutf8 | grep ^/usr/local/Cellar/screenutf8/ | sed -e 's/ .*//')
     screenutf8_path=/usr/local/Cellar/screenutf8/4.4.0
