@@ -50,6 +50,16 @@ if [ -d $HOME/.plenv ] ; then
 fi
 
 ###
+### rbenv on xtenv
+###
+if [ -d $HOME/.rbenv ] ; then
+    export RBENV_ROOT=$HOME/.rbenv
+    export PATH=$RBENV_ROOT/bin:$PATH
+    xtenv-cache-eval "rbenv init -" "rbenv.init"
+    test -d $RBENV_ROOT || mkdir $RBENV_ROOT
+fi
+
+###
 ### golang
 ###
 # brew install go
