@@ -304,23 +304,74 @@ function attach-agent {
     return 0
 }
 
+# enahnced cd
+# 2019/03/31
+function cd {
+    #set -x
+    local arg="$1" subcommand result
+    if [ -z "$arg" ] ; then ### home directory
+        # cd 連打で余計な $DIRSTACK を増やさない
+        test "$PWD" = "$HOME" || pushd $HOME >/dev/null
+    elif [ "${arg:0:1}" = ":" ] ; then ### command mode
+        # コロンコマンドは xtcd.sh にディスパッチする
+        subcommand="${arg#:}" ; shift
+        case "$subcommand" in
+            help)
+                xtcd.sh :help ; return
+                ;;
+            history)
+                result="$( dirs -v | xtcd.sh :history "$@" )"
+                ;;
+            stdin)
+                # 標準入力 + peco || select
+                # この拡張 cd 自体が標準入力を取ってディレクトリ移動することはできない
+                # cd :stdin "COMMAND" とする
+                test $# = 0 && { echo "list command is required" ; return 1 ; }
+                result="$( "$@" | xtcd.sh :stdin "$@" )"
+                ;;
+            back)
+                popd >/dev/null ; return
+                ;;
+            forward)
+                echo "forward: not implemented" ; return
+                ;;
+            clear)
+                dirs -c ; return
+                ;;
+            up|down)
+                result="$( xtcd.sh :$subcommand "$@" )"
+                ;;
+        esac
+        if [ "${result:0:1}" = "~" ] ; then
+            result=$HOME${result#"~"}
+        fi
+        if [ -f "$result" ] ; then
+            result="${result%/*}"
+        fi
+    else
+        result="$arg"
+    fi
+    pushd "$result" >/dev/null
+    #set +x
+}
+
 # 履歴を記録する cd の再定義
 # Initial release at 2005/03/22(Tue)
-function cd {
-    if [ -z "$1" ] ; then
-    # cd 連打で余計な $DIRSTACK を増やさない
-    test "$PWD" != "$HOME" && pushd $HOME > /dev/null
-    elif ( echo "$1" | egrep "^\.\.\.+$" > /dev/null ) ; then
-    cd $( echo "$1" | perl -ne 'print "../" x ( tr/\./\./ - 1 )' )
-    else
-        if [ "x$1" = "x-p" ] && [ -n "$2" ] ; then
-            mkdir -v -p "$2"
-            pushd "$2" >/dev/null
-        else
-        pushd "$1" > /dev/null
-        fi
-    fi
-}
+# function cd {
+#     if [ -z "$1" ] ; then
+#         # cd 連打で余計な $DIRSTACK を増やさない
+#         test "$PWD" != "$HOME" && pushd $HOME > /dev/null
+#     elif ( echo "$1" | egrep "^\.\.\.+$" > /dev/null ) ; then
+#         cd $( echo "$1" | perl -ne 'print "../" x ( tr/\./\./ - 1 )' )
+#     else
+#         if [ "x$1" = "x-p" ] && [ -n "$2" ] ; then
+#             mkdir -v -p "$2"
+#             pushd "$2" >/dev/null
+#         else
+#         pushd "$1" > /dev/null
+#         fi
+#     fi
+# }
 
 # 最近の cd によって移動したディレクトリを選択
 function cdhist {
