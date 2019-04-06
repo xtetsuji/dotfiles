@@ -304,8 +304,8 @@ function attach-agent {
     return 0
 }
 
-# enahnced cd
-# 2019/03/31
+# previous cd at 2005/03/22 (original idea)
+# enahnced cd at 2019/03/31 (following)
 function cd {
     #set -x
     local arg="$1" subcommand result
@@ -326,13 +326,13 @@ function cd {
                 # 標準入力 + peco || select
                 # この拡張 cd 自体が標準入力を取ってディレクトリ移動することはできない
                 # cd :stdin "COMMAND" とする
-                test $# = 0 && { echo "list command is required" ; return 1 ; }
+                test $# = 0 && { echo -e "Usage:\n  cd :stdin COMMAND ARGS..." ; return 1 ; }
                 result="$( "$@" | xtcd.sh :stdin "$@" )"
                 ;;
             clear)
                 dirs -c ; return
                 ;;
-            up|down)
+            up|down|which)
                 result="$( xtcd.sh :$subcommand "$@" )"
                 ;;
         esac
@@ -347,208 +347,6 @@ function cd {
     fi
     pushd "$result" >/dev/null
     #set +x
-}
-
-# 履歴を記録する cd の再定義
-# Initial release at 2005/03/22(Tue)
-# function cd {
-#     if [ -z "$1" ] ; then
-#         # cd 連打で余計な $DIRSTACK を増やさない
-#         test "$PWD" != "$HOME" && pushd $HOME > /dev/null
-#     elif ( echo "$1" | egrep "^\.\.\.+$" > /dev/null ) ; then
-#         cd $( echo "$1" | perl -ne 'print "../" x ( tr/\./\./ - 1 )' )
-#     else
-#         if [ "x$1" = "x-p" ] && [ -n "$2" ] ; then
-#             mkdir -v -p "$2"
-#             pushd "$2" >/dev/null
-#         else
-#         pushd "$1" > /dev/null
-#         fi
-#     fi
-# }
-
-# 最近の cd によって移動したディレクトリを選択
-function cdhist {
-    local dirnum
-    #dirs -v | head -n $(( LINES - 3 ))
-    dirs -v | sort -k 2 | uniq -f 1 | sort -n -k 1 | head -n $(( LINES - 3 ))
-    read -p "select number: " dirnum
-    if [ -z "$dirnum" ] ; then
-    echo "$FUNCNAME: Abort." 1>&2
-    elif ( echo $dirnum | egrep '^[[:digit:]]+$' > /dev/null ) ; then
-        cd "$( echo ${DIRSTACK[$dirnum]} | sed -e "s;^~;$HOME;" )"
-        echo "Prefer cdh over cdhist by peco"
-    else
-    echo "$FUNCNAME: Wrong." 1>&2
-    fi
-}
-
-# cdhist の peco 版
-type peco >/dev/null 2>&1 &&
-function cdh {
-    local dir
-    dir="$( dirs -v | sort -k 2 | uniq -f 1 | sort -n -k 1 | sed -e 's/^ *[0-9]* *//' | peco | sed -e "s;^~;$HOME;" )"
-    if [ ! -z "$dir" ] ; then
-        cd "$dir"
-    fi
-}
-
-# 現在のディレクトリの中にあるディレクトリを番号指定で移動
-function cdlist {
-    local -a dirlist opt_f=false
-    local i d num=0 dirnum opt opt_f
-    while getopts ":f" opt ; do
-    case $opt in
-        f ) opt_f=true ;;
-    esac
-    done
-    shift $(( OPTIND -1 ))
-    dirlist[0]=..
-    # external pipe scope. array is established.
-    for d in * ; do test -d "$d" && dirlist[$((++num))]="$d" ; done
-    # TODO: Is seq installed?
-    for i in $( seq 0 $num ) ; do printf "%3d %s%b\n" $i "$( $opt_f && echo -n "$PWD/" )${dirlist[$i]}" ; done
-    read -p "select number: " dirnum
-    if [ -z "$dirnum" ] ; then
-    echo "$FUNCNAME: Abort." 1>&2
-    elif ( echo $dirnum | egrep '^[[:digit:]]+$' > /dev/null ) ; then
-    cd "${dirlist[$dirnum]}"
-        echo "Prefer cdl over cdlist by peco"
-    else
-    echo "$FUNCNAME: Something wrong." 1>&2
-    fi
-}
-
-# cdlist の peco 版
-type peco >/dev/null 2>&1 &&
-function cdl {
-    local dir
-    dir="$( find . -maxdepth 1 -type d | sed -e 's;^\./;;' | grep -v '^\.$' | peco )"
-    if [ ! -z "$dir" ] ; then
-        cd "$dir"
-    fi
-}
-
-function cdback {
-    #popd $1 >/dev/null
-    local num=$1 i
-    if [ -z "$num" -o "$num" = 1 ] ; then
-        popd >/dev/null
-        return
-    elif [[ "$num" =~ ^[0-9]+$ ]] ; then
-        for (( i=0 ; i<num ; i++ )) ; do
-            popd >/dev/null
-        done
-        return
-    else
-        echo "cdback: argument is invalid." >&2
-    fi
-}
-
-alias cdclear='dirs -c'
-
-# Jump cd as shortcut key.
-function cdj {
-    ### cdj needs CDJ_DIR_MAP array definition:
-    # CDJ_DIR_MAP array Example. I define in ~/.bash_secret
-#     CDJ_DIR_MAP=(
-#         dbox ~/Dropbox
-#         cvs  ~/cvs
-#         etc  /etc
-#         );
-    test -n "$DEBUG" && echo "DEBUG: dir arg=$arg #CDJ_DIR_MAP=${#CDJ_DIR_MAP[*]}"
-    declare arg=$1 \
-            subarg=$2 \
-            dir i key value warn
-    if [ -z "$arg" -o "$arg" = "-h" ] || [ "$arg" = "-v" -a -z "$subarg" ] ; then
-        ### help and usage mode
-        echo "Usage: $FUNCNAME <directory_alias>"
-        echo "       $FUNCNAME [-h|-v|-l <directory_alias>]"
-        echo "-h: help"
-        echo "-l: list defined lists"
-        echo "-v <directory_alias>: view path specify alias."
-        return
-    elif [ "$arg" = "-v" -o "$arg" = "-l" ] ; then
-        ### view detail mode
-        for (( i=0; $i<${#CDJ_DIR_MAP[*]}; i=$((i+2)) )) ; do
-            key="${CDJ_DIR_MAP[$i]}"
-            value="${CDJ_DIR_MAP[$((i+1))]}"
-            if [ "$arg" = "-l" ] ; then
-                if [ ! -d "$value" ] ; then
-                    warn=" ***NOT_FOUND***"
-                else
-                    warn=""
-                fi
-                printf "%8s => %s%s\n" "$key" "$value" "$warn"
-            elif [ "$arg" = "-v" ] ; then
-                if [ "$key" = "$subarg" ] ; then
-                    echo $value
-                    return
-                fi
-            fi
-        done
-        return
-    fi
-    ### change directory mode
-    for (( i=0; $i<${#CDJ_DIR_MAP[*]}; i=$((i+2)) )) ; do
-        key="${CDJ_DIR_MAP[$i]}"
-        value="${CDJ_DIR_MAP[$((i+1))]}"
-        test -n "$DEBUG" && echo "$key => $value"
-        if [ "$key" = "$arg" ] ; then
-            if [ -n "$subarg" ] ; then
-                dir="$value/$subarg"
-        else
-                dir="$value"
-            fi
-            cd "$dir"
-            return
-        fi
-    done
-    echo "directory alias \"$arg\" is not found"
-    return 1
-}
-
-# cdup
-# ディレクトリをリスト化して上層へたどれる
-function cdup {
-    local -a dirlist
-    local dirstr="$PWD" num=0 i dirnum
-    while [ ! -z "$dirstr" ] ; do
-        dirlist[$((++num))]="$dirstr"
-        dirstr="${dirstr%/*}"
-    done
-    dirlist[$((++num))]=/
-    for i in $( seq 1 $num ) ; do
-        printf "%3d %s\n" $i "${dirlist[$i]}"
-    done
-    read -p "select number: " dirnum
-    if [ -z "$dirnum" ] ; then
-        echo "$FUNCNAME: Abort." 1>&2
-    elif ( echo $dirnum | egrep '^[[:digit:]]+$' > /dev/null ) ; then
-        cd "${dirlist[$dirnum]}"
-        echo "Prefer cdu over cdup by peco"
-    else
-        echo "$FUNCNAME: Something wrong." 1>&2
-    fi
-}
-
-# cdup の peco 版
-function cdu {
-    local dir
-    local dirstr="$PWD" num=0 i dirnum
-    while [ ! -z "$dirstr" ] ; do
-        dirlist[$((++num))]="$dirstr"
-        dirstr="${dirstr%/*}"
-    done
-    dirlist[$((++num))]=/
-    dir=$( for i in $( seq $num -1 1 ) ; do echo "${dirlist[$i]}" ; done | peco )
-    test ! -z "$dir" && cd "$dir"
-}
-
-# which したコマンドの場所に cd
-function cdwhich {
-    arg="$1"
-    cd $( dirname $( which "$arg" ) )
 }
 
 # chcvsroot: CVSROOT 環境変数を変更して export する
@@ -690,137 +488,6 @@ function pathctl {
     return $?
 }
 
-# cdlocate
-# cd shortcut by locate
-type locate >/dev/null 2>&1 && \
-function cdlocate {
-    local arg="$1" path i=0 j selnum selpath OUTPUT
-    declare -a pathes
-    if [ -z "$arg" ] || [ "$arg" = "-h" ] ; then
-        echo "Usage:"
-        echo "  $FUNCNAME STRING"
-        return
-    fi
-    # mdfind search is case insensitive
-    for path in $(locate "$arg" | grep -i -E "/[^/]*$arg[^/]*$" | sed -e 's/ /+/g') ; do
-        path=$(echo "$path" | sed -e 's/\+/ /g')
-        test -d "$path" || continue
-        i=$((i+1))
-        pathes[$i]="$path"
-    done
-    if [ -z "${pathes[1]}" ] ; then
-        # Nothing search result.
-        return
-    fi
-    if [ $i -ge $LINES ] ; then
-        OUTPUT=$PAGER
-        test -z "$OUTPUT" && OUTPUT=cat
-    else
-        OUTPUT=cat
-    fi
-    for j in $(seq 1 $i) ; do
-        printf "%2d: %s\n" $j "${pathes[$j]}"
-    done | $OUTPUT
-    read -p "select number: " selnum
-    selpath="${pathes[$selnum]}"
-    if [ -z "$selpath" ] ; then
-        echo "$FUNCNAME: select is wrong." 1>&2
-        return 1
-    fi
-    cd "$selpath"
-}
-
-# cdlocate の peco 版
-type loate >/dev/null 2>&1 && type peco >/dev/null 2>&1 &&
-function cdlocatep {
-    # not write yet ...
-    :
-}
-
-# cdmd
-# cd shortcut by mdfind (Mac OS X Spotlight CLI)
-type mdfind >/dev/null 2>&1 && \
-function cdmdfind {
-    local arg="$1" path i=0 j selnum selpath OUTPUT
-    declare -a pathes
-    if [ -z "$arg" ] || [ "$arg" = "-h" ] ; then
-        echo "Usage:"
-        echo "  $FUNCNAME STRING"
-        return
-    fi
-    # mdfind search is case insensitive
-    for path in $(mdfind -name "$arg" | sed -e 's/ /+/g') ; do
-        path=$(echo "$path" | sed -e 's/\+/ /g')
-        test -d "$path" || continue
-        i=$((i+1))
-        pathes[$i]="$path"
-    done
-    if [ -z "${pathes[1]}" ] ; then
-        # Nothing search result.
-        return
-    fi
-    if [ $i -ge $LINES ] ; then
-        OUTPUT=$PAGER
-        test -z "$OUTPUT" && OUTPUT=cat
-    else
-        OUTPUT=cat
-    fi
-    if [ $i = 1 ] ; then
-        cd ${pathes[1]}
-        return
-    fi
-    for j in $(seq 1 $i) ; do
-        printf "%2d: %s\n" $j "${pathes[$j]}"
-    done | $OUTPUT
-    read -p "select number: " selnum
-    selpath="${pathes[$selnum]}"
-    if [ -z "$selpath" ] ; then
-        echo "$FUNCNAME: select is wrong." 1>&2
-        return 1
-    fi
-    cd "$selpath"
-}
-
-# cdmdfind の peco 版
-function cdmdfindp {
-    local dir result_num query
-    local result_tmpfile="/tmp/cdmdfindp.$$.$USER"
-    local arg="$1"
-    arg="${arg//\'/}"
-    arg="${arg//\"/}"
-    # see: http://baqamore.hatenablog.com/entry/2014/08/28/185103
-    query="kMDItemContentType = public.folder && kMDItemFSName = \"*${arg}*\"c"
-
-    if [ -z "$arg" ] || [ "$arg" = "-h" ] ; then
-        echo "Usage:"
-        echo "  $FUNCNAME STRING"
-        return
-    fi
-    mdfind "$query" > $result_tmpfile
-    #echo "matched dirs:" ; cat $result_tmpfile
-    result_num=$( wc -l <$result_tmpfile )
-    #echo "result_num=$result_num"
-    if [ $result_num = 0 ] ; then
-        echo "$FUNCNAME: matched directory is not found"
-    elif [ $result_num = 1 ] ; then
-        cd "$(<$result_tmpfile)"
-    else
-        dir="$( peco <$result_tmpfile )"
-        if [ -n "$dir" ] ; then
-            cd "$dir"
-        else
-            echo "canceled"
-        fi
-    fi
-    #rm $result_tmpfile
-}
-
-if exists mdfind ; then
-    alias cdi=cdmdfindp
-elif exists locate ;then
-    alias cdi=cdlocatep
-fi
-
 # pwdscd - 現在のディレクトリを置換する
 # pwd -> s/// -> cd
 function pwdscd {
@@ -961,19 +628,6 @@ function peco-history() {
   fi
 }
 bind '"\C-x\C-r":"peco-history\n"'
-
-# cdfind / findcd
-# find した結果を peco で選別して cd
-function cdfind () {
-    if [ -z "$1" ] || [ "x$1" = "x-h" ] ; then
-        echo "Usage: $FUNCNAME find_argument..."
-        return
-    fi
-    local dir=$(find "$@" -type d | peco)
-    if [ ! -z "$dir" ] ; then
-        cd "$dir"
-    fi
-}
 
 # openfind
 # find した結果を peco で選別して open
