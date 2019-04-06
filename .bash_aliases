@@ -329,12 +329,6 @@ function cd {
                 test $# = 0 && { echo "list command is required" ; return 1 ; }
                 result="$( "$@" | xtcd.sh :stdin "$@" )"
                 ;;
-            back)
-                popd >/dev/null ; return
-                ;;
-            forward)
-                echo "forward: not implemented" ; return
-                ;;
             clear)
                 dirs -c ; return
                 ;;
