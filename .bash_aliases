@@ -332,7 +332,7 @@ function cd {
             clear)
                 dirs -c ; return
                 ;;
-            up|down|which|pwdsed)
+            up|down|which|pwdsed|repo)
                 result="$( xtcd.sh :$subcommand "$@" )"
                 ;;
         esac
@@ -727,18 +727,6 @@ function chkd {
     else
         echo "Mode detect faild" 2>&1
     fi
-}
-
-function cdrepo {
-    local dir=$1
-    local line
-    if [ -z "$dir" ] ; then
-        dir=~
-    fi
-    line=$( find "$dir" -maxdepth 4 -name .git -type d | sed -e "s#^$HOME#~#" -e 's#/\.git$##' -e 's#//##g '| peco )
-    # 空白ディレクトリ対策だけど、これだと ~ が展開されないので
-    # cd "$line"
-    cd "${line/'~'/$HOME}"
 }
 
 function http-get-source {
