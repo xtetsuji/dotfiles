@@ -622,17 +622,6 @@ function peco-history() {
 }
 bind '"\C-x\C-r":"peco-history\n"'
 
-# openfind
-# find した結果を peco で選別して open
-function openfind () {
-    if [ -z "$1" ] || [ "x$1" = "x-h" ] ; then
-        echo "Usage: $FUNCNAME find_argument..."
-        return
-    fi
-    local arg=$(find "$@" | peco)
-    open "$arg"
-}
-
 # 現在のディレクトリにいた記録を取ってタスクとして記憶
 # chkd => リストモードで選ばせる
 # chked delete => リストモードで選ばせたものを削除する
