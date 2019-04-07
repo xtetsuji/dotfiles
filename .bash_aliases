@@ -91,15 +91,6 @@ alias uri_escape='perl -MURI::Escape=uri_escape -E "say uri_escape(join q/ /, @A
 alias dict='perl -MCocoa::DictionaryServices=lookup -le "print for lookup(@ARGV);"'
 alias available_dictionaries='perl -MCocoa::DictionaryServices=available_dictionaries -le "print for available_dictionaries()"'
 
-# complete -C perldoc-complete -o nospace -o default perldoc
-# complete -C perldoc-complete -o nospace -o default pm
-# complete -C perldoc-complete -o nospace -o default pv
-# complete -C perldoc-complete -o nospace -o default pmgrep
-
-#if [ -f /usr/local/Cellar/groff/1.22.2/bin/groff ] ; then
-#    alias perldoc='perldoc -n /usr/local/Cellar/groff/1.22.2/bin/groff '
-#fi
-
 ###
 ### X / KDE
 ###
