@@ -55,6 +55,7 @@ case "$UNAME" in
         ;;
     CYGWIN*)
         alias ls='ls --color -F --show-control-chars'
+        source ~/.bash_aliases_cygwin
         ;;
 esac
 
@@ -91,24 +92,6 @@ alias uri_escape='perl -MURI::Escape=uri_escape -E "say uri_escape(join q/ /, @A
 
 alias dict='perl -MCocoa::DictionaryServices=lookup -le "print for lookup(@ARGV);"'
 alias available_dictionaries='perl -MCocoa::DictionaryServices=available_dictionaries -le "print for available_dictionaries()"'
-
-###
-### Cygwin
-###
-if [[ "$UNAME" =~ CYGWIN.* ]] ; then # Do not quote "=~"'s right side.
-    alias halt='shutdown -s -f -t 0 '
-    alias uptime='cat /proc/loadavg'
-    alias hide-dotfile='for f in .??* ; do attrib +h ; done'
-    alias cdcygdesktop='cd "$(cygpath -D)"'
-    function cygcd {
-        local arg dir
-        arg="$1"
-        if echo "$arg" | grep '^shell:' &>/dev/null 2>&1 ; then
-            dir=$(getwssname "$arg")
-        fi
-        builtin cd "$dir"
-    }
-fi
 
 ###
 ### big functions
