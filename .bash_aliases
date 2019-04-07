@@ -75,20 +75,6 @@ if [ -f /usr/local/bin/highlight ] ; then
     alias syntaxhi=/usr/local/bin/highlight
 fi
 
-if [ -d /usr/local/Cellar/screenutf8 ] ; then
-    #screenutf8_path=$(brew info screenutf8 | grep ^/usr/local/Cellar/screenutf8/ | sed -e 's/ .*//')
-    screenutf8_path=/usr/local/Cellar/screenutf8/4.4.0
-    if [ -n "$screenutf8_path" ] && [ -f "$screenutf8_path/bin/screen" ] ; then
-        alias screenutf8=$screenutf8_path/bin/screen
-        export SCREEN_COMMAND=$screenutf8_path/bin/screen
-    else
-        export SCREEN_COMMAND=screen
-    fi
-    export PHS_SCREEN_COMMAND=$SCREEN_COMMAND
-    unset screenutf8_path
-    alias screen=screenutf8
-fi
-
 ###
 ### Perl
 ###
@@ -113,23 +99,6 @@ alias available_dictionaries='perl -MCocoa::DictionaryServices=available_diction
 #if [ -f /usr/local/Cellar/groff/1.22.2/bin/groff ] ; then
 #    alias perldoc='perldoc -n /usr/local/Cellar/groff/1.22.2/bin/groff '
 #fi
-
-###
-### Mac OS X
-###
-
-# TODO: screen をログインシェルにしてもいいのでは？ → screen の new-screen で無限再帰になる危険性があるのでダメ
-if ! type sc >/dev/null 2>&1 ; then
-    function sc {
-        case "$TERM" in
-            screen*)
-                screen "$@"
-                ;;
-            *)
-                screen -xR "$@"
-        esac
-    }
-fi
 
 ###
 ### X / KDE
