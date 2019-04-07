@@ -555,38 +555,6 @@ function ps2 {
     esac
 }
 
-# killjobs - peco による jobs の kill
-# jobs2 が上位互換となっています
-function killjobs {
-    local jobnumbers
-    local arg="$1"
-    jobnumbers=$( jobs | peco | sed -e 's/^\[//' -e 's/\].*//' -e 's/^/%/' )
-    if [ ! -z "$jobnumbers" ] ; then
-        kill $arg $jobnumbers
-    fi
-}
-
-# killps - peco による ps リストからの kill
-# ps2 が上位互換となっています
-function killps {
-    local killpids
-    local arg="$1"
-    killpids=$( ps auxwww | peco | perl -ne 'print grep { /^\d+$/ } +(split /\s+/)[1], "\n";' )
-    if [ ! -z "$killpids" ] ; then
-        kill $arg $killpids
-    fi
-}
-
-# fgp - peco による fg
-# jobs2 が上位互換です
-function fgp {
-    local jobnumber
-    jobnumber=$( jobs | peco | sed -e 's/^\[//' -e 's/\].*//' -e 's/^/%/' )
-    if [ ! -z "$jobnumber" ] ; then
-        fg $jobnumber
-    fi
-}
-
 # see: http://qiita.com/yungsang/items/09890a06d204bf398eea
 #export HISTCONTROL="ignoredups"
 # peco-history / C-x C-r
