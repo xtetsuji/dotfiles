@@ -86,40 +86,6 @@ function perl-installed-modules { perl -MExtUtils::Installed -E 'say($_) for Ext
 function perllv { perldoc -l $1 | xargs --no-run-if-empty lv ; }
 alias uri_unescape='perl -MURI::Escape=uri_unescape -E "say uri_unescape(join q/ /, @ARGV)" '
 alias uri_escape='perl -MURI::Escape=uri_escape -E "say uri_escape(join q/ /, @ARGV)" '
-function perl-mods2newit-perlbrew {
-    # function naming is irresponsible. I will change it's names.
-    # see: https://delicious.com/ogata/perlbrew articles.
-    arg=$1
-    perlbrew list-modules | perlbrew exec --with $1 cpanm
-}
-# https://gist.github.com/hirose31/8647156
-function pmver {
-    if [ -z "$1" ] ; then
-        echo "Usage:"
-        echo "  pmver [-cd] MODULE_NAME"
-        return
-    fi
-    local do_cd=false
-    if [ "$1" = '-cd' ]; then
-        do_cd=true
-        shift
-    fi
-    local module=$1
-    perl -M${module} -e "print \$${module}::VERSION,\"\n\""
-    fullpath=$(
-        perldoc -ml ${module} 2>/dev/null
-        [ $? -eq  255 ] && perldoc -l ${module}
-        )
-    echo $fullpath
-    if $do_cd ; then
-        \cd $(dirname $fullpath)
-    fi
-}
-
-function pwdhttpd {
-    plackup -MCwd -MPlack::App::Directory "$@" \
-        -e 'Plack::App::Directory->new({root=>getcwd()})->to_app'
-}
 
 alias dict='perl -MCocoa::DictionaryServices=lookup -le "print for lookup(@ARGV);"'
 alias available_dictionaries='perl -MCocoa::DictionaryServices=available_dictionaries -le "print for available_dictionaries()"'
