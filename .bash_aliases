@@ -79,9 +79,6 @@ fi
 ###
 alias system-perldoc='/usr/bin/perldoc'
 alias system-perl='/usr/bin/perl'
-alias modperl-method='/usr/bin/perl -MModPerl::MethodLookup -e print_method'
-alias modperl-object='/usr/bin/perl -MModPerl::MethodLookup -e print_object'
-alias modperl-module='/usr/bin/perl -MModPerl::MethodLookup -e print_module'
 alias perl-deparse='perl -MO=Deparse '
 function perl-module { perl -M$1 -e 1 ; }
 function perl-flymake { pfswatch -q $1 -e perl -wc $1 ; }
