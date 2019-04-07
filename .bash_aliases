@@ -30,6 +30,21 @@ case "$UNAME" in
         # see: http://ascii.jp/elem/000/000/594/594203/
         test -f /Applications/Emacs.app/Contents/MacOS/bin/emacsclient && \
         alias emacsclient="/Applications/Emacs.app/Contents/MacOS/bin/emacsclient"
+        # Recommend to create symlink /usr/sbin/airport as the airport.
+        if [ ! -f /sbin/airport ] || [ ! -f /usr/sbin/airport ] ; then
+            alias airport='/System/Library/PrivateFrameworks/Apple80211.framework/Versions/Current/Resources/airport'
+        fi
+        alias ql='qlmanage -p 2>/dev/null'
+        alias imgdim='sips -g pixelHeight -g pixelWidth $1'
+        # see various-commands/alt-md5sum more.
+        if exists alt-md5sum && ! exists md5sum ; then
+            alias md5sum=alt-md5
+        elif exists md5 && ! exists md5sum ; then
+            alias md5sum='md5 -s '
+        fi
+        alias pbtee='cat | pbcopy ; sleep 1 ; pbpaste'
+        alias pwdcopy='echo -n $(pwd)/ | pbcopy'
+
         # see: http://deeeet.com/writing/2014/04/30/beer-on-terminal/
         function beers () { ruby -e 'C=`stty size`.scan(/\d+/)[1].to_i;S=ARGV.shift||"\xf0\x9f\x8d\xba";a={};puts "\033[2J";loop{a[rand(C)]=0;a.each{|x,o|;a[x]+=1;print "\033[#{o};#{x}H \033[#{a[x]};#{x}H#{S} \033[0;0H"};$stdout.flush;sleep 0.01}' ; }
         ;;
@@ -102,28 +117,6 @@ alias available_dictionaries='perl -MCocoa::DictionaryServices=available_diction
 ###
 ### Mac OS X
 ###
-#if type growlnotify >/dev/null 2>&1 ; then
-    #alias dialog='growlnotify -s -m '
-    #alias notify='read line; growlnotify -m "$line"'
-#fi
-if [ "$UNAME" = Darwin ] ; then
-    # Recommend to create symlink /usr/sbin/airport as the airport.
-    if [ ! -f /sbin/airport ] || [ ! -f /usr/sbin/airport ] ; then
-        alias airport='/System/Library/PrivateFrameworks/Apple80211.framework/Versions/Current/Resources/airport'
-    fi
-    alias ql='qlmanage -p 2>/dev/null'
-    alias imgdim='sips -g pixelHeight -g pixelWidth $1'
-    # see various-commands/alt-md5sum more.
-    if type alt-md5sum >/dev/null 2>&1 && ! type md5sum >/dev/null 2>&1 ; then
-        alias md5sum=alt-md5sum
-    elif type md5 >/dev/null 2>&1 && ! type md5sum >/dev/null 2>&1 ; then
-        alias md5sum='md5 -s '
-    fi
-    alias pbtee='cat | pbcopy ; sleep 1 ; pbpaste'
-    #alias pbtee='cat | tee >(pbpaste)' # FIXME: does not work.
-    alias pb-iconv-change='pbpaste | iconv -c -f UTF-8-MAC -t UTF-8 | pbcopy'
-    alias pwdcopy='echo -n $(pwd)/ | pbcopy'
-fi
 
 # TODO: screen をログインシェルにしてもいいのでは？ → screen の new-screen で無限再帰になる危険性があるのでダメ
 if ! type sc >/dev/null 2>&1 ; then
