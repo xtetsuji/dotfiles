@@ -1,0 +1,38 @@
+# -*- mode: shell-script ; coding: utf-8 ; -*-
+
+if type dcop >/dev/null 2>&1 ; then
+    alias mixer='dcop kmix kmix-mainwindow#1 show'
+    alias mute='dcop kmix Mixer0 toggleMasterMute' # arg: "on" or "off"
+
+    alias kding='test $? -eq 0 && ogg123 -q /usr/share/sounds/KDE_Event_1.ogg || ogg123 -q /usr/share/sounds/KDE_Event_5.ogg'
+    alias ding='test $? -eq 0 && ogg123 -q /usr/share/sounds/KDE_Event_1.ogg || ogg123 -q /usr/share/sounds/KDE_Event_5.ogg'
+fi
+if type kdialog >/dev/null 2>&1 ; then
+    alias kpopup='test $? -eq 0 && kdialog --msgbox 処理が完了しました || kdialog --error エラーコードを受けとりました '
+    function kfinish {
+        declare status=$?
+        declare cmd=`history 1 | sed -e 's/^ *[[:digit:]]* *//'`
+        kdialog --title "コマンドが終了しました" --msgbox "cmd=${cmd}\nstatus=$status"
+    }
+fi
+if type xrandr >/dev/null 2>&1 ; then
+    alias vga-display='xrandr --output VGA --mode 1024x768'
+    alias lcd-display='xrandr --output LVDS --mode 1024x768'
+fi
+if type wavemon >/dev/null 2>&1 ; then
+    alias xwavemon='env LANG=C xterm +sb -e wavemon'
+fi
+if type mlterm >/dev/null 2>&1 ; then
+    alias ml-server="mlterm -j genuine"
+    # If running ml-server at first, then use mlclient by mlterm subprocess up.
+    alias mlclient-remote="mlclient --bg=black --fg=gray "
+    alias mlclient-local="mlclient --bg=#EEEEE6 --title=local -e 'screen -xR $USER'"
+fi
+if type mlterm >/dev/null 2>&1 ; then
+    alias mlt-local='mlterm --bg=#EEEEE6 --title=mlterm::local -e screen -xR konko'
+    alias mlt-woody='mlterm --bg=black --fg=gray --title=mlterm::woody'
+    alias mlt-tetsuji='mlterm --bg=black --fg=gray --title=mlterm::tetsuji.jp'
+fi
+if type krdc >/dev/null 2>&1 ; then
+    alias krdc-castella='krdc -c -f -p $HOME/doc/passwd/castella.passwd -m localhost:1'
+fi
