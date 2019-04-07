@@ -633,30 +633,6 @@ function openfind () {
     open "$arg"
 }
 
-# ssh と tail を使った簡単リモート通知
-# ただ使い方が面倒
-# http://d.hatena.ne.jp/punitan/20110416/1302928953
-# 2011/12/16
-# 今は srnotifyd と srnotify.pl を使っている
-function snotifyd {
-    declare host remote_log line
-    declare -r IMAGE_PATH=$HOME/Pictures/min_x40_mini.png
-    host=$1
-    if [ -z "$host" ] ; then
-        echo "snotify host [remote_log]"
-        return 1
-    fi
-    remote_log=$2
-    if [ -z "$remote_log" ] ; then
-        remote_log='$HOME/log/growler.log'
-    fi
-    echo "start snotify to $host:$remote_log"
-    ssh $host env LANG=C tail -q -n 0 -F "$remote_log" \
-        | while read line ; do echo "$line" ; growlnotify -s -m "$line" -t $host ; done
-    #| perl -e 'system qw/growlnotify -s -m/, $_, '$host' while <STDIN>;'
-}
-
-
 # 現在のディレクトリにいた記録を取ってタスクとして記憶
 # chkd => リストモードで選ばせる
 # chked delete => リストモードで選ばせたものを削除する
