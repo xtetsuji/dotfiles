@@ -189,115 +189,22 @@ function cd {
     #set +x
 }
 
-# chcvsroot: CVSROOT 環境変数を変更して export する
-function chcvsroot {
-    declare arg desc dir i
-    arg="$1"
-    # CHCVSROOT_MAP array Example. I define in ~/.bash_secret
-#     CHCVSROOT_MAP=(
-#         "local"    "~/var/cvs"
-#         "intra"  ":pserver:username@cvs.intra.example.jp:/var/cvs"
-#         "outdev" ":ext:username@cvs.example.com:/var/cvsroot"
-#   );
-    if [ "$arg" = "-h" ] ; then
-        echo "Usage: $FUNCNAME "
-        echo "  $FUNCNAME"
-        echo "  $FUNCNAME [-h|-l]"
-        echo "  $FUNCNAME <cvsroot_alias>"
-        return
-    elif [ "$arg" = "-l" ] ; then
-        for (( i=0; $i<${#CHCVSROOT_MAP[*]}; i=$((i+2)) )) ; do
-            desc=${CHCVSROOT_MAP[$i]}
-            dir=${CHCVSROOT_MAP[$((i+1))]}
-            printf "%8s => %s\n" $desc $dir
-        done
-        return
-    elif [ -z "$arg" ] ; then
-        for (( i=0; $i<${#CHCVSROOT_MAP[*]}; i=$((i+2)) )) ; do
-            desc=${CHCVSROOT_MAP[$i]}
-            dir=${CHCVSROOT_MAP[$((i+1))]}
-            printf '%3d %8s %s%b\n' $((i/2)) $desc $dir
-        done
-        read -p "select number: " i
-        if [ -z "$i" ] ; then
-            echo "chcvsroot: Abort." 1>&2
-            return 1
-        fi
-        dir=${CHCVSROOT_MAP[$((i*2+1))]}
-        if [ -z "$dir" ] ; then
-            echo "directory is not defined" 1>&2
-            return 1
-        fi
-        export CVSROOT="$dir"
-        return
-    else
-        for (( i=0; $i<${#CHCVSROOT_MAP[*]}; i=$((i+2)) )) ; do
-            desc=${CHCVSROOT_MAP[$i]}
-            dir=${CHCVSROOT_MAP[$((i+1))]}
-            if [ "$desc" = "$arg" ] ; then
-                echo "export CVSROOT=$dir"
-                export CVSROOT="$dir"
-                return
-            fi
-        done
-    fi
-    echo "argument is not recognized."
-}
-
-# chproxy
-# http proxy 関連の環境変数を変更して export する
-function chproxy {
-    declare i num desc proxy
-    echo "currently http_proxy is ..."
-    env | grep -i _proxy | sed -e 's/^/  > /'
-    echo ""
-    # CHPROXYT_MAP array Example. I define in ~/.bash_secret
-#     CHPROXY_MAP=(
-#         "portforward" "http://localhost:8080/"
-#         "company"     "http://proxy.example.co.jp:80/"
-#   );
-    for (( i=0; $i<${#CHPROXY_MAP[*]}; i=$((i+2)) )) ; do
-        desc=${CHPROXY_MAP[$i]}
-        proxy=${CHPROXY_MAP[$((i+1))]}
-        printf '%3d %16s %s%b\n' $((i/2)) $desc $proxy
-    done
-    read -p "select number: " num
-    if [ -z "$num" ] ; then
-        echo "$FUNCNAME: Abort Input number." 1>&2
-        return 1
-    else
-        echo "$num" | grep '[^[:digit:]]' && \
-            { echo "$FUNCNAME: Abort. Invalid input." 1>&2 ; return ; }
-        proxy=${CHPROXY_MAP[$((num*2+1))]}
-        echo "Set proxy to $proxy"
-        # NOTE: HTTP_PROXY (All uppercase "HTTP_PROXY" is not recommended.)
-        export http_proxy=$proxy
-        export HTTPS_PROXY=$proxy
-        export https_proxy=$proxy
-        export FTP_PROXY=$proxy
-        if [ -z "$NO_PROXY" ] ; then
-            # comma-separated list of hosts
-            export NO_PROXY=localhost,127.0.0.1
-            export no_proxy="$NO_PROXY"
-        fi
-        return
-    fi
-}
-
-function reset-proxyenv {
-    # NOTE: HTTP_PROXY (All uppercase "HTTP_PROXY" is not recommended.)
-    unset HTTP_PROXY
-    unset http_proxy
-    unset HTTPS_PROXY
-    unset https_proxy
-    unset FTP_PROXY
-    unset ftp_proxy
-    unset NO_PROXY
-    unset no_proxy
-}
-
-function show-proxyenv {
-    env | grep -i _proxy
+# chenv - change environment variable at 2019/04/07
+# with chenv.pl
+function chenv {
+    case "$#" in
+        1)
+            chenv.pl $1
+            ;;
+        2)
+            local shcode="export $1=\"$(chenv.pl $1 $2)\""
+            echo "$shcode"
+            eval "$shcode"
+            ;;
+        *)
+            echo -e "Usage:\n  chenv ENV_NAME [KEY]"
+            ;;
+    esac
 }
 
 function pathctl {
