@@ -83,10 +83,8 @@ fi
 alias system-perldoc='/usr/bin/perldoc'
 alias system-perl='/usr/bin/perl'
 alias perl-deparse='perl -MO=Deparse '
-function perl-module { perl -M$1 -e 1 ; }
 function perl-flymake { pfswatch -q $1 -e perl -wc $1 ; }
 function perl-installed-modules { perl -MExtUtils::Installed -E 'say($_) for ExtUtils::Installed->new->modules' ; }
-function perllv { perldoc -l $1 | xargs --no-run-if-empty lv ; }
 alias uri_unescape='perl -MURI::Escape=uri_unescape -E "say uri_unescape(join q/ /, @ARGV)" '
 alias uri_escape='perl -MURI::Escape=uri_escape -E "say uri_escape(join q/ /, @ARGV)" '
 
