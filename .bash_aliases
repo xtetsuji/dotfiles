@@ -87,9 +87,6 @@ function perl-installed-modules { perl -MExtUtils::Installed -E 'say($_) for Ext
 alias uri_unescape='perl -MURI::Escape=uri_unescape -E "say uri_unescape(join q/ /, @ARGV)" '
 alias uri_escape='perl -MURI::Escape=uri_escape -E "say uri_escape(join q/ /, @ARGV)" '
 
-alias dict='perl -MCocoa::DictionaryServices=lookup -le "print for lookup(@ARGV);"'
-alias available_dictionaries='perl -MCocoa::DictionaryServices=available_dictionaries -le "print for available_dictionaries()"'
-
 ###
 ### big functions
 ###
