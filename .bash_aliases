@@ -69,7 +69,6 @@ alias less='less -R'
 exists gtar      && alias tar=gtar
 exists hub       && alias git=hub
 exists colordiff && alias diff=colordiff
-exists wavemon   && alias xwavemon='env LANG=C xterm +sb -e wavemon'
 alias od='od -tx1z -Ax -v' # http://d.hatena.ne.jp/maji-KY/20110718/1310985449
 exists highlight && alias hl=highlight # http://search.cpan.org/dist/App-highlight/
 # http://suzuki.tdiary.net/20140516.html#p01
