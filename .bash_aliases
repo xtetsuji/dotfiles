@@ -91,53 +91,6 @@ alias uri_escape='perl -MURI::Escape=uri_escape -E "say uri_escape(join q/ /, @A
 ### big functions
 ###
 
-# attach-agent
-# 再度アタッチした screen から、現在の ssh-agent に接続する
-function attach-agent {
-    if     [ $TERM != screen ]   \
-    && [ $TERM != screen-w ] \
-    && [ $TERM != mlterm ]   \
-        && [ $TERM != screen.mlterm ] ; then
-    return 1
-    fi
-    declare sock childpid
-    for sock in $( find /tmp -type s -name agent.\* -user $USER 2> /dev/null ) ; do
-    childpid=$( echo $sock | awk -F. '{ print $2 }' ) # ordinaly "sh"'s pid
-    if ps ux | grep $childpid | grep -v grep > /dev/null ; then
-#         eval $( ( cat /proc/$childpid/environ ; echo ) | tr "\000" "\n" | egrep ^SSH_AGENT_PID )
-#         if [ -z $SSH_AGENT_PID ] ; then
-#         echo "${FUNCNAME}: error! SSH_AGENT_PID unknonw"
-#         unset SSH_AGENT_PID
-#         return 1
-#         elif ! ( ps ux | grep $SSH_AGENT_PID | grep -v grep > /dev/null ) ; then
-#         echo "${FUNCNAME}: error! no process found corresponding SSH_AGENT_PID=$SSH_AGENT_PID"
-#         unset SSH_AGENT_PID
-#         return 1
-#         fi
-#         export SSH_AGENT_PID
-        export SSH_AUTH_SOCK=$sock
-        if ssh-add -l &> /dev/null ; then
-        # unsetenv for old (woody) version screen.
-#        screen -X unsetenv SSH_AGENT_PID
-        if [ $TERM = screen ] || [ $TERM = screen-w ] || [ $TERM = screen.mlterm ] ; then
-            #screen -X setenv SSH_AGENT_PID $SSH_AGENT_PID
-            screen -X unsetenv SSH_AUTH_SOCK
-            screen -X setenv SSH_AUTH_SOCK $SSH_AUTH_SOCK
-        fi
-        echo "OK, success that $TERM attaches to the ssh-agent!"
-        echo "'ssh-add -l' output is..."
-        ssh-add -l | sed -e 's;/[^[:space:]]*/;;'
-        set | egrep ^SSH_
-        return 0
-        else
-        unset SSH_AGENT_PID SSH_AUTH_SOCK
-        fi
-    fi
-    done
-    echo "screen-agent: no ssh-agent runs?"
-    return 0
-}
-
 # previous cd at 2005/03/22 (original idea)
 # enahnced cd at 2019/03/31 (following)
 function cd {
