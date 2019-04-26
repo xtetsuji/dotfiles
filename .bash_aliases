@@ -111,7 +111,7 @@ function cd {
             clear)
                 dirs -c ; return
                 ;;
-            up|down|which|pwdsed|repo|stdin)
+            up|down|drop|which|pwdsed|repo|stdin)
                 result="$( xtcd.sh :$subcommand "$@" )"
                 ;;
         esac
@@ -124,7 +124,12 @@ function cd {
     else
         result="$arg"
     fi
-    pushd "$result" >/dev/null
+    if [ -n "$result" ] ; then
+        pushd "$result" >/dev/null
+        if [ -n "$subcommand" -a "$subcommand" = drop ] ; then
+            cd :drop
+        fi
+    fi
     #set +x
 }
 
