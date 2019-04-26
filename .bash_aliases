@@ -111,7 +111,7 @@ function cd {
             clear)
                 dirs -c ; return
                 ;;
-            up|down|drop|which|pwdsed|repo|stdin)
+            up|down|drop|which|pwdsed|repo|stdin|mdfind)
                 result="$( xtcd.sh :$subcommand "$@" )"
                 ;;
         esac
