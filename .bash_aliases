@@ -108,17 +108,10 @@ function cd {
             history)
                 result="$( dirs -v | xtcd.sh :history "$@" )"
                 ;;
-            stdin)
-                # 標準入力 + peco || select
-                # この拡張 cd 自体が標準入力を取ってディレクトリ移動することはできない
-                # cd :stdin "COMMAND" とする
-                test $# = 0 && { echo -e "Usage:\n  cd :stdin COMMAND ARGS..." ; return 1 ; }
-                result="$( "$@" | xtcd.sh :stdin "$@" )"
-                ;;
             clear)
                 dirs -c ; return
                 ;;
-            up|down|which|pwdsed|repo)
+            up|down|which|pwdsed|repo|stdin)
                 result="$( xtcd.sh :$subcommand "$@" )"
                 ;;
         esac
