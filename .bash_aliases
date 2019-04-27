@@ -120,6 +120,10 @@ function cd {
                 ;;
             up|down|drop|which|pwdsed|repo|stdin|mdfind)
                 result="$( xtcd.sh :$subcommand "$@" )"
+                if [ $? -gt 0 ] ; then
+                    echo "xtcd.sh returns error code" >&2
+                    return 1
+                fi
                 ;;
         esac
         if [ "${result:0:1}" = "~" ] ; then
