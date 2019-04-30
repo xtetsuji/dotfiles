@@ -103,7 +103,7 @@ function cd {
         subcommand="${arg#:}" ; shift
         case "$subcommand" in
             help)
-                xtcd.sh :help ; return
+                xtcd.sh :help "$@" ; return
                 ;;
             history)
                 result="$( dirs -v | xtcd.sh :history "$@" )"
