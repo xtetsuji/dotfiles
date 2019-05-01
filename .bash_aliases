@@ -111,14 +111,11 @@ function cd {
             clear)
                 dirs -c ; return
                 ;;
-            bookmark)
-                if [ $# -gt 0 ] ; then
+            up|down|drop|which|pwdsed|repo|stdin|mdfind|bookmark)
+                if [ $subcommand = bookmark -a $# -gt 0 ] ; then
                     xtcd.sh :bookmark "$@"
                     return
                 fi
-                result="$( xtcd.sh :bookmark )"
-                ;;
-            up|down|drop|which|pwdsed|repo|stdin|mdfind)
                 result="$( xtcd.sh :$subcommand "$@" )"
                 if [ $? -gt 0 ] ; then
                     echo "xtcd.sh returns error code" >&2
