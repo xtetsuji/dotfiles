@@ -94,7 +94,7 @@ alias uri_escape='perl -MURI::Escape=uri_escape -E "say uri_escape(join q/ /, @A
 # enahnced cd at 2019/03/31 (following)
 function cd {
     #set -x
-    local arg="$1" subcommand result
+    local arg="$1" subcommand result rc
     if [ -z "$arg" ] ; then ### home directory
         # cd 連打で余計な $DIRSTACK を増やさない
         test "$PWD" = "$HOME" || pushd $HOME >/dev/null
@@ -118,7 +118,12 @@ function cd {
                     return
                 fi
                 result="$( xtcd.sh :$subcommand "$@" )"
-                if [ $? -gt 0 ] ; then
+                rc=$?
+                if [ $rc = 100 ] ; then
+                    # 終了ステータス100の場合、受け取った出力を流して、ここの（呼び出し元）で穏当に終了する
+                    echo "$result"
+                    return 0
+                elif [ $rc -gt 0 ] ; then
                     echo "xtcd.sh returns error code" >&2
                     return 1
                 fi
