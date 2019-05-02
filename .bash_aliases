@@ -112,8 +112,9 @@ function cd {
             clear)
                 dirs -c ; return
                 ;;
-            up|down|drop|which|pwdsed|repo|stdin|mdfind|bookmark)
+            up|down|drop|which|pwdsed|repo|stdin|mdfind|bookmark|subcommands)
                 if [ $subcommand = bookmark -a $# -gt 0 ] ; then
+                    # $() 中だと $EDITOR が起動できないので冒頭で処理している
                     xtcd.sh :bookmark "$@"
                     return
                 fi
