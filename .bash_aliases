@@ -98,6 +98,7 @@ function cd {
     if [ -z "$arg" ] ; then ### home directory
         # cd 連打で余計な $DIRSTACK を増やさない
         test "$PWD" = "$HOME" || pushd $HOME >/dev/null
+        return
     elif [ "${arg:0:1}" = ":" ] ; then ### command mode
         # コロンコマンドは xtcd.sh にディスパッチする
         subcommand="${arg#:}" ; shift
