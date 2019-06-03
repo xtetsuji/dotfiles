@@ -33,34 +33,6 @@ foo()
     esac
 }
 
-type cdj >/dev/null 2>&1 &&
-_cdj()
-{
-    local cur prev opts i
-    COMPREPLY=()
-    cur="${COMP_WORDS[COMP_CWORD]}"
-    prev="${COMP_WORDS[COMP_CWORD-1]}"
-    opts=$(for i in $(seq 0 2 $((${#CDJ_DIR_MAP[*]}-2)) ) ; do echo ${CDJ_DIR_MAP[$i]} ; done ; echo "-h -v -l")
-    #echo ""
-    #echo "> cur=$cur prev=$prev COMP_CWORD=$COMP_CWORD"
-    #echo "> opts=$opts"
-    #echo "> COMPWORDS=${COMP_WORDS[*]}"
-
-    case ${prev} in
-        -l)
-            opts=$(for i in $(seq 0 2 $((${#CDJ_DIR_MAP[*]}-2)) ) ; do echo ${CDJ_DIR_MAP[$i]} ; done)
-            COMPREPLY=( $(compgen -W "$opts" -- ${cur} ))
-            return 0
-            ;;
-        *)
-            ;;
-    esac
-
-    COMPREPLY=( $(compgen -W "$opts" -- ${cur} ))
-    return 0
-} &&
-complete -F _cdj cdj
-
 # perlbrew bash_completion.
 # see other implementation: https://github.com/telemachus/bash_completion.d/blob/master/perlbrew.bash
 type perlbrew >/dev/null 2>&1 &&
