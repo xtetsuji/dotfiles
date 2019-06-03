@@ -129,6 +129,10 @@ function cd {
                     return 1
                 fi
                 ;;
+            *)
+                echo "unknown command :$subcommand" >&2
+                return 1
+                ;;
         esac
         if [ "${result:0:1}" = "~" ] ; then
             result=$HOME${result#"~"}
