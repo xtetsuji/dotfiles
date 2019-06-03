@@ -160,32 +160,34 @@ shopt -u hostcomplete && complete -F _ssh xssh
 ###
 ### pager and editor
 ###
-if type lv >/dev/null 2>&1 ; then
-    export PAGER='lv -c'
-elif type less >/dev/null 2>&1 ; then
-    export PAGER='less -R'
-else
-    export PAGER=more
+export PAGER=less
+export EDITOR=vi
+
+# less
+export LESS='-i -M -R -S '
+export LESS_TERMCAP_mb=$'\E[01;31m'      # Begins blinking.
+export LESS_TERMCAP_md=$'\E[01;31m'      # Begins bold.
+export LESS_TERMCAP_me=$'\E[0m'          # Ends mode.
+export LESS_TERMCAP_se=$'\E[0m'          # Ends standout-mode.
+export LESS_TERMCAP_so=$'\E[00;47;30m'   # Begins standout-mode.
+export LESS_TERMCAP_ue=$'\E[0m'          # Ends underline.
+export LESS_TERMCAP_us=$'\E[01;32m'      # Begins underline.
+if type lesspipe.sh >/dev/null 2>&1 ; then
+  export LESSOPEN='| /usr/bin/env lesspipe.sh %s 2>&-'
 fi
 
-if type vi >/dev/null 2>&1 ; then
-    export EDITOR=vi
-fi
+# git
+export GIT_PAGER='less -FRX'
 
-if type less &>/dev/null ; then
-    export LESS=-M
-    if type /usr/bin/lesspipe &>/dev/null ; then
-        export LESSOPEN="| /usr/bin/lesspipe '%s'"
-        export LESSCLOSE="/usr/bin/lesspipe '%s' '%s'"
-    fi
-    case "$LANG" in
-        ja_JP.UTF-8) JLESSCHARSET=utf-8 ;    LV=-Ou8 ;;
-        ja_JP.*) JLESSCHARSET=japanese-euc ; LV=-Oej ;;
-        *) JLESSCHARSET=latin1 ;             LV=-Al1 ;;
-    esac
-    export JLESSCHARSET LV
-elif [ "$UNAME" =~ CYGWIN.* ] ; then # Do not quote "=~"'s right side.
-    alias lv='lv -Os'
+# perldoc
+export PERLDOC_PAGER='less -FRX'
+
+# lv
+export LV='-c -Oej'
+
+# vim (if exist)
+if type vim >/dev/null 2>&1 ; then
+    EDITOR=vim
 fi
 
 ###
@@ -202,7 +204,6 @@ stty stop undef
 
 export CVS_RSH=ssh
 export RSYNC_RSH=ssh
-export PERLDOC_PAGER='lv -c'
 
 set bell-style visible
 
