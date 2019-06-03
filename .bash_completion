@@ -86,18 +86,6 @@ _brew(){
 } &&
 complete -F _brew brew
 
-type tweetbot >/dev/null 2>&1 &&
-_tweetbot(){
-    local cur prev opts
-    # I refer to homebrew/0.9.4 for makeing it.
-    COMPREPLY=()
-    cur="${COMP_WORDS[COMP_CWORD]}"
-    prev="${COMP_WORDS[COMP_CWORD-1]}"
-    opts="-h --help --usage timeline mentions retweets direct_messages lists favorites search status user_profile post follow unfollow favorite unfavorite retweet list"
-    COMPREPLY=( $(compgen -W "$opts" -- ${cur} ))
-} &&
-complete -F _tweetbot tweetbot
-
 type zcssh >/dev/null 2>&1 &&
 complete -F _ssh zcssh
 
