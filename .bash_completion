@@ -2,37 +2,6 @@
 # homebrew の流儀であれば /usr/local/etc/bash_completion.d/ 以下に
 # 個別のスクリプトファイルとして投げ込んでおくという手もある
 
-# DEFINITIONS
-_foo()
-{
-    # Tiny sample of bash_completion. Enable debug echo.
-    local cur prev opts
-    COMPREPLY=()
-    cur="${COMP_WORDS[COMP_CWORD]}"
-    prev="${COMP_WORDS[COMP_CWORD-1]}"
-    opts="--help --verbose --version"
-    echo ""
-    echo "> cur=$cur prev=$prev COMP_CWORD=$COMP_CWORD"
-    echo "> opts=$opts"
-    echo "> COMPWORDS=${COMP_WORDS[*]}"
-
-    if [[ ${cur} == -* ]] ; then
-        COMPREPLY=( $(compgen -W "${opts}" -- ${cur}) )
-        return 0
-    fi
-}
-complete -F _foo foo
-foo()
-{
-    # sample function by OGATA Tetsuji
-    case $1 in
-        --help) echo "$FUNCNAME [--help --verbose --version]" ;;
-        --verbose) echo "Hello! Hello! Hello!" ;;
-        --version) echo "$FUNCNAME Version 0.1" ;;
-        *) echo foo ;;
-    esac
-}
-
 _cpanm(){
     local cur prev opts i
     COMPREPLY=()
