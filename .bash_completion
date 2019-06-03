@@ -175,16 +175,6 @@ _mdls(){
 } &&
 complete -F _mdls mdls
 
-type nephia-setup >/dev/null 2>&1 &&
-_nephia-setup(){
-    local cur prev opts
-    cur="${COMP_WORDS[COMP_CWORD]}"
-    prev="${COMP_WORDS[COMP_CWORD-1]}"
-    opts="--version --flavor"
-    COMPREPLY=( $(compgen -W "$opts" -- ${cur} ))
-} &&
-complete -F _nephia-setup nephia-setup
-
 type sips >/dev/null 2>&1 &&
 _sips(){
     local cur prev opts_all opts_property opts_format opts_format_options
