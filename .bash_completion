@@ -218,9 +218,6 @@ _sips(){
 } &&
 complete -F _sips sips
 
-type cdfind >/dev/null 2>&1 &&
-complete -F _find cdfind
-
 type pbedit >/dev/null 2>&1 &&
 _pbedit_completion(){
     local cur=${COMP_WORDS[COMP_CWORD]}
