@@ -86,9 +86,6 @@ _brew(){
 } &&
 complete -F _brew brew
 
-type zcssh >/dev/null 2>&1 &&
-complete -F _ssh zcssh
-
 # TODO: under construction.
 type mojo >/dev/null 2>&1 &&
 _mojo(){
