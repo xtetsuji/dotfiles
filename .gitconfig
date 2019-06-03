@@ -10,7 +10,7 @@
 	st = status
 	ci = commit
 	co = checkout
-	pco = !git checkout $(git branch --all | perl -pe 's/^..//, s!^remotes/origin/!!' | sort | uniq | peco)
+	cop = !git checkout $(git branch --all | perl -pe 's/^..//, s!^remotes/origin/!!' | sort | uniq | peco)
 
 	### funny view
         graph  = log --graph --date-order --all --pretty=format:'%h %Cred%d %Cgreen%ad %Cblue%cn %Creset%s' --date=short
