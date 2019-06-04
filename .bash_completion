@@ -43,18 +43,6 @@ _pbcopy(){
 } &&
 complete -F _pbpaste pbpaste
 
-type brew >/dev/null 2>&1 &&
-_brew(){
-    local cur prev opts
-    # I refer to homebrew/0.9.4 for makeing it.
-    COMPREPLY=()
-    cur="${COMP_WORDS[COMP_CWORD]}"
-    prev="${COMP_WORDS[COMP_CWORD-1]}"
-    opts="info home options install uninstall search list update upgrade doctor --env --config --version create edit"
-    COMPREPLY=( $(compgen -W "$opts" -- ${cur} ))
-} &&
-complete -F _brew brew
-
 # TODO: under construction.
 type mojo >/dev/null 2>&1 &&
 _mojo(){
