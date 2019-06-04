@@ -5,7 +5,8 @@
 test -z "$PS1" && return
 
 UNAME="$(uname)"
-BREW_PREFIX="$(brew --prefix)"
+#BREW_PREFIX="$(brew --prefix)"
+BREW_PREFIX="/usr/local"
 
 # コマンド入力や通知などのインタラクティブなもの
 
@@ -183,7 +184,7 @@ export GIT_PAGER='less -FRX'
 export PERLDOC_PAGER='less -FRX'
 
 # lv
-export LV='-c -Oej'
+export LV='-c -Ouj'
 
 # vim (if exist)
 if type vim >/dev/null 2>&1 ; then
