@@ -2,6 +2,14 @@
 # homebrew の流儀であれば /usr/local/etc/bash_completion.d/ 以下に
 # 個別のスクリプトファイルとして投げ込んでおくという手もある
 
+OUTSIDE_COMPLETION_FILES=(
+    "${BREW_PREFIX:-/usr/local}/Cellar/plenv/2.3.0/completions/plenv.bash" # plenv
+)
+for f in "${OUTSIDE_COMPLETION_FILES[@]}" ; do
+    test -f "$f" && source "$f"
+done
+unset OUTSIDE_COMPLETION_FILES
+
 _cpanm(){
     local cur prev opts i
     COMPREPLY=()
@@ -81,7 +89,6 @@ _mojo(){
     COMPREPLY=( $(compgen -W "$opts_all" -- ${cur} ))
 } &&
 complete -F _mojo mojo
-
 
 type minil >/dev/null 2>&1 &&
 _minil(){
