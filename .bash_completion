@@ -2,112 +2,14 @@
 # homebrew の流儀であれば /usr/local/etc/bash_completion.d/ 以下に
 # 個別のスクリプトファイルとして投げ込んでおくという手もある
 
-# DEFINITIONS
-_foo()
-{
-    # Tiny sample of bash_completion. Enable debug echo.
-    local cur prev opts
-    COMPREPLY=()
-    cur="${COMP_WORDS[COMP_CWORD]}"
-    prev="${COMP_WORDS[COMP_CWORD-1]}"
-    opts="--help --verbose --version"
-    echo ""
-    echo "> cur=$cur prev=$prev COMP_CWORD=$COMP_CWORD"
-    echo "> opts=$opts"
-    echo "> COMPWORDS=${COMP_WORDS[*]}"
-
-    if [[ ${cur} == -* ]] ; then
-        COMPREPLY=( $(compgen -W "${opts}" -- ${cur}) )
-        return 0
-    fi
-}
-complete -F _foo foo
-foo()
-{
-    # sample function by OGATA Tetsuji
-    case $1 in
-        --help) echo "$FUNCNAME [--help --verbose --version]" ;;
-        --verbose) echo "Hello! Hello! Hello!" ;;
-        --version) echo "$FUNCNAME Version 0.1" ;;
-        *) echo foo ;;
-    esac
-}
-
-type cdj >/dev/null 2>&1 &&
-_cdj()
-{
-    local cur prev opts i
-    COMPREPLY=()
-    cur="${COMP_WORDS[COMP_CWORD]}"
-    prev="${COMP_WORDS[COMP_CWORD-1]}"
-    opts=$(for i in $(seq 0 2 $((${#CDJ_DIR_MAP[*]}-2)) ) ; do echo ${CDJ_DIR_MAP[$i]} ; done ; echo "-h -v -l")
-    #echo ""
-    #echo "> cur=$cur prev=$prev COMP_CWORD=$COMP_CWORD"
-    #echo "> opts=$opts"
-    #echo "> COMPWORDS=${COMP_WORDS[*]}"
-
-    case ${prev} in
-        -l)
-            opts=$(for i in $(seq 0 2 $((${#CDJ_DIR_MAP[*]}-2)) ) ; do echo ${CDJ_DIR_MAP[$i]} ; done)
-            COMPREPLY=( $(compgen -W "$opts" -- ${cur} ))
-            return 0
-            ;;
-        *)
-            ;;
-    esac
-
-    COMPREPLY=( $(compgen -W "$opts" -- ${cur} ))
-    return 0
-} &&
-complete -F _cdj cdj
-
-# perlbrew bash_completion.
-# see other implementation: https://github.com/telemachus/bash_completion.d/blob/master/perlbrew.bash
-type perlbrew >/dev/null 2>&1 &&
-_perlbrew()
-{
-    # I refer to App::perlbrew/0.62 for makeing it.
-    local cur prev opts_all opts_names opts
-    COMPREPLY=()
-    cur="${COMP_WORDS[COMP_CWORD]}"
-    prev="${COMP_WORDS[COMP_CWORD-1]}"
-    opts_names="
-        init info
-        install uninstall available lib alias upgrade-perl
-        list use off switch switch-off exec
-        self-install self-upgrade
-        install-patchperl install-cpanm install-ack install-multiple
-        download mirror clean version help"
-    opts_all="$opts_names -q --quiet -v --verbose"
-
-    case "${prev}" in
-        help)
-            COMPREPLY=( $(compgen -W "$opts_names" -- ${cur} ))
-            return 0
-            ;;
-        install|download)
-            opts=$(perlbrew available)
-            COMPREPLY=( $(compgen -W "$opts" -- ${cur} ))
-            return 0
-            ;;
-        list)
-            opts=$(perlbrew list | sed -e 's/^..//' -e 's/ .*//')
-            COMPREPLY=( $(compgen -W "$opts" -- ${cur} ))
-            return 0
-            ;;
-        use|switch|exec|uninstall)
-            opts=$(perlbrew list | grep '^\*' | sed -e 's/..//' -e 's/ .*//')
-            COMPREPLY=( $(compgen -W "$opts" -- ${cur} ))
-            return 0
-            ;;
-        *)
-            ;;
-    esac
-
-    COMPREPLY=( $(compgen -W "$opts_all" -- ${cur} ) )
-    return 0
-} &&
-complete -F _perlbrew perlbrew
+OUTSIDE_COMPLETION_FILES=(
+    "${BREW_PREFIX:-/usr/local}/Cellar/plenv/2.3.0/completions/plenv.bash" # plenv
+    "${BREW_PREFIX:-/usr/local}/etc/bash_completion.d/git-completion.bash" # git
+)
+for f in "${OUTSIDE_COMPLETION_FILES[@]}" ; do
+    test -f "$f" && source "$f"
+done
+unset OUTSIDE_COMPLETION_FILES
 
 _cpanm(){
     local cur prev opts i
@@ -119,63 +21,6 @@ _cpanm(){
     return 0
 } &&
 complete -o default -F _cpanm cpanm
-
-type pbpaste >/dev/null 2>&1 &&
-_pbpaste(){
-    local cur prev opts i
-    COMPREPLY=()
-    cur="${COMP_WORDS[COMP_CWORD]}"
-    prev="${COMP_WORDS[COMP_CWORD-1]}"
-    opts="-help -Prefer"
-    case ${prev} in
-        -Prefer)
-            opts="rtf ps txt"
-            ;;
-        *)
-            ;;
-    esac
-    COMPREPLY=( $(compgen -W "$opts" -- ${cur} ))
-    return 0
-} &&
-complete -F _pbpaste pbpaste
-
-type pbcopy >/dev/null 2>&1 &&
-_pbcopy(){
-    COMPREPLY=()
-    cur="${COMP_WORDS[COMP_CWORD]}"
-    prev="${COMP_WORDS[COMP_CWORD-1]}"
-    opts="-help"
-    COMPREPLY=( $(compgen -W "$opts" -- ${cur} ))
-    return 0
-} &&
-complete -F _pbpaste pbpaste
-
-type brew >/dev/null 2>&1 &&
-_brew(){
-    local cur prev opts
-    # I refer to homebrew/0.9.4 for makeing it.
-    COMPREPLY=()
-    cur="${COMP_WORDS[COMP_CWORD]}"
-    prev="${COMP_WORDS[COMP_CWORD-1]}"
-    opts="info home options install uninstall search list update upgrade doctor --env --config --version create edit"
-    COMPREPLY=( $(compgen -W "$opts" -- ${cur} ))
-} &&
-complete -F _brew brew
-
-type tweetbot >/dev/null 2>&1 &&
-_tweetbot(){
-    local cur prev opts
-    # I refer to homebrew/0.9.4 for makeing it.
-    COMPREPLY=()
-    cur="${COMP_WORDS[COMP_CWORD]}"
-    prev="${COMP_WORDS[COMP_CWORD-1]}"
-    opts="-h --help --usage timeline mentions retweets direct_messages lists favorites search status user_profile post follow unfollow favorite unfavorite retweet list"
-    COMPREPLY=( $(compgen -W "$opts" -- ${cur} ))
-} &&
-complete -F _tweetbot tweetbot
-
-type zcssh >/dev/null 2>&1 &&
-complete -F _ssh zcssh
 
 # TODO: under construction.
 type mojo >/dev/null 2>&1 &&
@@ -216,7 +61,6 @@ _mojo(){
 } &&
 complete -F _mojo mojo
 
-
 type minil >/dev/null 2>&1 &&
 _minil(){
     local cur prev opts
@@ -251,16 +95,6 @@ _mdls(){
 } &&
 complete -F _mdls mdls
 
-type nephia-setup >/dev/null 2>&1 &&
-_nephia-setup(){
-    local cur prev opts
-    cur="${COMP_WORDS[COMP_CWORD]}"
-    prev="${COMP_WORDS[COMP_CWORD-1]}"
-    opts="--version --flavor"
-    COMPREPLY=( $(compgen -W "$opts" -- ${cur} ))
-} &&
-complete -F _nephia-setup nephia-setup
-
 type sips >/dev/null 2>&1 &&
 _sips(){
     local cur prev opts_all opts_property opts_format opts_format_options
@@ -294,8 +128,35 @@ _sips(){
 } &&
 complete -F _sips sips
 
-type cdfind >/dev/null 2>&1 &&
-complete -F _find cdfind
+type pbpaste >/dev/null 2>&1 &&
+_pbpaste(){
+    local cur prev opts i
+    COMPREPLY=()
+    cur="${COMP_WORDS[COMP_CWORD]}"
+    prev="${COMP_WORDS[COMP_CWORD-1]}"
+    opts="-help -Prefer"
+    case ${prev} in
+        -Prefer)
+            opts="rtf ps txt"
+            ;;
+        *)
+            ;;
+    esac
+    COMPREPLY=( $(compgen -W "$opts" -- ${cur} ))
+    return 0
+} &&
+complete -F _pbpaste pbpaste
+
+type pbcopy >/dev/null 2>&1 &&
+_pbcopy(){
+    COMPREPLY=()
+    cur="${COMP_WORDS[COMP_CWORD]}"
+    prev="${COMP_WORDS[COMP_CWORD-1]}"
+    opts="-help"
+    COMPREPLY=( $(compgen -W "$opts" -- ${cur} ))
+    return 0
+} &&
+complete -F _pbpaste pbpaste
 
 type pbedit >/dev/null 2>&1 &&
 _pbedit_completion(){
