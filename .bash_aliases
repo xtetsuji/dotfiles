@@ -103,16 +103,17 @@ function cd {
         # コロンコマンドは xtcd.sh にディスパッチする
         subcommand="${arg#:}" ; shift
         case "$subcommand" in
-            help)
-                xtcd.sh :help "$@" ; return
-                ;;
             history)
                 result="$( dirs -v | xtcd.sh :history "$@" )"
                 ;;
             clear)
                 dirs -c ; return
                 ;;
-            up|down|drop|which|pwdsed|repo|stdin|mdfind|bookmark|subcommands)
+            help|subcommands)
+                xtcd.sh :$subcommand "$@"
+                return
+                ;;
+            up|down|drop|which|pwdsed|repo|stdin|mdfind|bookmark)
                 if [ $subcommand = bookmark -a $# -gt 0 ] ; then
                     # $() 中だと $EDITOR が起動できないので冒頭で処理している
                     xtcd.sh :bookmark "$@"
