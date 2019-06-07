@@ -225,3 +225,8 @@ _cd()
 
     return 0
 }
+
+# if only login shell `exec $SHELL -l` execution, above script causes syntax error.
+#   bash: /Users/tetsuji.ogata/.bash_completion: line 188: syntax error in conditional expression: unexpected token `('
+#   bash: /Users/tetsuji.ogata/.bash_completion: line 188: syntax error near `?(\'
+#   bash: /Users/tetsuji.ogata/.bash_completion: line 188: `    if [[ "$cur" == ?(\\)\$* ]]; then'
