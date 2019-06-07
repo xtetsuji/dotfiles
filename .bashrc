@@ -22,6 +22,10 @@ fi
 if [ -f ~/.bash_aliases ] ; then
     source ~/.bash_aliases
 fi
+### bash_completion unless it is not loaded yet
+if [ -f ~/.bash_completion ] && ! exists _cpanm ; then
+    source ~/.bash_completion
+fi
 
 ###
 ### Prompt
