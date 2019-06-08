@@ -183,14 +183,6 @@ set bell-style visible
 IGNOREEOF=3
 
 ###
-### xtenv
-###
-XTENV_CACHE_DIR=~/.config/xtenv/cache
-if [ ! -d $XTENV_CACHE_DIR ] ; then
-    mkdir -p $XTENV_CACHE_DIR
-fi
-
-###
 ### chdrip on xtenv
 ###
 if type drip 2>&1 >/dev/null ; then

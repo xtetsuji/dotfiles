@@ -3,6 +3,8 @@
 declare ALIASES=$HOME/.bash_aliases
 declare UNAME=$(uname)
 
+export XTENV_CACHE_DIR=~/.config/xtenv/cache
+test -d "$XTENV_CACHE_DIR" || mkdir -p "$XTENV_CACHE_DIR"
 # xtenv-cache-eval CMD CACHE_FILE_NAME
 # CMD の出力結果を CACHE_FILE_NAME にキャッシュしつつ eval する
 # すでに CACHE_FILE_NAME があれば CMD を実行しない
