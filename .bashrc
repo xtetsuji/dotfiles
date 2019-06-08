@@ -223,12 +223,6 @@ if type go >/dev/null 2>&1 ; then
 fi
 
 ###
-### Some PATHes
-###
-export MANPATH
-export INFOPATH
-
-###
 ### ssh-agent
 ###
 # http://www.gcd.org/blog/2006/09/100/
