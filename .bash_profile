@@ -36,7 +36,6 @@ if [ -d $HOME/.plenv ] ; then
     export PATH=$PLENV_ROOT/bin:$PATH
     #eval "$(plenv init -)"
     xtenv-cache-eval "plenv init -" "plenv.init"
-    test -d $PLENV_ROOT || mkdir $PLENV_ROOT
 fi
 
 ###
@@ -46,7 +45,6 @@ if [ -d $HOME/.rbenv ] ; then
     export RBENV_ROOT=$HOME/.rbenv
     export PATH=$RBENV_ROOT/bin:$PATH
     xtenv-cache-eval "rbenv init -" "rbenv.init"
-    test -d $RBENV_ROOT || mkdir $RBENV_ROOT
 fi
 
 ###
