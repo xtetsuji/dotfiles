@@ -20,6 +20,22 @@ function xtenv-cache-eval {
     eval "$(< "$cache_file_path" )"
 }
 
+# http-get-source URL FILE
+# FILE が無ければ URL から取得して FILE に書き、FILE を source する
+# 環境変数 HTTP_GET_SOURCE_FORCE が設定されていれば、キャッシュを刷新する
+function http-get-source {
+    local url=$1
+    local file=$2
+    if [ -n "$HTTP_GET_SOURCE_FORCE" ] || [ ! -f $file ] ; then
+        curl --silent $url > $file
+    fi
+    if [ -s $file ] ; then
+        source $file
+    elif [ -f $file ] ; then
+        echo "$FUNCNAME: $file is empty" >&2
+    fi
+}
+
 ###
 ### Basics
 ###
@@ -300,19 +316,6 @@ function peco-history() {
   fi
 }
 bind '"\C-x\C-r":"peco-history\n"'
-
-function http-get-source {
-    local url=$1
-    local file=$2
-    if [ -n "$HTTP_GET_SOURCE_FORCE" ] || [ ! -f $file ] ; then
-        curl --silent $url > $file
-    fi
-    if [ -s $file ] ; then
-        source $file
-    elif [ -f $file ] ; then
-        echo "$FUNCNAME: $file is empty" >&2
-    fi
-}
 
 unset ALIASES
 unset UNAME
