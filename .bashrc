@@ -148,6 +148,17 @@ if type vim >/dev/null 2>&1 ; then
 fi
 
 ###
+### Locale / Lang
+###
+export LANG=ja_JP.UTF-8
+export TZ=JST-9
+
+###
+### Information
+###
+export icloud_drive=$HOME/Library/Mobile\ Documents/com~apple~CloudDocs
+
+###
 ### some settings
 ###
 
@@ -238,17 +249,5 @@ elif [ -S $MY_SSH_AUTH_SOCK_PATH ]; then
 else
     : #echo "no ssh-agent"
 fi
-
-###
-### Locale / Lang
-###
-export LANG=ja_JP.UTF-8
-export LV="-Ou"
-export TZ=JST-9
-
-###
-### Information
-###
-export icloud_drive=$HOME/Library/Mobile\ Documents/com~apple~CloudDocs
 
 unset UNAME
