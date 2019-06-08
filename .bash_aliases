@@ -22,8 +22,6 @@ function xtenv-cache-eval {
 ### Basics
 ###
 
-function exists { type $1 >/dev/null 2>&1 ; return $? ; }
-
 case "$UNAME" in
     Darwin) ### Mac OS X
         alias ls='ls -FG' # BSD type "ls"

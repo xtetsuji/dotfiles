@@ -10,6 +10,11 @@ BREW_PREFIX="/usr/local"
 
 # コマンド入力や通知などのインタラクティブなもの
 
+function exists { type $1 >/dev/null 2>&1 ; return $? ; }
+function source_if_readable { test -r "$1" && source "$1" ; }
+
+source ~/.bash_aliases
+
 ###
 ### read some config
 ###
@@ -17,10 +22,6 @@ BREW_PREFIX="/usr/local"
 ### Personal secret settings.
 if [ -f ~/.bash_secret ] ; then
     source ~/.bash_secret
-fi
-### Aliases
-if [ -f ~/.bash_aliases ] ; then
-    source ~/.bash_aliases
 fi
 ### bash_completion unless it is not loaded yet
 if [ -f ~/.bash_completion ] && ! exists _cpanm ; then
