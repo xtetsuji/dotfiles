@@ -20,7 +20,6 @@ source_if_readable ~/.bash_completion
 ###
 ### Prompt
 ###
-SCREEN_VERSION=$(screen -version | sed -e 's/^Screen version //' -e 's/ .*//')
 case $UNAME in
     Darwin)
         PROMPT_ICON='\360\237\222\273' # computer
