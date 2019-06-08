@@ -22,23 +22,6 @@ source_if_readable /etc/bash_completion
 ###
 ### Prompt
 ###
-case $UNAME in
-    Darwin)
-        PROMPT_ICON='\360\237\222\273' # computer
-        #PROMPT_ICON='' # apple
-        ;;
-    Linux)
-        if  [ -f /etc/debian_versin ] ; then
-            # うずまき
-            PROMPT_ICON='\360\237\214\200'
-        fi
-        ;;
-    *)
-        emoji_prompt=no
-        PROMPT_ICON=''
-        ;;
-esac
-
 case "$TERM" in
     xterm-color)     color_prompt=yes;;
     xterm-256color)  color_prompt=yes;;
@@ -55,7 +38,6 @@ if [ "$color_prompt" = yes ] ; then
     http-get-source \
         https://raw.githubusercontent.com/git/git/master/contrib/completion/git-prompt.sh \
         ~/.config/cache/http-get-source/git-prompt.sh
-    # ひとまず絵文字 ($PROMPT_ICON) は入れない
     #PS1='[%:\j @\A]${debian_chroot:+($debian_chroot)}\[\033[01;32m\]\u@\h\[\033[00m\]:\[\033[01;34m\]\w\[\033[00m\]$(__git_ps1 " [\[\033[32m\]%s\[\033[0m\]]")\$ '
     PS1='\[\033[01;33m\]\u@\h\[\033[00m\]:\[\033[01;34m\]\w\[\033[00m\]$(__git_ps1 " [\[\033[32m\]%s\[\033[0m\]]")\$ '
     COLOR_PROMPT_PS1="$PS1"
