@@ -1,0 +1,8 @@
+# https://qiita.com/yoshikazusawa/items/d99e8b5d6f6a45aa6e2e
+# main viewの左端にコミットIDを表示する
+set main-view = id date author commit-title:graph=yes,refs=yes
+# デフォルト
+# set main-view = date author commit-title:graph=yes,refs=yes
+
+set main-view-date = custom
+set main-view-date-format = "%Y-%m-%d %H:%M"
