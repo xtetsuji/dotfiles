@@ -153,6 +153,9 @@ fi
 export LANG=ja_JP.UTF-8
 export TZ=JST-9
 
+export CVS_RSH=ssh
+export RSYNC_RSH=ssh
+
 ###
 ### Information
 ###
@@ -166,18 +169,10 @@ export icloud_drive=$HOME/Library/Mobile\ Documents/com~apple~CloudDocs
 # Ignore C-s for terminal stop.
 stty stop undef
 
-###
-### some config by env
-###
-
-export CVS_RSH=ssh
-export RSYNC_RSH=ssh
-
 set bell-style visible
 
 # avoid Ctrl-D logout.
 IGNOREEOF=3
-
 
 ###
 ### xtenv
