@@ -56,17 +56,6 @@ unset color_prompt
 export MYSQL_PS1='\u@\h> '
 
 ###
-### Growl
-###
-
-### add at 2013/02/24
-if [ "$UNAME" = Darwin ] ; then
-    export GROWL_ANY_DEFAULT_BACKEND=CocoaGrowl
-    export GROWL_ANY_DEBUG=0
-    # I like CocoaGrowl than MacGrowl.
-fi
-
-###
 ### proxy
 ###
 # export http_proxy=http://localhost:8080/
