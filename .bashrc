@@ -16,6 +16,8 @@ function source_if_readable { test -r "$1" && source "$1" ; }
 source ~/.bash_aliases
 source_if_readable ~/.bash_secret
 source_if_readable ~/.bash_completion
+source_if_readable $BREW_PREFIX/etc/bash_completion
+source_if_readable /etc/bash_completion
 
 ###
 ### Prompt
@@ -128,15 +130,6 @@ if type prompt_command >/dev/null 2>&1 ; then
     PROMPT_COMMAND=prompt_command
 fi
 
-###
-### bash_completion
-###
-for f in $BREW_PREFIX/etc/bash_completion /etc/bash_completion ; do
-    test -f $f && source $f
-done
-unset f
-
-# and see "~/.bash_completion". It is read by builtin bash_completion.
 
 # bash_color
 http-get-source \
