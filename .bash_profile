@@ -13,16 +13,6 @@ if [ -n "$BASH_VERSION" ] && [ -f ~/.bashrc ] ; then
     source ~/.bashrc
 fi
 
-### PATH of fundamental
-export PATH
-for d in ~/bin ~/Dropbox/bin ~/git/@github/xtetsuji/various-commands/bin ; do
-    if [ -d $d ] ; then
-        PATH=$PATH:$d
-    fi
-done
-unset d
-# TODO: each other two directries are same if one is symbolic link of another.
-
 ###
 ### xtenv
 ###

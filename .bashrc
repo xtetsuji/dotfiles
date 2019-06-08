@@ -12,12 +12,21 @@ BREW_PREFIX="/usr/local"
 
 function exists { type $1 >/dev/null 2>&1 ; return $? ; }
 function source_if_readable { test -r "$1" && source "$1" ; }
+function add_path_var { test -d $1 && PATH=$PATH:$1 ; }
 
 source ~/.bash_aliases
 source_if_readable ~/.bash_secret
 source_if_readable ~/.bash_completion
 source_if_readable $BREW_PREFIX/etc/bash_completion
 source_if_readable /etc/bash_completion
+
+###
+### Path
+###
+export PATH
+add_path_var ~/bin
+add_path_var ~/Dropbox/bin
+add_path_var ~/git/@github/xtetsuji/various-commands/bin
 
 ###
 ### Prompt
