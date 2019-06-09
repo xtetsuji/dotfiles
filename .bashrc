@@ -3,15 +3,9 @@
 function is_login_shell { shopt -q login_shell ; }
 function is_interactive_shell { [[ $- =~ i ]] ; }
 
-### relax if it is not interactive.
-### (インタラクティブでない場合、何もしない)
-test -z "$PS1" && return
-
 UNAME="$(uname)"
 #BREW_PREFIX="$(brew --prefix)"
 BREW_PREFIX="/usr/local"
-
-# コマンド入力や通知などのインタラクティブなもの
 
 function exists { type $1 >/dev/null 2>&1 ; return $? ; }
 function source_if_readable { test -r "$1" && source "$1" ; }
