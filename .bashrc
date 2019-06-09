@@ -30,7 +30,7 @@ add_path_var ~/git/@github/xtetsuji/various-commands/bin
 ###
 case "$TERM" in
     *color*) color_prompt=yes;;
-    screeen) color_prompt=yes;;
+    screen) color_prompt=yes;;
 esac
 
 if [ -z "$debian_chroot" -a -r /etc/debian_chroot ] ; then
