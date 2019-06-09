@@ -1,5 +1,8 @@
 # -*- mode: shell-script ; coding: utf-8 ; -*-
 
+function is_login_shell { shopt -q login_shell ; }
+function is_interactive_shell { [[ $- =~ i ]] ; }
+
 ### relax if it is not interactive.
 ### (インタラクティブでない場合、何もしない)
 test -z "$PS1" && return
