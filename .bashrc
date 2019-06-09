@@ -71,7 +71,7 @@ export HISTCONTROL=ignoreboth
 ###
 ### PROMPT_COMMAND
 ###
-if [ "$PS1" ] ; then
+if is_interactive_shell ; then
     function prompt_command {
         share_history
     }
