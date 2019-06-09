@@ -282,6 +282,23 @@ function ps2 {
     esac
 }
 
+function choice-prompt {
+    local type="$1"
+    case "$type" in
+        default-color)
+            PS1="$COLOR_PROMPT_PS1"
+            ;;
+        simple)
+            PS1='$ '
+            ;;
+        *)
+            echo Usage:
+            echo "  $FUNCNAME: [default-color|simple]"
+            ;;
+    esac
+}
+
+
 # see: http://qiita.com/yungsang/items/09890a06d204bf398eea
 #export HISTCONTROL="ignoredups"
 # peco-history / C-x C-r
