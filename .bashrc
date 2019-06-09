@@ -101,11 +101,6 @@ http-get-source \
     https://raw.githubusercontent.com/maxtsepkov/bash_colors/master/bash_colors.sh \
     ~/.config/cache/http-get-source/bash_colors
 
-# git-completion
-http-get-source \
-    https://raw.githubusercontent.com/git/git/master/contrib/completion/git-completion.bash \
-    ~/.config/cache/http-get-source/git-completion.bash
-
 # for my xssh command completion same as ssh.
 shopt -u hostcomplete && complete -F _ssh xssh
 
