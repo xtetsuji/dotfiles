@@ -12,10 +12,11 @@ function add_path_var { test -d $1 && PATH=$PATH:$1 ; }
 
 source ~/.bash_aliases
 source_if_readable ~/.bash_secret
-source_if_readable ~/.bash_completion
-source_if_readable $BREW_PREFIX/etc/bash_completion
-source_if_readable /etc/bash_completion
-
+if is_interactive_shell ; then
+    source_if_readable ~/.bash_completion
+    source_if_readable $BREW_PREFIX/etc/bash_completion
+    source_if_readable /etc/bash_completion
+fi
 ###
 ### Path
 ###
