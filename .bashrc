@@ -46,7 +46,7 @@ unset color_prompt
 export MYSQL_PS1='\u@\h> '
 
 ###
-### history
+### history and PROMPT_COMMAND
 ###
 # see: http://tukaikta.blog135.fc2.com/blog-entry-187.html
 function share_history {
@@ -70,11 +70,8 @@ if is_interactive_shell ; then
     function prompt_command {
         share_history
     }
-fi
-if type prompt_command >/dev/null 2>&1 ; then
     PROMPT_COMMAND=prompt_command
 fi
-
 
 ###
 ### pager and editor
