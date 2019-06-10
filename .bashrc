@@ -63,9 +63,6 @@ shopt -s checkwinsize
 # ignoreboth:上記の両方を設定
 export HISTCONTROL=ignoreboth
 
-###
-### PROMPT_COMMAND
-###
 if is_interactive_shell ; then
     function prompt_command {
         share_history
