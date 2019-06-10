@@ -33,6 +33,9 @@ function http-get-source {
         source $file
     elif [ -f $file ] ; then
         echo "$FUNCNAME: $file is empty" >&2
+    else
+        echo "$FUNCNAME: $file is not found" >&2
+        return 1
     fi
 }
 
