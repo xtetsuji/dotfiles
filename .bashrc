@@ -76,11 +76,6 @@ if type prompt_command >/dev/null 2>&1 ; then
 fi
 
 
-# bash_color
-http-get-source \
-    https://raw.githubusercontent.com/maxtsepkov/bash_colors/master/bash_colors.sh \
-    ~/.config/cache/http-get-source/bash_colors
-
 ###
 ### pager and editor
 ###
@@ -148,6 +143,17 @@ set bell-style visible
 
 # avoid Ctrl-D logout.
 IGNOREEOF=3
+
+function import-clr {
+    http-get-source \
+        https://raw.githubusercontent.com/maxtsepkov/bash_colors/master/bash_colors.sh \
+        ~/.config/cache/http-get-source/bash_colors
+    echo "import clr_*"
+    echo "  clr_dump:"
+    clr_dump
+}
+
+
 
 ###
 ### chdrip on xtenv
