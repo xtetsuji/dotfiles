@@ -33,16 +33,11 @@ case "$TERM" in
     screen) color_prompt=yes;;
 esac
 
-if [ -z "$debian_chroot" -a -r /etc/debian_chroot ] ; then
-    debian_chroot=$(cat /etc/debian_chroot)
-fi
-
 if [ "$color_prompt" = yes ] ; then
     # git プロンプト
     http-get-source \
         https://raw.githubusercontent.com/git/git/master/contrib/completion/git-prompt.sh \
         ~/.config/cache/http-get-source/git-prompt.sh
-    #PS1='[%:\j @\A]${debian_chroot:+($debian_chroot)}\[\033[01;32m\]\u@\h\[\033[00m\]:\[\033[01;34m\]\w\[\033[00m\]$(__git_ps1 " [\[\033[32m\]%s\[\033[0m\]]")\$ '
     PS1='\[\033[01;33m\]\u@\h\[\033[00m\]:\[\033[01;34m\]\w\[\033[00m\]$(__git_ps1 " [\[\033[32m\]%s\[\033[0m\]]")\$ '
     COLOR_PROMPT_PS1="$PS1"
 fi
