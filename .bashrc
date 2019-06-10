@@ -102,8 +102,8 @@ export PERLDOC_PAGER='less -FRX'
 export LV='-c -Ouj'
 
 # vim (if exist)
-if type vim >/dev/null 2>&1 ; then
-    EDITOR=vim
+if exists vim ; then
+    export EDITOR=vim
 fi
 
 ###
