@@ -46,9 +46,6 @@ function http-get-source {
 case "$UNAME" in
     Darwin) ### Mac OS X
         alias ls='ls -FG' # BSD type "ls"
-        # see: http://ascii.jp/elem/000/000/594/594203/
-        test -f /Applications/Emacs.app/Contents/MacOS/bin/emacsclient && \
-        alias emacsclient="/Applications/Emacs.app/Contents/MacOS/bin/emacsclient"
         # Recommend to create symlink /usr/sbin/airport as the airport.
         if [ ! -f /sbin/airport ] || [ ! -f /usr/sbin/airport ] ; then
             alias airport='/System/Library/PrivateFrameworks/Apple80211.framework/Versions/Current/Resources/airport'
