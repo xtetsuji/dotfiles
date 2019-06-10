@@ -86,9 +86,6 @@ http-get-source \
     https://raw.githubusercontent.com/maxtsepkov/bash_colors/master/bash_colors.sh \
     ~/.config/cache/http-get-source/bash_colors
 
-# for my xssh command completion same as ssh.
-shopt -u hostcomplete && complete -F _ssh xssh
-
 ###
 ### pager and editor
 ###
