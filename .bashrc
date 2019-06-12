@@ -23,6 +23,7 @@ fi
 export PATH
 add_path_var ~/bin
 add_path_var ~/Dropbox/bin
+add_path_var /usr/local/bin
 add_path_var ~/git/@github/xtetsuji/various-commands/bin
 
 ###
