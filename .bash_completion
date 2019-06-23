@@ -185,7 +185,8 @@ _cd()
     fi
 
     # try to allow variable completion
-    if [[ "$cur" == ?(\\)\$* ]]; then
+    #if [[ "$cur" == ?(\\)\$* ]]; then
+    if [[ "$cur" =~ \\?\$.* ]] ; then
         COMPREPLY=( $( compgen -v -P '$' -- "${cur#?(\\)$}" ) )
         return 0
     fi
@@ -194,7 +195,8 @@ _cd()
 
     # Use standard dir completion if no CDPATH or parameter starts with /,
     # ./ or ../
-    if [[ -z "${CDPATH:-}" || "$cur" == ?(.)?(.)/* ]]; then
+    #if [[ -z "${CDPATH:-}" || "$cur" == ?(.)?(.)/* ]]; then
+    if [[ -z "${CDPATH:-}" || "$cur" =~ \.?\.?/.* ]] ; then
         _filedir -d
         return 0
     fi
@@ -230,3 +232,6 @@ _cd()
 #   bash: /Users/tetsuji.ogata/.bash_completion: line 188: syntax error in conditional expression: unexpected token `('
 #   bash: /Users/tetsuji.ogata/.bash_completion: line 188: syntax error near `?(\'
 #   bash: /Users/tetsuji.ogata/.bash_completion: line 188: `    if [[ "$cur" == ?(\\)\$* ]]; then'
+#
+# rewrite original `?(STRING)` shell notation to regular expression.
+# this notation requires `shopt -s extglob`
