@@ -3,6 +3,8 @@
 declare ALIASES=$HOME/.bash_aliases
 declare UNAME=$(uname)
 
+export XTENV_CACHE_DIR=~/.config/xtenv/cache
+test -d "$XTENV_CACHE_DIR" || mkdir -p "$XTENV_CACHE_DIR"
 # xtenv-cache-eval CMD CACHE_FILE_NAME
 # CMD の出力結果を CACHE_FILE_NAME にキャッシュしつつ eval する
 # すでに CACHE_FILE_NAME があれば CMD を実行しない
@@ -18,18 +20,32 @@ function xtenv-cache-eval {
     eval "$(< "$cache_file_path" )"
 }
 
+# http-get-source URL FILE
+# FILE が無ければ URL から取得して FILE に書き、FILE を source する
+# 環境変数 HTTP_GET_SOURCE_FORCE が設定されていれば、キャッシュを刷新する
+function http-get-source {
+    local url=$1
+    local file=$2
+    if [ -n "$HTTP_GET_SOURCE_FORCE" ] || [ ! -f $file ] ; then
+        curl --silent $url > $file
+    fi
+    if [ -s $file ] ; then
+        source $file
+    elif [ -f $file ] ; then
+        echo "$FUNCNAME: $file is empty" >&2
+    else
+        echo "$FUNCNAME: $file is not found" >&2
+        return 1
+    fi
+}
+
 ###
 ### Basics
 ###
 
-function exists { type $1 >/dev/null 2>&1 ; return $? ; }
-
 case "$UNAME" in
     Darwin) ### Mac OS X
         alias ls='ls -FG' # BSD type "ls"
-        # see: http://ascii.jp/elem/000/000/594/594203/
-        test -f /Applications/Emacs.app/Contents/MacOS/bin/emacsclient && \
-        alias emacsclient="/Applications/Emacs.app/Contents/MacOS/bin/emacsclient"
         # Recommend to create symlink /usr/sbin/airport as the airport.
         if [ ! -f /sbin/airport ] || [ ! -f /usr/sbin/airport ] ; then
             alias airport='/System/Library/PrivateFrameworks/Apple80211.framework/Versions/Current/Resources/airport'
@@ -266,6 +282,23 @@ function ps2 {
     esac
 }
 
+function choice-prompt {
+    local type="$1"
+    case "$type" in
+        default-color)
+            PS1="$COLOR_PROMPT_PS1"
+            ;;
+        simple)
+            PS1='$ '
+            ;;
+        *)
+            echo Usage:
+            echo "  $FUNCNAME: [default-color|simple]"
+            ;;
+    esac
+}
+
+
 # see: http://qiita.com/yungsang/items/09890a06d204bf398eea
 #export HISTCONTROL="ignoredups"
 # peco-history / C-x C-r
@@ -300,19 +333,6 @@ function peco-history() {
   fi
 }
 bind '"\C-x\C-r":"peco-history\n"'
-
-function http-get-source {
-    local url=$1
-    local file=$2
-    if [ -n "$HTTP_GET_SOURCE_FORCE" ] || [ ! -f $file ] ; then
-        curl --silent $url > $file
-    fi
-    if [ -s $file ] ; then
-        source $file
-    elif [ -f $file ] ; then
-        echo "$FUNCNAME: $file is empty" >&2
-    fi
-}
 
 unset ALIASES
 unset UNAME

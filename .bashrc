@@ -1,71 +1,43 @@
 # -*- mode: shell-script ; coding: utf-8 ; -*-
 
-### relax if it is not interactive.
-### (インタラクティブでない場合、何もしない)
-test -z "$PS1" && return
-
 UNAME="$(uname)"
 #BREW_PREFIX="$(brew --prefix)"
 BREW_PREFIX="/usr/local"
 
-# コマンド入力や通知などのインタラクティブなもの
+function is_login_shell { shopt -q login_shell ; }
+function is_interactive_shell { [[ $- =~ i ]] ; }
+function exists { type $1 >/dev/null 2>&1 ; }
+function source_if_readable { test -r "$1" && source "$1" ; }
+function add_path_var { test -d $1 && PATH=$PATH:$1 ; }
 
+source ~/.bash_aliases
+source_if_readable ~/.bash_secret
+if is_interactive_shell ; then
+    source_if_readable ~/.bash_completion
+    source_if_readable $BREW_PREFIX/etc/bash_completion
+    source_if_readable /etc/bash_completion
+fi
 ###
-### read some config
+### Path
 ###
-
-### Personal secret settings.
-if [ -f ~/.bash_secret ] ; then
-    source ~/.bash_secret
-fi
-### Aliases
-if [ -f ~/.bash_aliases ] ; then
-    source ~/.bash_aliases
-fi
-### bash_completion unless it is not loaded yet
-if [ -f ~/.bash_completion ] && ! exists _cpanm ; then
-    source ~/.bash_completion
-fi
+export PATH
+add_path_var ~/bin
+add_path_var ~/Dropbox/bin
+add_path_var /usr/local/bin
 
 ###
 ### Prompt
 ###
-SCREEN_VERSION=$(screen -version | sed -e 's/^Screen version //' -e 's/ .*//')
-case $UNAME in
-    Darwin)
-        PROMPT_ICON='\360\237\222\273' # computer
-        #PROMPT_ICON='' # apple
-        ;;
-    Linux)
-        if  [ -f /etc/debian_versin ] ; then
-            # うずまき
-            PROMPT_ICON='\360\237\214\200'
-        fi
-        ;;
-    *)
-        emoji_prompt=no
-        PROMPT_ICON=''
-        ;;
-esac
-
 case "$TERM" in
-    xterm-color)     color_prompt=yes;;
-    xterm-256color)  color_prompt=yes;;
-    screen)          color_prompt=yes;; # Is modern screen OK!?
-    screen-256color) color_prompt=yes;;
+    *color*) color_prompt=yes;;
+    screen) color_prompt=yes;;
 esac
-
-if [ -z "$debian_chroot" -a -r /etc/debian_chroot ] ; then
-    debian_chroot=$(cat /etc/debian_chroot)
-fi
 
 if [ "$color_prompt" = yes ] ; then
     # git プロンプト
     http-get-source \
         https://raw.githubusercontent.com/git/git/master/contrib/completion/git-prompt.sh \
         ~/.config/cache/http-get-source/git-prompt.sh
-    # ひとまず絵文字 ($PROMPT_ICON) は入れない
-    #PS1='[%:\j @\A]${debian_chroot:+($debian_chroot)}\[\033[01;32m\]\u@\h\[\033[00m\]:\[\033[01;34m\]\w\[\033[00m\]$(__git_ps1 " [\[\033[32m\]%s\[\033[0m\]]")\$ '
     PS1='\[\033[01;33m\]\u@\h\[\033[00m\]:\[\033[01;34m\]\w\[\033[00m\]$(__git_ps1 " [\[\033[32m\]%s\[\033[0m\]]")\$ '
     COLOR_PROMPT_PS1="$PS1"
 fi
@@ -74,28 +46,7 @@ unset color_prompt
 export MYSQL_PS1='\u@\h> '
 
 ###
-### Growl
-###
-
-### add at 2013/02/24
-if [ "$UNAME" = Darwin ] ; then
-    export GROWL_ANY_DEFAULT_BACKEND=CocoaGrowl
-    export GROWL_ANY_DEBUG=0
-    # I like CocoaGrowl than MacGrowl.
-fi
-
-###
-### proxy
-###
-# export http_proxy=http://localhost:8080/
-# export https_proxy=$http_proxy
-# export ftp_proxy=$http_proxy
-# export HTTPS_PROXY=$http_proxy
-# export FTP_PROXY=$http_proxy
-### NOTE: proxy environments are detected chproxy function or on .bash_secret.
-
-###
-### history
+### history and PROMPT_COMMAND
 ###
 # see: http://tukaikta.blog135.fc2.com/blog-entry-187.html
 function share_history {
@@ -112,55 +63,12 @@ shopt -s checkwinsize
 # ignoreboth:上記の両方を設定
 export HISTCONTROL=ignoreboth
 
-###
-### PROMPT_COMMAND
-###
-if [ "$PS1" ] ; then
+if is_interactive_shell ; then
     function prompt_command {
         share_history
     }
-    function choice-prompt {
-        local type="$1"
-        case "$type" in
-            default-color)
-                PS1="$COLOR_PROMPT_PS1"
-                ;;
-            simple)
-                PS1='$ '
-                ;;
-            *)
-                echo Usage:
-                echo "  $FUNCNAME: [default-color|simple]"
-                ;;
-        esac
-    }
-fi
-if type prompt_command >/dev/null 2>&1 ; then
     PROMPT_COMMAND=prompt_command
 fi
-
-###
-### bash_completion
-###
-for f in $BREW_PREFIX/etc/bash_completion /etc/bash_completion ; do
-    test -f $f && source $f
-done
-unset f
-
-# and see "~/.bash_completion". It is read by builtin bash_completion.
-
-# bash_color
-http-get-source \
-    https://raw.githubusercontent.com/maxtsepkov/bash_colors/master/bash_colors.sh \
-    ~/.config/cache/http-get-source/bash_colors
-
-# git-completion
-http-get-source \
-    https://raw.githubusercontent.com/git/git/master/contrib/completion/git-completion.bash \
-    ~/.config/cache/http-get-source/git-completion.bash
-
-# for my xssh command completion same as ssh.
-shopt -u hostcomplete && complete -F _ssh xssh
 
 ###
 ### pager and editor
@@ -191,9 +99,31 @@ export PERLDOC_PAGER='less -FRX'
 export LV='-c -Ouj'
 
 # vim (if exist)
-if type vim >/dev/null 2>&1 ; then
-    EDITOR=vim
+if exists vim ; then
+    export EDITOR=vim
 fi
+
+###
+### Locale / Lang
+###
+export LANG="ja_JP.UTF-8"
+export LC_COLLATE="ja_JP.UTF-8"
+export LC_CTYPE="UTF-8"
+export LC_MESSAGES="ja_JP.UTF-8"
+export LC_MONETARY="ja_JP.UTF-8"
+export LC_NUMERIC="ja_JP.UTF-8"
+export LC_TIME="ja_JP.UTF-8"
+export LC_ALL=
+
+export TZ=JST-9
+
+export CVS_RSH=ssh
+export RSYNC_RSH=ssh
+
+###
+### Information
+###
+export icloud_drive=$HOME/Library/Mobile\ Documents/com~apple~CloudDocs
 
 ###
 ### some settings
@@ -203,16 +133,83 @@ fi
 # Ignore C-s for terminal stop.
 stty stop undef
 
-###
-### some config by env
-###
-
-export CVS_RSH=ssh
-export RSYNC_RSH=ssh
-
 set bell-style visible
 
 # avoid Ctrl-D logout.
 IGNOREEOF=3
+
+function import-clr {
+    http-get-source \
+        https://raw.githubusercontent.com/maxtsepkov/bash_colors/master/bash_colors.sh \
+        ~/.config/cache/http-get-source/bash_colors
+    echo "import clr_*"
+    echo "  clr_dump:"
+    clr_dump
+}
+
+
+
+###
+### chdrip on xtenv
+###
+if type drip 2>&1 >/dev/null ; then
+    xtenv-cache-eval "drip drip-init" "drip.init"
+fi
+
+###
+### plenv on xtenv
+###
+if [ -d $HOME/.plenv ] ; then
+    export PLENV_ROOT=$HOME/.plenv
+    export PATH=$PLENV_ROOT/bin:$PATH
+    #eval "$(plenv init -)"
+    xtenv-cache-eval "plenv init -" "plenv.init"
+fi
+
+###
+### rbenv on xtenv
+###
+if [ -d $HOME/.rbenv ] ; then
+    export RBENV_ROOT=$HOME/.rbenv
+    export PATH=$RBENV_ROOT/bin:$PATH
+    xtenv-cache-eval "rbenv init -" "rbenv.init"
+fi
+
+###
+### golang
+###
+# brew install go
+if type go >/dev/null 2>&1 ; then
+    #GO_VERSION=$(go version | sed -e 's/.*version go//' -e 's/ .*//')
+    # go version コマンド実行が結構コストかかるので暫定的に固定
+    GO_VERSION=1.8
+    if ! [[ $GO_VERSION =~ ^[0-9][0-9.]+$ ]] ; then
+        GO_VERSION=default
+    fi
+    if [ -d "$HOME/.go" ] ; then
+        export GOPATH=$HOME/.go/$GO_VERSION
+        export PATH=$GOPATH/bin:$PATH
+        if [ ! -d $GOPATH ] ; then
+            mkdir -p $GOPATH
+        fi
+    fi
+fi
+
+###
+### ssh-agent
+###
+# http://www.gcd.org/blog/2006/09/100/
+MY_SSH_AUTH_SOCK_PATH="/tmp/ssh-agent-$USER"
+if [ -S "$SSH_AUTH_SOCK" ]; then
+    case $SSH_AUTH_SOCK in
+    /tmp/*/agent.[0-9]*)
+        ln -snf "$SSH_AUTH_SOCK" $MY_SSH_AUTH_SOCK_PATH \
+                && export SSH_AUTH_SOCK=$MY_SSH_AUTH_SOCK_PATH
+    esac
+elif [ -S $MY_SSH_AUTH_SOCK_PATH ]; then
+    export SSH_AUTH_SOCK=$MY_SSH_AUTH_SOCK_PATH
+else
+    : #echo "no ssh-agent"
+fi
 
 unset UNAME
