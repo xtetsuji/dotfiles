@@ -1,0 +1,13 @@
+# https://gist.github.com/BlakeGardner/5587269
+set smooth
+
+set autoindent
+
+set backup
+
+set mouse
+
+# https://theembeddedlab.com/tutorials/syntax-coloring-nano-mac-os-x/
+include /usr/local/share/nano/*.nanorc
+
+# https://www.reddit.com/r/MacOS/comments/9dbaj3/version_of_nano_included_with_mojave/
