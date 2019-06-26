@@ -168,3 +168,70 @@ _pbedit_completion(){
     esac
 }
 complete -F _pbedit_completion pbedit
+
+# cd completion
+# original is in /usr/local/etc/bash_completion
+unset -f _cd
+_cd()
+{
+    local cur IFS=$'\n' i j k
+    _get_comp_words_by_ref -n : cur
+
+    # https://codeday.me/jp/qa/20190128/173873.html
+    if [[ $COMP_CWORD == 1 && $cur =~ ^: ]] ; then
+        COMPREPLY=( $( compgen -W "$(cd :subcommands)" -- "$cur" ) )
+        __ltrim_colon_completions "$cur"
+        return 0
+    fi
+
+    # try to allow variable completion
+    #if [[ "$cur" == ?(\\)\$* ]]; then
+    if [[ "$cur" =~ \\?\$.* ]] ; then
+        COMPREPLY=( $( compgen -v -P '$' -- "${cur#?(\\)$}" ) )
+        return 0
+    fi
+
+    _compopt_o_filenames
+
+    # Use standard dir completion if no CDPATH or parameter starts with /,
+    # ./ or ../
+    #if [[ -z "${CDPATH:-}" || "$cur" == ?(.)?(.)/* ]]; then
+    if [[ -z "${CDPATH:-}" || "$cur" =~ \.?\.?/.* ]] ; then
+        _filedir -d
+        return 0
+    fi
+
+    local -r mark_dirs=$(_rl_enabled mark-directories && echo y)
+    local -r mark_symdirs=$(_rl_enabled mark-symlinked-directories && echo y)
+
+    # we have a CDPATH, so loop on its contents
+    for i in ${CDPATH//:/$'\n'}; do
+        # create an array of matched subdirs
+        k="${#COMPREPLY[@]}"
+        for j in $( compgen -d $i/$cur ); do
+            if [[ ( $mark_symdirs && -h $j || $mark_dirs && ! -h $j ) && ! -d ${j#$i/} ]]; then
+                j="${j}/"
+            fi
+            COMPREPLY[k++]=${j#$i/}
+        done
+    done
+
+    _filedir -d
+
+    if [[ ${#COMPREPLY[@]} -eq 1 ]]; then
+        i=${COMPREPLY[0]}
+        if [[ "$i" == "$cur" && $i != "*/" ]]; then
+            COMPREPLY[0]="${i}/"
+        fi
+    fi
+
+    return 0
+}
+
+# if only login shell `exec $SHELL -l` execution, above script causes syntax error.
+#   bash: /Users/tetsuji.ogata/.bash_completion: line 188: syntax error in conditional expression: unexpected token `('
+#   bash: /Users/tetsuji.ogata/.bash_completion: line 188: syntax error near `?(\'
+#   bash: /Users/tetsuji.ogata/.bash_completion: line 188: `    if [[ "$cur" == ?(\\)\$* ]]; then'
+#
+# rewrite original `?(STRING)` shell notation to regular expression.
+# this notation requires `shopt -s extglob`
