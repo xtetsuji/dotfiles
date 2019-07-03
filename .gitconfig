@@ -15,6 +15,7 @@
 	### branch
 	# see: https://qiita.com/upinetree/items/0b74b08b64442f0a89b9
 	parent-branch = !git show-branch | grep -F '*' | grep -v "$(git rev-parse --abbrev-ref HEAD)" | head -1 | awk -F'[]~^[]' '{print $2}'
+	active-branch = branch --list --no-merged
 
 	### funny view
         graph  = log --graph --date-order --all --pretty=format:'%h %Cred%d %Cgreen%ad %Cblue%cn %Creset%s' --date=short
