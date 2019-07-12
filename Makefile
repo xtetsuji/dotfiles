@@ -38,26 +38,6 @@ status:
 		stat -f '%T %N' $$target ; \
 	done
 
-deploy:
-	@echo "Start deploy dotfiles current directory."
-	@echo "If this is \"dotdir\", curretly it is ignored and copy your hand."
-	for f in .??* ; do \
-		test "$(IGNORE_EXIST_SYMLINK)" = 1 -a -L "$${f}" && continue ; \
-		test "$${f}" = .git -o "$${f}" = .git/ && continue ; \
-		test "$${f}" = .gitignore            && continue ; \
-		test "$${f}" = .DS_Store             && continue ; \
-		test "$${f}" = .xsession -a "$(UNAME)" = Darwin && continue ; \
-		test -d "$${f}" && continue ; \
-		if [ -f "~/$${f}" ] && [ ! -L "~/$${f}" ] ; then \
-			echo ">>> backup as $${f} to $${f}.$(BACKUP_EXT)" ; \
-			cp -v "~/$${f}" "~/$${f}.$(BACKUP_EXT)" ; \
-		fi ; \
-		ln -v -i -s "$(PWD)/$${f}" ~/ ; \
-	done ; true
-
-deploy-append:
-	$(MAKE) deploy IGNORE_EXIST_SYMLINK=1
-
 delete-symlink:
 	cd ~ ; for f in .??* ; do \
 		if [ -L "$${f}" ] ; then \
