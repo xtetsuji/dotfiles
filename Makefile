@@ -20,7 +20,7 @@ $(DOTFILES):
 	f=$$(basename $@) ; \
 		ln -s "$(CURDIR)/$$f" "$@"
 
-all-symlinks:
+install-symlink:
 	for target in $(DOTFILES) ; do \
 		$(MAKE) $$target || exit 1 ; \
 	done
@@ -30,7 +30,7 @@ status:
 		stat -f '%T %N' $$target ; \
 	done
 
-delete-symlink:
+uninstall-symlink:
 	cd ~ ; for f in .??* ; do \
 		if [ -L "$${f}" ] ; then \
 			ls -l $${f} ; \
