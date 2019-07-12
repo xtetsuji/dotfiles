@@ -8,6 +8,8 @@ RSYNC_OPTS	= -avz -e ssh --exclude=Makefile --exclude=README.md --exclude=.git -
 REMOTE_USER	= $(USER)
 REMOTE_HOST	= 
 
+DOTFILES	= $(shell git ls-files '.??*' | grep -v '/' | sed -e 's|^|~/|')
+
 usage:
 	@echo "Usage:"
 	@echo "  make list             #=> ls -a"
@@ -20,6 +22,16 @@ usage:
 
 list:
 	ls -a
+
+$(DOTFILES):
+	@f=$$(basename $@) ; test -f "$$f" -a -f "$(CURDIR)/$$f"
+	f=$$(basename $@) ; \
+		ln -s "$(CURDIR)/$$f" "$@"
+
+all-symlinks:
+	for target in $(DOTFILES) ; do \
+		$(MAKE) $$target || exit 1 ; \
+	done
 
 deploy:
 	@echo "Start deploy dotfiles current directory."
