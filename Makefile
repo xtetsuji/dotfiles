@@ -1,13 +1,5 @@
 # -*- makefile -*-
 
-BACKUP_EXT	= orig
-UNAME		= $(shell uname)
-
-RSYNC_OPTS	= -avz -e ssh --exclude=Makefile --exclude=README.md --exclude=.git --exclude=.gitignore --exclude=.DS_Store
-
-REMOTE_USER	= $(USER)
-REMOTE_HOST	= 
-
 DOTFILES	= $(shell git ls-files '.??*' | grep -v '/' | sed -e 's|^|~/|')
 
 usage:
