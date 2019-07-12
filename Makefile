@@ -44,14 +44,3 @@ delete-symlink:
 			ls -l $${f} ; \
 			rm -i -v $${f} ; \
 		fi ; done
-
-.dotfiles:
-	date +"%Y/%m/%d %H:%M:%S" > $@
-	echo $(REMOTE_HOST) >> $@
-
-update:
-	git fetch
-	git pull origin master
-
-clean:
-	rm -f .dotfiles
