@@ -45,18 +45,6 @@ delete-symlink:
 			rm -i -v $${f} ; \
 		fi ; done
 
-upload-files: .dotfiles
-	@echo "Start upload files to remote server."
-	@echo "If this is \"dotdir\", currently it is ignored and copy your hand.";
-	if [ -z "$(REMOTE_HOST)" ] ; then \
-		echo "REMOTE_HOST is required" ; \
-		exit 1 ; \
-	fi
-	rsync $(RSYNC_OPTS) ./ $(REMOTE_USER)@$(REMOTE_HOST):
-
-dry-upload-files:
-	$(MAKE) upload-files RSYNC_OPTS="--dry-run $(RSYNC_OPTS)"
-
 .dotfiles:
 	date +"%Y/%m/%d %H:%M:%S" > $@
 	echo $(REMOTE_HOST) >> $@
