@@ -33,6 +33,11 @@ all-symlinks:
 		$(MAKE) $$target || exit 1 ; \
 	done
 
+status:
+	for target in $(DOTFILES) ; do \
+		stat -f '%T %N' $$target ; \
+	done
+
 deploy:
 	@echo "Start deploy dotfiles current directory."
 	@echo "If this is \"dotdir\", curretly it is ignored and copy your hand."
