@@ -12,8 +12,10 @@ usage:
 	@echo "  make dry-upload-files #=> dry-run and ditto"
 	@echo "  make update           #=> git pull origin master"
 
-list:
-	ls -a
+status:
+	for target in $(DOTFILES) ; do \
+		stat -f '%T %N' $$target ; \
+	done
 
 $(DOTFILES):
 	@f=$$(basename $@) ; test -f "$$f" -a -f "$(CURDIR)/$$f"
@@ -23,11 +25,6 @@ $(DOTFILES):
 install-symlink:
 	for target in $(DOTFILES) ; do \
 		$(MAKE) $$target || exit 1 ; \
-	done
-
-status:
-	for target in $(DOTFILES) ; do \
-		stat -f '%T %N' $$target ; \
 	done
 
 uninstall-symlink:
