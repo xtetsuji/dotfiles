@@ -14,7 +14,11 @@ usage:
 
 status:
 	for target in $(DOTFILES) ; do \
-		stat -f '%T %N' $$target ; \
+		if [ -z "$$(stat -f '%T' $$target )" ] ; then \
+			echo "- $$target" ; \
+		else \
+			stat -f '%T %N' $$target ; \
+		fi ; \
 	done
 
 $(DOTFILES):
