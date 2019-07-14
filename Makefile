@@ -4,13 +4,10 @@ DOTFILES	= $(shell git ls-files '.??*' | grep -v '/' | sed -e 's|^|~/|')
 
 usage:
 	@echo "Usage:"
-	@echo "  make list             #=> ls -a"
-	@echo "  make deploy           #=> create symlink"
-	@echo "  make deploy-append    #=> create symlink if not exist"
-	@echo "  make delete-symlink   #=> delete symlink"
-	@echo "  make upload-files     #=> rsync to REMOTE_USER@REMOTE_HOST"
-	@echo "  make dry-upload-files #=> dry-run and ditto"
-	@echo "  make update           #=> git pull origin master"
+	@echo "  make status"
+	@echo "  make ~/.SOMEFILE"
+	@echo "  make install-symlink"
+	@echo "  make uninstall-symlink"
 
 status:
 	for target in $(DOTFILES) ; do \
