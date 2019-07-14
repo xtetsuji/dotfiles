@@ -28,8 +28,9 @@ install-symlink:
 	done
 
 uninstall-symlink:
-	cd ~ ; for f in .??* ; do \
-		if [ -L "$${f}" ] ; then \
-			ls -l $${f} ; \
-			rm -i -v $${f} ; \
-		fi ; done
+	for target in $(DOTFILES) ; do \
+		if [ -L $$target ] ; then \
+			ls -l $$target ; \
+			rm -v $$target ; \
+		fi ; \
+	done
