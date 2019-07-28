@@ -20,11 +20,10 @@
 	sgraph = log --oneline --graph
 
 	### diff methods
-	difff = diff --name-only
-	# staged diff
+	diffn = diff --name-only
 	diffs = diff --cached
-	dp = diff --no-prefix
-	dsp = diff --cached --no-prefix
+	diffsn = diff --cached --name-only
+	diffns = diff --name-only --cached
 
         ### reset methods
 	cancel      = reset --soft HEAD^
