@@ -2,9 +2,6 @@
 	name = OGATA Tetsuji
 	email = tetsuji.ogata@gmail.com
 [alias]
-        mpush  = push origin master
-	update = !git fetch && git pull origin master
-
 	### current view shortcut
 	s  = status
 	st = status
