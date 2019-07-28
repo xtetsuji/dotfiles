@@ -15,8 +15,8 @@
 	active-branch = branch --list --no-merged
 
 	### funny view
-        graph  = log --graph --date-order --all --pretty=format:'%h %Cred%d %Cgreen%ad %Cblue%cn %Creset%s' --date=short
-        today  = log --oneline --since='12 hour ago'
+	graph  = log --graph --date-order --all --pretty=format:'%h %Cred%d %Cgreen%ad %Cblue%cn %Creset%s' --date=short
+	today  = log --oneline --since='12 hour ago'
 	sgraph = log --oneline --graph
 
 	### diff methods
@@ -25,15 +25,15 @@
 	diffsn = diff --cached --name-only
 	diffns = diff --name-only --cached
 
-        ### reset methods
+	### reset methods
 	cancel      = reset --soft HEAD^
-        reset-merge = reset --merge
+	reset-merge = reset --merge
 	unstage     = reset HEAD
 
 	# see: http://ikeyasu.hatenablog.com/entries/2011/05/25
 	# http://qiita.com/peccul/items/90dd469e2f72babbc106
 
-        ### some log methods
+	### some log methods
 	logg = log --graph --all --decorate
 	log1 = log --pretty='format:%C(yellow)%h%Creset %C(magenta)%cd%Creset %s %Cgreen(%an)%Creset %Cred%d%Creset%C(black bold)%ar%Creset' --date=iso
 	# lg = log --graph --pretty=format:'%Cred%h%Creset - %s%C(yellow)%d%Creset %Cgreen(%cr:%cd) %C(bold blue)<%an>%Creset' --abbrev-commit --date=relative
@@ -44,7 +44,7 @@
 	log3 = log --graph --date-order -C -M --pretty=format:"<%h> %ad [%an] %Cgreen%d%Creset %s" --all --date=short
 	log4 = log --graph --pretty='format:%C(yellow)%h%Cblue%d%Creset %s %C(black bold)%an, %ar%Creset'
 
-        whole-grep = !git-whole-grep.sh
+	whole-grep = !git-whole-grep.sh
 # [push]
 #        default = simple
 
