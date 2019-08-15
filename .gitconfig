@@ -6,6 +6,7 @@
 	s  = status
 	st = status
 	ci = commit
+	cm = commit -m 
 	co = checkout
 	cop = !git checkout $(git branch --all | perl -pe 's/^..//, s/ .*//, s!^remotes/origin/!!' | sort | uniq | peco)
 
