@@ -1,6 +1,7 @@
 [user]
 	name = OGATA Tetsuji
 	email = tetsuji.ogata@gmail.com
+
 [alias]
 	### current view shortcut
 	s  = status
@@ -46,6 +47,7 @@
 	log4 = log --graph --pretty='format:%C(yellow)%h%Cblue%d%Creset %s %C(black bold)%an, %ar%Creset'
 
 	whole-grep = !git-whole-grep.sh
+
 # [push]
 #        default = simple
 
@@ -57,5 +59,6 @@
 
 [github]
 	user = xtetsuji
+
 [ghi]
 	token = !security find-internet-password -a xtetsuji -s github.com -l 'ghi token' -w
