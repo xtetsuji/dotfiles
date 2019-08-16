@@ -8,8 +8,10 @@
 	st = status
 	ci = commit
 	cm = commit -m 
+	cam = commit -am 
 	co = checkout
 	cop = !git checkout $(git branch --all | perl -pe 's/^..//, s/ .*//, s!^remotes/origin/!!' | sort | uniq | peco)
+	a  = add
 
 	### branch
 	# see: https://qiita.com/upinetree/items/0b74b08b64442f0a89b9
@@ -20,6 +22,7 @@
 	graph  = log --graph --date-order --all --pretty=format:'%h %Cred%d %Cgreen%ad %Cblue%cn %Creset%s' --date=short
 	today  = log --oneline --since='12 hour ago'
 	sgraph = log --oneline --graph
+	g = graph
 
 	### diff methods
 	diffn = diff --name-only
