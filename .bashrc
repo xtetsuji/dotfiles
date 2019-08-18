@@ -92,6 +92,8 @@ fi
 # git
 export GIT_PAGER='less -FRX'
 
+bind '"\C-g": "git "'
+
 # perldoc
 export PERLDOC_PAGER='less -FRX'
 
