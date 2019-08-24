@@ -7,6 +7,7 @@
 	s  = status
 	st = status
 	ci = commit
+	ca = commit -a
 	cm = commit -m 
 	cam = commit -am 
 	co = checkout
