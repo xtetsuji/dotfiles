@@ -30,6 +30,9 @@
 	diffs = diff --cached
 	diffsn = diff --cached --name-only
 	diffns = diff --name-only --cached
+	df = diff
+	dfs = diff --cached
+	dfn = diff --name-only
 
 	### reset methods
 	cancel      = reset --soft HEAD^
