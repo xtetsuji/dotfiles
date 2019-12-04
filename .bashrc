@@ -85,7 +85,7 @@ export LESS_TERMCAP_se=$'\E[0m'          # Ends standout-mode.
 export LESS_TERMCAP_so=$'\E[00;47;30m'   # Begins standout-mode.
 export LESS_TERMCAP_ue=$'\E[0m'          # Ends underline.
 export LESS_TERMCAP_us=$'\E[01;32m'      # Begins underline.
-if type lesspipe.sh >/dev/null 2>&1 ; then
+if exists lesspipe.sh ; then
   export LESSOPEN='| /usr/bin/env lesspipe.sh %s 2>&-'
 fi
 
@@ -154,7 +154,7 @@ function import-clr {
 ###
 ### chdrip on xtenv
 ###
-if type drip >/dev/null 2>&1 ; then
+if exists drip ; then
     xtenv-cache-eval "drip drip-init" "drip.init"
 fi
 
@@ -181,7 +181,7 @@ fi
 ### golang
 ###
 # brew install go
-if type go >/dev/null 2>&1 ; then
+if exists go ; then
     #GO_VERSION=$(go version | sed -e 's/.*version go//' -e 's/ .*//')
     # go version コマンド実行が結構コストかかるので暫定的に固定
     GO_VERSION=1.8
