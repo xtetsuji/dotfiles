@@ -33,15 +33,23 @@ case "$TERM" in
     screen) color_prompt=yes;;
 esac
 
+git_prompt_brew="/usr/local/etc/bash_completion.d/git-prompt.sh"
+git_prompt_macos="/Library/Developer/CommandLineTools/usr/share/git-core/git-prompt.sh"
 if [ "$color_prompt" = yes ] ; then
-    # git プロンプト
-    http-get-source \
-        https://raw.githubusercontent.com/git/git/master/contrib/completion/git-prompt.sh \
-        ~/.config/cache/http-get-source/git-prompt.sh
-    PS1='\[\033[01;33m\]\u@\h\[\033[00m\]:\[\033[01;34m\]\w\[\033[00m\]$(__git_ps1 " [\[\033[32m\]%s\[\033[0m\]]")\$ '
+    for f in "$git_prompt_brew" "$git_prompt_macos" ; do
+        source "$f"
+        break
+    done
+
+    if exists __git_ps1 ; then
+        PS1='\[\033[01;33m\]\u@\h\[\033[00m\]:\[\033[01;34m\]\w\[\033[00m\]$(__git_ps1 " [\[\033[32m\]%s\[\033[0m\]]")\$ '
+    else
+        PS1='\[\033[01;33m\]\u@\h\[\033[00m\]:\[\033[01;34m\]\w\[\033[00m\]\$ '
+    fi
     COLOR_PROMPT_PS1="$PS1"
 fi
-unset color_prompt
+
+unset f color_prompt git_prompt_brew git_prompt_macos
 
 export MYSQL_PS1='\u@\h> '
 
