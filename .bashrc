@@ -154,7 +154,7 @@ function import-clr {
 ###
 ### chdrip on xtenv
 ###
-if type drip 2>&1 >/dev/null ; then
+if type drip >/dev/null 2>&1 ; then
     xtenv-cache-eval "drip drip-init" "drip.init"
 fi
 
