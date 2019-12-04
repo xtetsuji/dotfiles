@@ -26,8 +26,19 @@ function xtenv-cache-eval {
 function http-get-source {
     local url=$1
     local file=$2
+    local dir
     if [ -n "$HTTP_GET_SOURCE_FORCE" ] || [ ! -f $file ] ; then
-        curl --silent $url > $file
+        dir="$(dirname "$file")"
+        if [ ! -d "$dir" ] ; then
+            mkdir -p "$dir" || {
+                echo "$FUNCNAME: fail mkdir \"$dir\"" >&2
+                return 1
+            }
+        fi
+        curl --silent $url > $file || {
+            echo "$FUNCNAME: fail fetch $url" >&2
+            return 1
+        }
     fi
     if [ -s $file ] ; then
         source $file
