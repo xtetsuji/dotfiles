@@ -78,11 +78,11 @@ case "$UNAME" in
     Linux)
         alias ls='ls --color=auto'
         alias crontab='crontab -i'
-        source ~/.bash_aliases_kde
+        source_if_readable ~/.bash_aliases_kde
         ;;
     CYGWIN*)
         alias ls='ls --color -F --show-control-chars'
-        source ~/.bash_aliases_cygwin
+        source_if_readable ~/.bash_aliases_cygwin
         ;;
 esac
 
