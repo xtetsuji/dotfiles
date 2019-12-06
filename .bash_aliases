@@ -26,8 +26,19 @@ function xtenv-cache-eval {
 function http-get-source {
     local url=$1
     local file=$2
+    local dir
     if [ -n "$HTTP_GET_SOURCE_FORCE" ] || [ ! -f $file ] ; then
-        curl --silent $url > $file
+        dir="$(dirname "$file")"
+        if [ ! -d "$dir" ] ; then
+            mkdir -p "$dir" || {
+                echo "$FUNCNAME: fail mkdir \"$dir\"" >&2
+                return 1
+            }
+        fi
+        curl --silent $url > $file || {
+            echo "$FUNCNAME: fail fetch $url" >&2
+            return 1
+        }
     fi
     if [ -s $file ] ; then
         source $file
@@ -67,11 +78,11 @@ case "$UNAME" in
     Linux)
         alias ls='ls --color=auto'
         alias crontab='crontab -i'
-        source ~/.bash_aliases_kde
+        source_if_readable ~/.bash_aliases_kde
         ;;
     CYGWIN*)
         alias ls='ls --color -F --show-control-chars'
-        source ~/.bash_aliases_cygwin
+        source_if_readable ~/.bash_aliases_cygwin
         ;;
 esac
 

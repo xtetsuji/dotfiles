@@ -33,15 +33,25 @@ case "$TERM" in
     screen) color_prompt=yes;;
 esac
 
+git_prompt_brew="/usr/local/etc/bash_completion.d/git-prompt.sh"
+git_prompt_macos="/Library/Developer/CommandLineTools/usr/share/git-core/git-prompt.sh"
 if [ "$color_prompt" = yes ] ; then
-    # git プロンプト
-    http-get-source \
-        https://raw.githubusercontent.com/git/git/master/contrib/completion/git-prompt.sh \
-        ~/.config/cache/http-get-source/git-prompt.sh
-    PS1='\[\033[01;33m\]\u@\h\[\033[00m\]:\[\033[01;34m\]\w\[\033[00m\]$(__git_ps1 " [\[\033[32m\]%s\[\033[0m\]]")\$ '
+    for f in "$git_prompt_brew" "$git_prompt_macos" ; do
+        if [ -f "$f" ] ; then
+            source "$f"
+            break
+        fi
+    done
+
+    if exists __git_ps1 ; then
+        PS1='\[\033[01;33m\]\u@\h\[\033[00m\]:\[\033[01;34m\]\w\[\033[00m\]$(__git_ps1 " [\[\033[32m\]%s\[\033[0m\]]")\$ '
+    else
+        PS1='\[\033[01;33m\]\u@\h\[\033[00m\]:\[\033[01;34m\]\w\[\033[00m\]\$ '
+    fi
     COLOR_PROMPT_PS1="$PS1"
 fi
-unset color_prompt
+
+unset f color_prompt git_prompt_brew git_prompt_macos
 
 export MYSQL_PS1='\u@\h> '
 
@@ -85,7 +95,7 @@ export LESS_TERMCAP_se=$'\E[0m'          # Ends standout-mode.
 export LESS_TERMCAP_so=$'\E[00;47;30m'   # Begins standout-mode.
 export LESS_TERMCAP_ue=$'\E[0m'          # Ends underline.
 export LESS_TERMCAP_us=$'\E[01;32m'      # Begins underline.
-if type lesspipe.sh >/dev/null 2>&1 ; then
+if exists lesspipe.sh ; then
   export LESSOPEN='| /usr/bin/env lesspipe.sh %s 2>&-'
 fi
 
@@ -154,7 +164,7 @@ function import-clr {
 ###
 ### chdrip on xtenv
 ###
-if type drip 2>&1 >/dev/null ; then
+if exists drip ; then
     xtenv-cache-eval "drip drip-init" "drip.init"
 fi
 
@@ -181,7 +191,7 @@ fi
 ### golang
 ###
 # brew install go
-if type go >/dev/null 2>&1 ; then
+if exists go ; then
     #GO_VERSION=$(go version | sed -e 's/.*version go//' -e 's/ .*//')
     # go version コマンド実行が結構コストかかるので暫定的に固定
     GO_VERSION=1.8
