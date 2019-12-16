@@ -3,7 +3,7 @@
 	email = tetsuji.ogata@gmail.com
 
 [alias]
-	### current view shortcut
+	### shorthands
 	s  = status
 	st = status
 	ci = commit
@@ -13,8 +13,9 @@
 	co = checkout
 	cop = !git checkout $(git branch --all | perl -pe 's/^..//, s/ .*//, s!^remotes/origin/!!' | sort | uniq | peco)
 	a  = add
+	ba = branch -a
 
-	### branch
+	### branch management
 	# see: https://qiita.com/upinetree/items/0b74b08b64442f0a89b9
 	parent-branch = !git show-branch | grep -F '*' | grep -v "$(git rev-parse --abbrev-ref HEAD)" | head -1 | awk -F'[]~^[]' '{print $2}'
 	active-branch = branch --list --no-merged
