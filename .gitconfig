@@ -14,6 +14,7 @@
 	cop = !git checkout $(git branch --all | perl -pe 's/^..//, s/ .*//, s!^remotes/origin/!!' | sort | uniq | peco)
 	a  = add
 	ba = branch -a
+	ra = remote -v
 
 	### branch management
 	# see: https://qiita.com/upinetree/items/0b74b08b64442f0a89b9
