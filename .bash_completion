@@ -3,7 +3,7 @@
 # 個別のスクリプトファイルとして投げ込んでおくという手もある
 
 OUTSIDE_COMPLETION_FILES=(
-    "${BREW_PREFIX:-/usr/local}/Cellar/plenv/2.3.0/completions/plenv.bash" # plenv
+    "${BREW_PREFIX:-/usr/local}/Cellar/plenv/2.3.1/completions/plenv.bash" # plenv
     "${BREW_PREFIX:-/usr/local}/etc/bash_completion.d/git-completion.bash" # git
 )
 for f in "${OUTSIDE_COMPLETION_FILES[@]}" ; do
