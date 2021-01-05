@@ -1,4 +1,5 @@
 # -*- mode: shell-script ; coding: utf-8 ; -*-
+: "start .bash_aliases"
 
 declare ALIASES=$HOME/.bash_aliases
 declare UNAME=$(uname)
@@ -349,3 +350,5 @@ unset ALIASES
 unset UNAME
 
 ALIASES_DONE=1
+
+: "end .bash_aliases"
