@@ -1,0 +1,20 @@
+{
+    "window.zoomLevel": 0,
+    "explorer.confirmDragAndDrop": false,
+    "[ruby]": {
+        "editor.insertSpaces": true,
+        "editor.tabSize": 2
+    },
+    "workbench.statusBar.feedback.visible": false,
+    "editor.minimap.enabled": false,
+    "breadcrumbs.enabled": false,
+    "editor.renderWhitespace": "boundary",
+    "editor.wordWrap": "bounded",
+    "editor.rulers": [
+        80,
+        55
+    ],
+    "editor.acceptSuggestionOnEnter": "smart",
+    "files.insertFinalNewline": true,
+    "editor.columnSelection": false,
+}
