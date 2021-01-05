@@ -9,6 +9,8 @@
 # ~/.bash_profile only offers environment varialble.
 # and if possible, do not use external command to reduce cost.
 
+: "start .bash_profile"
+
 umask 022
 
 ### read .bashrc and .bash_aliases (in .bashrc)
@@ -17,3 +19,5 @@ if [ -n "$BASH_VERSION" ] && [ -f ~/.bashrc ] ; then
 fi
 
 BASH_PROFILE_DONE=1
+
+: "end .bash_profile"
