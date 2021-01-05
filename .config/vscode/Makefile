@@ -6,6 +6,16 @@ EXTENSION_FILE		= extensions
 VSCODE_SETTING_DIR	= "$(HOME)/Library/Application Support/Code/User"
 NOW_DATE			= $(shell date+%Y%m%d_%H%M%S)
 
+usage:
+	@echo "Usage:"
+	@echo "  make create-symlink"
+	@echo "  make delete-symlink"
+	@echo "  make recreate-symlink"
+	@echo "  make import-extensions"
+	@echo "  make export-extensions"
+	@echo ""
+	@echo "  you can \"create-symlink\" in both repositry working and real ~/.config/vscode"
+
 export-extensions:
 	code --list-extensions > extensions
 
