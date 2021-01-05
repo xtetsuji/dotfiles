@@ -11,13 +11,6 @@ function exists { type $1 >/dev/null 2>&1 ; }
 function source_if_readable { test -r "$1" && source "$1" ; }
 function add_path_var { test -d $1 && PATH=$PATH:$1 ; }
 
-source ~/.bash_aliases
-source_if_readable ~/.bash_secret
-if is_interactive_shell ; then
-    source_if_readable ~/.bash_completion
-    source_if_readable $BREW_PREFIX/etc/bash_completion
-    source_if_readable /etc/bash_completion
-fi
 ###
 ### Path
 ###
@@ -25,6 +18,17 @@ export PATH
 add_path_var ~/bin
 add_path_var ~/Dropbox/bin
 add_path_var /usr/local/bin
+
+###
+### Config
+###
+source ~/.bash_aliases
+source_if_readable ~/.bash_secret
+if is_interactive_shell ; then
+    source_if_readable ~/.bash_completion
+    source_if_readable $BREW_PREFIX/etc/bash_completion
+    source_if_readable /etc/bash_completion
+fi
 
 ###
 ### Prompt
