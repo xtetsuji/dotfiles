@@ -349,7 +349,7 @@ function peco-history() {
     history -d $((HISTCMD-1))
   fi
 }
-bind '"\C-x\C-r":"peco-history\n"'
+is_current_bash && bind '"\C-x\C-r":"peco-history\n"'
 
 unset ALIASES
 unset UNAME
