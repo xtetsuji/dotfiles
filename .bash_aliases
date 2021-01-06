@@ -1,6 +1,9 @@
 # -*- mode: shell-script ; coding: utf-8 ; -*-
 : "start .bash_aliases"
 
+function exists { type $1 >/dev/null 2>&1 ; }
+function source_if_readable { test -r "$1" && source "$1" ; }
+
 declare ALIASES=$HOME/.bash_aliases
 declare UNAME=$(uname)
 
