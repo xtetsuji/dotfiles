@@ -3,6 +3,8 @@
 
 function exists { type $1 >/dev/null 2>&1 ; }
 function source_if_readable { test -r "$1" && source "$1" ; }
+function is_current_bash { test -n "$BASH_VERSION" ; }
+function is_current_zsh  { test -n "$ZSH_VERSION" ; }
 
 declare ALIASES=$HOME/.bash_aliases
 declare UNAME=$(uname)
