@@ -7,8 +7,6 @@ BREW_PREFIX="/usr/local"
 
 function is_login_shell { shopt -q login_shell ; }
 function is_interactive_shell { [[ $- =~ i ]] ; }
-function exists { type $1 >/dev/null 2>&1 ; }
-function source_if_readable { test -r "$1" && source "$1" ; }
 function add_path_var { test -d $1 && PATH=$PATH:$1 ; }
 
 ###

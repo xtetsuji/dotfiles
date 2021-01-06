@@ -1,5 +1,11 @@
 # -*- mode: shell-script ; coding: utf-8 ; -*-
+# .bash_aliases - bash and zsh aliases
 : "start .bash_aliases"
+
+function exists { type $1 >/dev/null 2>&1 ; }
+function source_if_readable { test -r "$1" && source "$1" ; }
+function is_current_bash { test -n "$BASH_VERSION" ; }
+function is_current_zsh  { test -n "$ZSH_VERSION" ; }
 
 declare ALIASES=$HOME/.bash_aliases
 declare UNAME=$(uname)
@@ -120,6 +126,7 @@ alias uri_escape='perl -MURI::Escape=uri_escape -E "say uri_escape(join q/ /, @A
 
 # previous cd at 2005/03/22 (original idea)
 # enahnced cd at 2019/03/31 (following)
+is_current_bash && \
 function cd {
     #set -x
     local arg="$1" subcommand result rc
@@ -344,7 +351,7 @@ function peco-history() {
     history -d $((HISTCMD-1))
   fi
 }
-bind '"\C-x\C-r":"peco-history\n"'
+is_current_bash && bind '"\C-x\C-r":"peco-history\n"'
 
 unset ALIASES
 unset UNAME
