@@ -126,6 +126,7 @@ alias uri_escape='perl -MURI::Escape=uri_escape -E "say uri_escape(join q/ /, @A
 
 # previous cd at 2005/03/22 (original idea)
 # enahnced cd at 2019/03/31 (following)
+is_current_bash && \
 function cd {
     #set -x
     local arg="$1" subcommand result rc
