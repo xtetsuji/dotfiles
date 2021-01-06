@@ -1,4 +1,5 @@
 # -*- mode: shell-script ; coding: utf-8 ; -*-
+# .bash_aliases - bash and zsh aliases
 : "start .bash_aliases"
 
 function exists { type $1 >/dev/null 2>&1 ; }
