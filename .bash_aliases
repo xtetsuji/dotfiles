@@ -6,6 +6,12 @@ function exists { type $1 >/dev/null 2>&1 ; }
 function source_if_readable { test -r "$1" && source "$1" ; }
 function is_current_bash { test -n "$BASH_VERSION" ; }
 function is_current_zsh  { test -n "$ZSH_VERSION" ; }
+function is_interactive_shell { [[ $- =~ i ]] ; }
+if is_current_bash ; then
+    function is_login_shell { shopt -q login_shell ; }
+elif is_current_zsh ; then
+    function is_login_shell { [[ -o login ]] ; }
+fi
 
 declare ALIASES=$HOME/.bash_aliases
 declare UNAME=$(uname)

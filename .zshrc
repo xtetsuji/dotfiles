@@ -13,8 +13,6 @@ BREW_PREFIX="/usr/local"
 bindkey -e
 
 function add_path_var { test -d $1 && PATH=$PATH:$1 ; }
-function is_login_shell { shopt -q login_shell ; }
-function is_interactive_shell { [[ $- =~ i ]] ; }
 
 ###
 ### Path
