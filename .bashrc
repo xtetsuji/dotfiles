@@ -82,6 +82,13 @@ if is_interactive_shell ; then
 fi
 
 ###
+### keybind
+###
+
+bind '"\C-g": "git "'
+
+
+###
 ### pager and editor
 ###
 export PAGER=less
@@ -102,8 +109,6 @@ fi
 
 # git
 export GIT_PAGER='less -FRX'
-
-bind '"\C-g": "git "'
 
 # perldoc
 export PERLDOC_PAGER='less -FRX'

@@ -59,4 +59,10 @@ export MYSQL_PS1='\u@\h> '
 
 # TODO: history
 
+###
+### keybind
+###
+
+bindkey -s '^g' 'git '
+
 : "start .zshrc"
