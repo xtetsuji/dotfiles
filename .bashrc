@@ -87,8 +87,6 @@ fi
 
 bind '"\C-g": "git "'
 
-unset UNAME
-
 ###
 ### common env
 ###
