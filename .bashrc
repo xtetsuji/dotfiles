@@ -20,11 +20,6 @@ add_path_var /usr/local/bin
 ###
 source ~/.bash_aliases
 source_if_readable ~/.bash_secret
-if is_interactive_shell ; then
-    source_if_readable ~/.bash_completion
-    source_if_readable $BREW_PREFIX/etc/bash_completion
-    source_if_readable /etc/bash_completion
-fi
 
 ###
 ### Prompt
@@ -55,6 +50,15 @@ fi
 unset f color_prompt git_prompt_brew git_prompt_macos
 
 export MYSQL_PS1='\u@\h> '
+
+###
+### completion
+###
+if is_interactive_shell ; then
+    source_if_readable ~/.bash_completion
+    source_if_readable $BREW_PREFIX/etc/bash_completion
+    source_if_readable /etc/bash_completion
+fi
 
 ###
 ### history and PROMPT_COMMAND
