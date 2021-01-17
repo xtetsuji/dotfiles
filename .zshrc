@@ -5,10 +5,6 @@ UNAME="$(uname)"
 #BREW_PREFIX="$(brew --prefix)"
 BREW_PREFIX="/usr/local"
 
-# autoload -U compinit promptinit
-# compinit
-# promptinit
-
 # Emacs like keybind
 bindkey -e
 
@@ -58,6 +54,12 @@ fi
 export RPROMPT='%D %T'
 
 export MYSQL_PS1='\u@\h> '
+
+###
+### completion
+###
+autoload -U compinit
+compinit
 
 ###
 ### hisotry and PROMPT_COMMAND
