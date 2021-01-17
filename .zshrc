@@ -66,4 +66,9 @@ export MYSQL_PS1='\u@\h> '
 
 bindkey -s '^g' 'git '
 
+###
+### common env
+###
+source ~/.common_env
+
 : "start .zshrc"
