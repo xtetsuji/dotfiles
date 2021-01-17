@@ -25,6 +25,12 @@ add_path_var /usr/local/bin
 # /usr/share/zsh/5.8 is macOS 11 (Big Sur) default zsh library path
 fpath=(/usr/share/zsh/5.8/functions/ $fpath)
 
+# before `autoload -U XXX`,
+# you may need to change load path directory permission: 775 -> 755
+#   chmod 755 /usr/local/share/zsh
+#   chmod 755 /usr/local/share/zsh/site-functions
+# see: https://qiita.com/ayihis@github/items/88f627b2566d6341a741
+
 ###
 ### Config
 ###
