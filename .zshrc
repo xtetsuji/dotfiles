@@ -38,6 +38,7 @@ source_if_readable ~/.bash_secret
 ### Prompt
 ###
 export PROMPT='[z]%B%F{yellow}%n@%m%f:%F{blue}%0~%f%b%# '
+export RPROMPT='%D %T'
 #PROMPT='%F{bold blue}%t%f %F{yellow}%n@%m%f %F{green}%~%f$ '
 
 git_prompt_brew="/usr/local/etc/bash_completion.d/git-prompt.sh"
@@ -48,7 +49,7 @@ source "$git_prompt_macos"
 if exists __git_ps1 ; then
     setopt PROMPT_SUBST
     # PS1='[%n@%m %c$(__git_ps1 " (%s)")]\$ '
-    PROMPT='[z]%B%F{yellow}%n@%m%f:%F{blue}%0~%f%b$(__git_ps1 " [\033[32m%s\033[0m]")%# '
+    PROMPT='%B%F{yellow}%n@%m%f:%F{blue}%0~%f%b$(__git_ps1 " [\033[32m%s\033[0m]")%# '
 fi
 
 export MYSQL_PS1='\u@\h> '
