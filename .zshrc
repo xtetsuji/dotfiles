@@ -5,9 +5,6 @@ UNAME="$(uname)"
 #BREW_PREFIX="$(brew --prefix)"
 BREW_PREFIX="/usr/local"
 
-# Emacs like keybind
-bindkey -e
-
 function add_path_var { test -d $1 && PATH=$PATH:$1 ; }
 
 ###
@@ -71,7 +68,11 @@ compinit
 ### keybind
 ###
 
+# Emacs like keybind
+bindkey -e
+
 bindkey -s '^g' 'git '
+
 
 ###
 ### common env
