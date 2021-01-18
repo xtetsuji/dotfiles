@@ -59,10 +59,15 @@ autoload -U compinit
 compinit
 
 ###
-### hisotry and PROMPT_COMMAND
+### history
 ###
-
-# TODO: history
+export HISTSIZE=2000
+export SAVEHIST=100000
+setopt share_history
+setopt hist_ignore_space
+setopt hist_ignore_dups
+setopt hist_no_store
+setopt EXTENDED_HISTORY
 
 ###
 ### keybind
