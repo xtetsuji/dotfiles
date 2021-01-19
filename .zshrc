@@ -78,4 +78,4 @@ bindkey -s '^g' 'git '
 ###
 source ~/.common_env
 
-: "start .zshrc"
+: "end .zshrc"
