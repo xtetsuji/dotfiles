@@ -33,11 +33,11 @@ source_if_readable ~/.bash_secret
 ###
 ### Prompt
 ###
+setopt PROMPT_SUBST
 git_prompt_brew="/usr/local/etc/bash_completion.d/git-prompt.sh"
 git_prompt_macos="/Library/Developer/CommandLineTools/usr/share/git-core/git-prompt.sh"
 source "$git_prompt_macos"
 if exists __git_ps1 ; then
-    setopt PROMPT_SUBST
     export PROMPT='%B%F{yellow}%n@%m%f:%F{blue}%0~%f%b$(__git_ps1 " [\033[32m%s\033[0m]")%# '
 else
     export PROMPT='%B%F{yellow}%n@%m%f:%F{blue}%0~%f%b%# '
