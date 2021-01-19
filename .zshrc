@@ -29,12 +29,6 @@ fpath=(/usr/share/zsh/5.8/functions/ $fpath)
 ###
 source ~/.bash_aliases
 source_if_readable ~/.bash_secret
-# if is_interactive_shell ; then
-#     source_if_readable ~/.bash_completion
-#     source_if_readable $BREW_PREFIX/etc/bash_completion
-#     source_if_readable /etc/bash_completion
-# fi
-# TODO: completion
 
 ###
 ### Prompt
