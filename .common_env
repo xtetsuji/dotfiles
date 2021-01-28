@@ -102,7 +102,7 @@ fi
 if [ -d $HOME/.rbenv ] ; then
     export RBENV_ROOT=$HOME/.rbenv
     export PATH=$RBENV_ROOT/bin:$PATH
-    xtenv-cache-eval "rbenv init -" "rbenv.init"
+    xtsource "rbenv.init.$SHELL_NAME" "system:rbenv init -"
 fi
 
 ###
