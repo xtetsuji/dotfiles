@@ -84,36 +84,6 @@ function xtsourcectl {
     esac
 }
 
-# http-get-source URL FILE
-# FILE が無ければ URL から取得して FILE に書き、FILE を source する
-# 環境変数 HTTP_GET_SOURCE_FORCE が設定されていれば、キャッシュを刷新する
-function http-get-source {
-    local url=$1
-    local file=$2
-    local dir
-    if [ -n "$HTTP_GET_SOURCE_FORCE" ] || [ ! -f $file ] ; then
-        dir="$(dirname "$file")"
-        if [ ! -d "$dir" ] ; then
-            mkdir -p "$dir" || {
-                echo "$FUNCNAME: fail mkdir \"$dir\"" >&2
-                return 1
-            }
-        fi
-        curl --silent $url > $file || {
-            echo "$FUNCNAME: fail fetch $url" >&2
-            return 1
-        }
-    fi
-    if [ -s $file ] ; then
-        source $file
-    elif [ -f $file ] ; then
-        echo "$FUNCNAME: $file is empty" >&2
-    else
-        echo "$FUNCNAME: $file is not found" >&2
-        return 1
-    fi
-}
-
 ###
 ### Basics
 ###
