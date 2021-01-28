@@ -84,26 +84,6 @@ function xtsourcectl {
     esac
 }
 
-
-
-
-export XTENV_CACHE_DIR=~/.config/xtenv/cache
-test -d "$XTENV_CACHE_DIR" || mkdir -p "$XTENV_CACHE_DIR"
-# xtenv-cache-eval CMD CACHE_FILE_NAME
-# CMD の出力結果を CACHE_FILE_NAME にキャッシュしつつ eval する
-# すでに CACHE_FILE_NAME があれば CMD を実行しない
-# TODO: キャシュ有効期限を設定する？
-function xtenv-cache-eval {
-    test $# = 2 || { echo "$FUNCNAME COMMANDS FILENAME" ; return 1 ; }
-    local init_script_generate_command="$1"
-    local cache_file_name="$2"
-    local cache_file_path="$XTENV_CACHE_DIR/$cache_file_name"
-    if [ ! -f "$cache_file_path" ] ; then
-        $init_script_generate_command > $cache_file_path
-    fi
-    eval "$(< "$cache_file_path" )"
-}
-
 # http-get-source URL FILE
 # FILE が無ければ URL から取得して FILE に書き、FILE を source する
 # 環境変数 HTTP_GET_SOURCE_FORCE が設定されていれば、キャッシュを刷新する
