@@ -16,6 +16,100 @@ fi
 declare ALIASES=$HOME/.bash_aliases
 declare UNAME=$(uname)
 
+
+export XTCACHE_LIFETIME=7d
+export XTSOURCE_CACHE_DIR=~/.config/xtsource/cache
+
+# xtsource FILE URL_OR_COMMAND
+# source FILE_OF_URL or eval $(COMMAND) from URL or Command
+# if 2nd argument is URL,
+#     then GET URL is saved to file and this file is sourced
+# if 2nd argument is command (with `system:` scheme),
+#     then executed content is saved to file and this file is sourced
+# source <(curl URL) => xtsource CACHE_FILE URL
+function xtsource {
+    local file=$1 url=$2 command mode
+    if ! [[ $file =~ / ]] ; then
+        file=$XTSOURCE_CACHE_DIR/$file
+    fi
+    if xtcache-need-fetch "$file" ; then
+        # backup previous cache
+        if [ -f "$file" ] ; then
+            mv "$file" "$file.$(date +%Y%m%d-%H%M%S)-backup"
+        fi
+        # command detect
+        if [[ $url =~ ^https?: ]] ; then
+            command=(curl -q "$url")
+            mode=curl
+        elif [[ $url =~ ^system: ]] ; then
+            command=($(sed -e 's/^system: *//' <<<"$url" ))
+            mode=system
+        else
+            echo "xtsource: URL format error" >&2
+            return 1
+        fi
+        # command execute and create cache
+        "${command[@]}" > "$file" || {
+            echo "xtsource: $mode \"$url\" failed" >&2
+            return 1
+        } # TODO: stderr log
+    fi
+    source "$file"
+}
+
+function xtcache-lifetime {
+    local second unit
+    if ! [[ $XTCACHE_LIFETIME =~ ^([0-9]+)([smhd]?)$ ]] ; then
+        return 1
+    fi
+    second=$( is_current_bash && echo ${BASH_REMATCH[0]} \
+            || is_current_zsh  && echo ${match[1]} )
+    unit=$( is_current_bash && echo ${BASH_REMATCH[1]} \
+            || is_current_zsh  && echo ${match[2]} )
+    case "$unit" in
+        s|"") unit=1 ;;
+        m) unit=60 ;;
+        h) unit=3600 ;;
+        d) unit=86400 ;;
+        *)
+            echo "xtcache-lifetime: unknown unit" >&2
+            return 1
+            ;;
+    esac
+    echo $(( second * unit ))
+}
+
+function xtcache-need-fetch {
+    local file=$1 now=$(date +%s)
+    local RC_FETCH=0 RC_USE_CACHE=1
+    if [ ! -f "$file" ] ; then
+        return $RC_FETCH
+    fi
+    eval local $(stat -s "$file")
+    if [[ $((now - st_mtime)) > $(xtcache-lifetime) ]] ; then
+        return $RC_FETCH
+    fi
+    return $RC_USE_CACHE
+}
+
+function xtsourcectl {
+    command="$1"
+    case "$command" in
+        setup) mkdir -v -p "$XTSOURCE_CACHE_DIR" ;;
+        list)  ls -l "$XTSOURCE_CACHE_DIR" ;;
+        clear) rm -v "$XTSOURCE_CACHE_DIR/"* ;;
+        dir)   echo "$XTSOURCE_CACHE_DIR" ;;
+        cd)    cd "$XTSOURCE_CACHE_DIR" ;;
+        *)
+            echo "Usage:"
+            echo "  xtsourcectl [setup|list|clear|dir|cd]"
+            ;;
+    esac
+}
+
+
+
+
 export XTENV_CACHE_DIR=~/.config/xtenv/cache
 test -d "$XTENV_CACHE_DIR" || mkdir -p "$XTENV_CACHE_DIR"
 # xtenv-cache-eval CMD CACHE_FILE_NAME
