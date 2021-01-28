@@ -63,7 +63,7 @@ function xtcache-need-fetch {
         return $RC_FETCH
     fi
     eval local $(stat -s "$file")
-    if [[ $((now - st_mtime)) > $XTCACHE_LIFETIME ]] ; then
+    if (( now - st_mtime > XTCACHE_LIFETIME )) ; then
         return $RC_FETCH
     fi
     return $RC_USE_CACHE
