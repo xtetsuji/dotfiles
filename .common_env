@@ -70,9 +70,8 @@ set bell-style visible
 IGNOREEOF=3
 
 function import-clr {
-    http-get-source \
-        https://raw.githubusercontent.com/maxtsepkov/bash_colors/master/bash_colors.sh \
-        ~/.config/cache/http-get-source/bash_colors
+    xtsource bash_colors \
+        https://raw.githubusercontent.com/maxtsepkov/bash_colors/master/bash_colors.sh
     echo "import clr_*"
     echo "  clr_dump:"
     clr_dump
