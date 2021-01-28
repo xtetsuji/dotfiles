@@ -84,7 +84,7 @@ SHELL_NAME=${SHELL##*/}
 ### chdrip on xtenv
 ###
 if exists drip ; then
-    xtenv-cache-eval "drip drip-init" "drip.init"
+    xtsource "drip.init" "system:drip drip-init"
 fi
 
 ###
