@@ -94,7 +94,31 @@ if [ -d $HOME/.plenv ] ; then
     export PLENV_ROOT=$HOME/.plenv
     export PATH=$PLENV_ROOT/bin:$PATH
     #eval "$(plenv init -)"
-    xtenv-cache-eval "plenv init -" "plenv.init"
+
+    # paste output of `plenv init -` and modify condition of bash or zsh
+    export PATH="/Users/tetsuji.ogata/.plenv/shims:${PATH}"
+    if is_current_zsh ; then
+        export PLENV_SHELL=zsh
+    elif is_current_bash ; then
+        export PLENV_SHELL=zsh
+    fi
+    source '/usr/local/Cellar/plenv/2.3.1/libexec/../completions/plenv.'$PLENV_SHELL
+
+    plenv() {
+    local command
+
+    command="$1"
+    if [ "$#" -gt 0 ]; then
+        shift
+    fi
+
+    case "$command" in
+    rehash|shell|update)
+        eval "`plenv "sh-$command" "$@"`";;
+    *)
+        command plenv "$command" "$@";;
+    esac
+    }
 fi
 
 ###
