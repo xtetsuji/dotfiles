@@ -16,8 +16,7 @@ fi
 declare ALIASES=$HOME/.bash_aliases
 declare UNAME=$(uname)
 
-
-export XTCACHE_LIFETIME=7d
+export XTCACHE_LIFETIME=$(( 120 * 86400 )) # 120 days
 export XTSOURCE_CACHE_DIR=~/.config/xtsource/cache
 
 # xtsource FILE URL_OR_COMMAND
@@ -57,28 +56,6 @@ function xtsource {
     source "$file"
 }
 
-function xtcache-lifetime {
-    local second unit
-    if ! [[ $XTCACHE_LIFETIME =~ ^([0-9]+)([smhd]?)$ ]] ; then
-        return 1
-    fi
-    second=$( is_current_bash && echo ${BASH_REMATCH[0]} \
-            || is_current_zsh  && echo ${match[1]} )
-    unit=$( is_current_bash && echo ${BASH_REMATCH[1]} \
-            || is_current_zsh  && echo ${match[2]} )
-    case "$unit" in
-        s|"") unit=1 ;;
-        m) unit=60 ;;
-        h) unit=3600 ;;
-        d) unit=86400 ;;
-        *)
-            echo "xtcache-lifetime: unknown unit" >&2
-            return 1
-            ;;
-    esac
-    echo $(( second * unit ))
-}
-
 function xtcache-need-fetch {
     local file=$1 now=$(date +%s)
     local RC_FETCH=0 RC_USE_CACHE=1
@@ -86,7 +63,7 @@ function xtcache-need-fetch {
         return $RC_FETCH
     fi
     eval local $(stat -s "$file")
-    if [[ $((now - st_mtime)) > $(xtcache-lifetime) ]] ; then
+    if [[ $((now - st_mtime)) > $XTCACHE_LIFETIME ]] ; then
         return $RC_FETCH
     fi
     return $RC_USE_CACHE
