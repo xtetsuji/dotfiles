@@ -54,6 +54,8 @@ export MYSQL_PS1='\u@\h> '
 ###
 autoload -Uz compinit && compinit
 
+zstyle ':completion:*' matcher-list 'm:{a-z}={A-Z}'
+
 ###
 ### history
 ###
