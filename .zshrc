@@ -49,8 +49,7 @@ export MYSQL_PS1='\u@\h> '
 ###
 ### completion
 ###
-autoload -U compinit
-compinit
+autoload -Uz compinit && compinit
 
 ###
 ### history
