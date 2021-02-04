@@ -42,6 +42,17 @@ if exists __git_ps1 ; then
 else
     export PROMPT='%B%F{yellow}%n@%m%f:%F{blue}%0~%f%b%# '
 fi
+function __mybasedir_guess_cdhook {
+    test "$TERM" = screen || return
+    local title gitdir="$(git rev-parse --show-superproject-working-tree --show-toplevel 2>/dev/null)"
+    test -n "$gitdir" && title="git:${gitdir/*\//}" || title="${PWD/*\//}"
+    test "$PWD" = "$HOME" && title="~"
+    test "$PWD" = "/" && title="/"
+    screen -X title "$title"
+}
+if [ "$TERM" = screen ] ; then
+    PROMPT+='$(__mybasedir_guess_cdhook)'
+fi
 export RPROMPT='[%j%1(j.:$(jobs|perl -e "print join q(,), map { /^\[\d+\](?:  [+-])?\s+\w+\s+(\S+)/ } <>").)] %F{black}%1(?.%K{red}.%K{green})↪%?%k%f @%T'
 
 export MYSQL_PS1='\u@\h> '
