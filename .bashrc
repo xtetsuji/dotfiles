@@ -47,16 +47,8 @@ if [ "$color_prompt" = yes ] ; then
     COLOR_PROMPT_PS1="$PS1"
 fi
 
-function __mybasedir_guess_cdhook {
-    test "$TERM" = screen || return
-    local title gitdir="$(git rev-parse --show-superproject-working-tree --show-toplevel 2>/dev/null)"
-    test -n "$gitdir" && title="git:${gitdir/*\//}" || title="${PWD/*\//}"
-    test "$PWD" = "$HOME" && title="~"
-    test "$PWD" = "/" && title="/"
-    screen -X title "$title"
-}
 if [ "$TERM" = screen ] ; then
-    PS1=$PS1'$(__mybasedir_guess_cdhook)'
+    PS1=$PS1'$(__cdhook_screen_title_pwd)'
 fi
 
 unset f color_prompt git_prompt_brew git_prompt_macos
