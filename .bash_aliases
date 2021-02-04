@@ -89,6 +89,7 @@ function xtsourcectl {
 ###
 function __cdhook_screen_title_pwd {
     test "$TERM" = screen || return
+    test "$CDHOOK_SCREEN_TITLE" = off && return
     local title gitdir="$(git rev-parse --show-superproject-working-tree --show-toplevel 2>/dev/null)"
     test -n "$gitdir" && title="git:${gitdir/*\//}" || title="${PWD/*\//}"
     test "$PWD" = "$HOME" && title="~"
