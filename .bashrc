@@ -5,10 +5,6 @@ UNAME="$(uname)"
 #BREW_PREFIX="$(brew --prefix)"
 BREW_PREFIX="/usr/local"
 
-function is_login_shell { shopt -q login_shell ; }
-function is_interactive_shell { [[ $- =~ i ]] ; }
-function exists { type $1 >/dev/null 2>&1 ; }
-function source_if_readable { test -r "$1" && source "$1" ; }
 function add_path_var { test -d $1 && PATH=$PATH:$1 ; }
 
 ###
@@ -24,11 +20,6 @@ add_path_var /usr/local/bin
 ###
 source ~/.bash_aliases
 source_if_readable ~/.bash_secret
-if is_interactive_shell ; then
-    source_if_readable ~/.bash_completion
-    source_if_readable $BREW_PREFIX/etc/bash_completion
-    source_if_readable /etc/bash_completion
-fi
 
 ###
 ### Prompt
@@ -56,9 +47,22 @@ if [ "$color_prompt" = yes ] ; then
     COLOR_PROMPT_PS1="$PS1"
 fi
 
+if [ "$TERM" = screen ] ; then
+    PS1=$PS1'$(__cdhook_screen_title_pwd)'
+fi
+
 unset f color_prompt git_prompt_brew git_prompt_macos
 
 export MYSQL_PS1='\u@\h> '
+
+###
+### completion
+###
+if is_interactive_shell ; then
+    source_if_readable ~/.bash_completion
+    source_if_readable $BREW_PREFIX/etc/bash_completion
+    source_if_readable /etc/bash_completion
+fi
 
 ###
 ### history and PROMPT_COMMAND
@@ -86,149 +90,14 @@ if is_interactive_shell ; then
 fi
 
 ###
-### pager and editor
+### keybind
 ###
-export PAGER=less
-export EDITOR=vi
-
-# less
-export LESS='-i -M -R -S '
-export LESS_TERMCAP_mb=$'\E[01;31m'      # Begins blinking.
-export LESS_TERMCAP_md=$'\E[01;31m'      # Begins bold.
-export LESS_TERMCAP_me=$'\E[0m'          # Ends mode.
-export LESS_TERMCAP_se=$'\E[0m'          # Ends standout-mode.
-export LESS_TERMCAP_so=$'\E[00;47;30m'   # Begins standout-mode.
-export LESS_TERMCAP_ue=$'\E[0m'          # Ends underline.
-export LESS_TERMCAP_us=$'\E[01;32m'      # Begins underline.
-if exists lesspipe.sh ; then
-  export LESSOPEN='| /usr/bin/env lesspipe.sh %s 2>&-'
-fi
-
-# git
-export GIT_PAGER='less -FRX'
 
 bind '"\C-g": "git "'
 
-# perldoc
-export PERLDOC_PAGER='less -FRX'
-
-# lv
-export LV='-c -Ouj'
-
-# vim (if exist)
-if exists vim ; then
-    export EDITOR=vim
-fi
-
 ###
-### Locale / Lang
+### common env
 ###
-export LANG="ja_JP.UTF-8"
-export LC_COLLATE="ja_JP.UTF-8"
-export LC_CTYPE="UTF-8"
-export LC_MESSAGES="ja_JP.UTF-8"
-export LC_MONETARY="ja_JP.UTF-8"
-export LC_NUMERIC="ja_JP.UTF-8"
-export LC_TIME="ja_JP.UTF-8"
-export LC_ALL=
-
-export TZ=JST-9
-
-export CVS_RSH=ssh
-export RSYNC_RSH=ssh
-
-###
-### Information
-###
-export icloud_drive=$HOME/Library/Mobile\ Documents/com~apple~CloudDocs
-
-###
-### some settings
-###
-
-# see: http://d.hatena.ne.jp/hogem/20090411/1239451878
-# Ignore C-s for terminal stop.
-stty stop undef
-
-set bell-style visible
-
-# avoid Ctrl-D logout.
-IGNOREEOF=3
-
-function import-clr {
-    http-get-source \
-        https://raw.githubusercontent.com/maxtsepkov/bash_colors/master/bash_colors.sh \
-        ~/.config/cache/http-get-source/bash_colors
-    echo "import clr_*"
-    echo "  clr_dump:"
-    clr_dump
-}
-
-
-
-###
-### chdrip on xtenv
-###
-if exists drip ; then
-    xtenv-cache-eval "drip drip-init" "drip.init"
-fi
-
-###
-### plenv on xtenv
-###
-if [ -d $HOME/.plenv ] ; then
-    export PLENV_ROOT=$HOME/.plenv
-    export PATH=$PLENV_ROOT/bin:$PATH
-    #eval "$(plenv init -)"
-    xtenv-cache-eval "plenv init -" "plenv.init"
-fi
-
-###
-### rbenv on xtenv
-###
-if [ -d $HOME/.rbenv ] ; then
-    export RBENV_ROOT=$HOME/.rbenv
-    export PATH=$RBENV_ROOT/bin:$PATH
-    xtenv-cache-eval "rbenv init -" "rbenv.init"
-fi
-
-###
-### golang
-###
-# brew install go
-if exists go ; then
-    #GO_VERSION=$(go version | sed -e 's/.*version go//' -e 's/ .*//')
-    # go version コマンド実行が結構コストかかるので暫定的に固定
-    GO_VERSION=1.8
-    if ! [[ $GO_VERSION =~ ^[0-9][0-9.]+$ ]] ; then
-        GO_VERSION=default
-    fi
-    if [ -d "$HOME/.go" ] ; then
-        export GOPATH=$HOME/.go/$GO_VERSION
-        export PATH=$GOPATH/bin:$PATH
-        if [ ! -d $GOPATH ] ; then
-            mkdir -p $GOPATH
-        fi
-    fi
-fi
-
-###
-### ssh-agent
-###
-# http://www.gcd.org/blog/2006/09/100/
-MY_SSH_AUTH_SOCK_PATH="/tmp/ssh-agent-$USER"
-if [ -S "$SSH_AUTH_SOCK" ]; then
-    case $SSH_AUTH_SOCK in
-    /tmp/*/agent.[0-9]*)
-        ln -snf "$SSH_AUTH_SOCK" $MY_SSH_AUTH_SOCK_PATH \
-                && export SSH_AUTH_SOCK=$MY_SSH_AUTH_SOCK_PATH
-    esac
-elif [ -S $MY_SSH_AUTH_SOCK_PATH ]; then
-    export SSH_AUTH_SOCK=$MY_SSH_AUTH_SOCK_PATH
-else
-    : #echo "no ssh-agent"
-fi
-
-unset UNAME
+source ~/.common_env
 
 : "end .bashrc"

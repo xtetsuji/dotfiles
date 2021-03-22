@@ -1,55 +1,102 @@
 # -*- mode: shell-script ; coding: utf-8 ; -*-
+# .bash_aliases - bash and zsh aliases
 : "start .bash_aliases"
+
+function exists { type $1 >/dev/null 2>&1 ; }
+function source_if_readable { test -r "$1" && source "$1" ; }
+function is_current_bash { test -n "$BASH_VERSION" ; }
+function is_current_zsh  { test -n "$ZSH_VERSION" ; }
+function is_interactive_shell { [[ $- =~ i ]] ; }
+if is_current_bash ; then
+    function is_login_shell { shopt -q login_shell ; }
+elif is_current_zsh ; then
+    function is_login_shell { [[ -o login ]] ; }
+fi
 
 declare ALIASES=$HOME/.bash_aliases
 declare UNAME=$(uname)
 
-export XTENV_CACHE_DIR=~/.config/xtenv/cache
-test -d "$XTENV_CACHE_DIR" || mkdir -p "$XTENV_CACHE_DIR"
-# xtenv-cache-eval CMD CACHE_FILE_NAME
-# CMD の出力結果を CACHE_FILE_NAME にキャッシュしつつ eval する
-# すでに CACHE_FILE_NAME があれば CMD を実行しない
-# TODO: キャシュ有効期限を設定する？
-function xtenv-cache-eval {
-    test $# = 2 || { echo "$FUNCNAME COMMANDS FILENAME" ; return 1 ; }
-    local init_script_generate_command="$1"
-    local cache_file_name="$2"
-    local cache_file_path="$XTENV_CACHE_DIR/$cache_file_name"
-    if [ ! -f "$cache_file_path" ] ; then
-        $init_script_generate_command > $cache_file_path
+export XTCACHE_LIFETIME=$(( 120 * 86400 )) # 120 days
+export XTSOURCE_CACHE_DIR=~/.config/xtsource/cache
+
+# xtsource FILE URL_OR_COMMAND
+# source FILE_OF_URL or eval $(COMMAND) from URL or Command
+# if 2nd argument is URL,
+#     then GET URL is saved to file and this file is sourced
+# if 2nd argument is command (with `system:` scheme),
+#     then executed content is saved to file and this file is sourced
+# source <(curl URL) => xtsource CACHE_FILE URL
+function xtsource {
+    local file=$1 url=$2 command mode
+    if ! [[ $file =~ / ]] ; then
+        file=$XTSOURCE_CACHE_DIR/$file
     fi
-    eval "$(< "$cache_file_path" )"
+    if xtcache-need-fetch "$file" ; then
+        # backup previous cache
+        if [ -f "$file" ] ; then
+            mv "$file" "$file.$(date +%Y%m%d-%H%M%S)-backup"
+        fi
+        # command detect
+        if [[ $url =~ ^https?: ]] ; then
+            command=(curl -q "$url")
+            mode=curl
+        elif [[ $url =~ ^system: ]] ; then
+            command=($(sed -e 's/^system: *//' <<<"$url" ))
+            mode=system
+        else
+            echo "xtsource: URL format error" >&2
+            return 1
+        fi
+        # command execute and create cache
+        "${command[@]}" > "$file" || {
+            echo "xtsource: $mode \"$url\" failed" >&2
+            return 1
+        } # TODO: stderr log
+    fi
+    source "$file"
 }
 
-# http-get-source URL FILE
-# FILE が無ければ URL から取得して FILE に書き、FILE を source する
-# 環境変数 HTTP_GET_SOURCE_FORCE が設定されていれば、キャッシュを刷新する
-function http-get-source {
-    local url=$1
-    local file=$2
-    local dir
-    if [ -n "$HTTP_GET_SOURCE_FORCE" ] || [ ! -f $file ] ; then
-        dir="$(dirname "$file")"
-        if [ ! -d "$dir" ] ; then
-            mkdir -p "$dir" || {
-                echo "$FUNCNAME: fail mkdir \"$dir\"" >&2
-                return 1
-            }
-        fi
-        curl --silent $url > $file || {
-            echo "$FUNCNAME: fail fetch $url" >&2
-            return 1
-        }
+function xtcache-need-fetch {
+    local file=$1 now=$(date +%s)
+    local RC_FETCH=0 RC_USE_CACHE=1
+    if [ ! -f "$file" ] ; then
+        return $RC_FETCH
     fi
-    if [ -s $file ] ; then
-        source $file
-    elif [ -f $file ] ; then
-        echo "$FUNCNAME: $file is empty" >&2
-    else
-        echo "$FUNCNAME: $file is not found" >&2
-        return 1
+    eval local $(stat -s "$file")
+    if (( now - st_mtime > XTCACHE_LIFETIME )) ; then
+        return $RC_FETCH
     fi
+    return $RC_USE_CACHE
 }
+
+function xtsourcectl {
+    command="$1"
+    case "$command" in
+        setup) mkdir -v -p "$XTSOURCE_CACHE_DIR" ;;
+        list)  ls -l "$XTSOURCE_CACHE_DIR" ;;
+        clear) rm -v "$XTSOURCE_CACHE_DIR/"* ;;
+        dir)   echo "$XTSOURCE_CACHE_DIR" ;;
+        cd)    cd "$XTSOURCE_CACHE_DIR" ;;
+        *)
+            echo "Usage:"
+            echo "  xtsourcectl [setup|list|clear|dir|cd]"
+            ;;
+    esac
+}
+
+###
+### hooks
+###
+function __cdhook_screen_title_pwd {
+    test "$TERM" = screen || return
+    test "$CDHOOK_SCREEN_TITLE" = off && return
+    local title gitdir="$(git rev-parse --show-superproject-working-tree --show-toplevel 2>/dev/null)"
+    test -n "$gitdir" && title="git:${gitdir/*\//}" || title="${PWD/*\//}"
+    test "$PWD" = "$HOME" && title="~"
+    test "$PWD" = "/" && title="/"
+    screen -X title "$title"
+}
+
 
 ###
 ### Basics
@@ -120,6 +167,7 @@ alias uri_escape='perl -MURI::Escape=uri_escape -E "say uri_escape(join q/ /, @A
 
 # previous cd at 2005/03/22 (original idea)
 # enahnced cd at 2019/03/31 (following)
+is_current_bash && \
 function cd {
     #set -x
     local arg="$1" subcommand result rc
@@ -344,7 +392,7 @@ function peco-history() {
     history -d $((HISTCMD-1))
   fi
 }
-bind '"\C-x\C-r":"peco-history\n"'
+is_current_bash && bind '"\C-x\C-r":"peco-history\n"'
 
 unset ALIASES
 unset UNAME
