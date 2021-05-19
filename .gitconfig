@@ -64,6 +64,9 @@
 # [push]
 #        default = simple
 
+[init]
+	defaultBranch = main
+
 [color]
 	ui = auto
 
