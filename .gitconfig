@@ -16,6 +16,8 @@
 	ba = branch -a
 	ra = remote -v
 
+	# enhancement hub clone
+	named-clone = "!perl -E '($n, $r) = split m{/}, shift; system qw(hub clone), qq($n/$r), qq($n/$r\\@$n);'"
 	### branch management
 	# see: https://qiita.com/upinetree/items/0b74b08b64442f0a89b9
 	parent-branch = !git show-branch | grep -F '*' | grep -v "$(git rev-parse --abbrev-ref HEAD)" | head -1 | awk -F'[]~^[]' '{print $2}'
