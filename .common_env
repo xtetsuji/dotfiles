@@ -8,7 +8,7 @@ export PAGER=less
 export EDITOR=vi
 
 # less
-export LESS='-i -M -R -S '
+export LESS='-i -M -R'
 export LESS_TERMCAP_mb=$'\E[01;31m'      # Begins blinking.
 export LESS_TERMCAP_md=$'\E[01;31m'      # Begins bold.
 export LESS_TERMCAP_me=$'\E[0m'          # Ends mode.
