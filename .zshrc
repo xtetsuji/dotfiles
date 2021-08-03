@@ -45,7 +45,10 @@ fi
 if [ "$TERM" = screen ] ; then
     PROMPT+='$(__cdhook_screen_title_pwd)'
 fi
-export RPROMPT='[%j%1(j.:$(jobs|perl -e "print join q(,), map { /^\[\d+\](?:  [+-])?\s+\w+\s+(\S+)/ } <>").)] %F{black}%1(?.%K{red}.%K{green})↪%?%k%f @%T'
+
+PROMPT="%F{black}%1(?.%K{red}.%K{green})↪%?%k%f @%T $PROMPT"
+
+#export RPROMPT='[%j%1(j.:$(jobs|perl -e "print join q(,), map { /^\[\d+\](?:  [+-])?\s+\w+\s+(\S+)/ } <>").)] %F{black}%1(?.%K{red}.%K{green})↪%?%k%f @%T'
 
 export MYSQL_PS1='\u@\h> '
 
