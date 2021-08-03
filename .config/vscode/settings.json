@@ -1,5 +1,4 @@
 {
-    "window.zoomLevel": 0,
     "explorer.confirmDragAndDrop": false,
     "[ruby]": {
         "editor.insertSpaces": true,
@@ -17,4 +16,5 @@
     "editor.acceptSuggestionOnEnter": "smart",
     "files.insertFinalNewline": true,
     "editor.columnSelection": false,
+    "workbench.colorTheme": "Default Dark+",
 }
