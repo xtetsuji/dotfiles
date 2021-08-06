@@ -62,6 +62,7 @@ function xtcache-need-fetch {
     if [ ! -f "$file" ] ; then
         return $RC_FETCH
     fi
+    # TODO: `stat -s` is only available BSD like system. It is need Linux support.
     eval local $(stat -s "$file")
     if (( now - st_mtime > XTCACHE_LIFETIME )) ; then
         return $RC_FETCH
@@ -105,6 +106,7 @@ function __cdhook_screen_title_pwd {
 case "$UNAME" in
     Darwin) ### Mac OS X
         alias ls='ls -FG' # BSD type "ls"
+        exists gls && alias ls='gls --color=auto -F'
         # Recommend to create symlink /usr/sbin/airport as the airport.
         if [ ! -f /sbin/airport ] || [ ! -f /usr/sbin/airport ] ; then
             alias airport='/System/Library/PrivateFrameworks/Apple80211.framework/Versions/Current/Resources/airport'
@@ -124,7 +126,7 @@ case "$UNAME" in
         function beers () { ruby -e 'C=`stty size`.scan(/\d+/)[1].to_i;S=ARGV.shift||"\xf0\x9f\x8d\xba";a={};puts "\033[2J";loop{a[rand(C)]=0;a.each{|x,o|;a[x]+=1;print "\033[#{o};#{x}H \033[#{a[x]};#{x}H#{S} \033[0;0H"};$stdout.flush;sleep 0.01}' ; }
         ;;
     Linux)
-        alias ls='ls --color=auto'
+        alias ls='ls --color=auto -F'
         alias crontab='crontab -i'
         source_if_readable ~/.bash_aliases_kde
         ;;

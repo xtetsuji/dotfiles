@@ -5,7 +5,9 @@ UNAME="$(uname)"
 #BREW_PREFIX="$(brew --prefix)"
 BREW_PREFIX="/usr/local"
 
-function add_path_var { test -d $1 && PATH=$PATH:$1 ; }
+function push_path_var { test -d "$1" && PATH=$PATH:$1 ; }
+function unshift_path_var { test -d "$1" && PATH=$1:$PATH ; }
+alias add_path_var=push_path_var
 
 ###
 ### Path
@@ -14,6 +16,8 @@ export PATH
 add_path_var ~/bin
 add_path_var ~/Dropbox/bin
 add_path_var /usr/local/bin
+unshift_path_var /usr/local/opt/zip/bin
+unshift_path_var /usr/local/opt/unzip/bin
 
 # /usr/share/zsh/5.8 is macOS 11 (Big Sur) default zsh library path
 fpath=(/usr/share/zsh/5.8/functions/ $fpath)
@@ -45,7 +49,10 @@ fi
 if [ "$TERM" = screen ] ; then
     PROMPT+='$(__cdhook_screen_title_pwd)'
 fi
-export RPROMPT='[%j%1(j.:$(jobs|perl -e "print join q(,), map { /^\[\d+\](?:  [+-])?\s+\w+\s+(\S+)/ } <>").)] %F{black}%1(?.%K{red}.%K{green})↪%?%k%f @%T'
+
+PROMPT="%F{black}%1(?.%K{red}.%K{green})↪%?%k%f @%T $PROMPT"
+
+#export RPROMPT='[%j%1(j.:$(jobs|perl -e "print join q(,), map { /^\[\d+\](?:  [+-])?\s+\w+\s+(\S+)/ } <>").)] %F{black}%1(?.%K{red}.%K{green})↪%?%k%f @%T'
 
 export MYSQL_PS1='\u@\h> '
 
