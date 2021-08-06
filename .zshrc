@@ -16,6 +16,8 @@ export PATH
 add_path_var ~/bin
 add_path_var ~/Dropbox/bin
 add_path_var /usr/local/bin
+unshift_path_var /usr/local/opt/zip/bin
+unshift_path_var /usr/local/opt/unzip/bin
 
 # /usr/share/zsh/5.8 is macOS 11 (Big Sur) default zsh library path
 fpath=(/usr/share/zsh/5.8/functions/ $fpath)
