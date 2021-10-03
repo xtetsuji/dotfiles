@@ -327,7 +327,10 @@ function ps2 {
         return 1
     fi
     echo "pids $pids"
-    read -p "Choice [kill|kill -*|SIG***|pbcopy]: " choice
+    # MEMO: zsh compatible, read `-p` option is different as printing prompt.
+    #read -p "Choice [kill|kill -*|SIG***|pbcopy]: " choice
+    echo -n "Choice [kill|kill -*|SIG***|pbcopy]: "
+    read choice
     case $choice in
         kill|"kill -*")
             $choice $pid
