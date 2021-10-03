@@ -42,7 +42,11 @@ git_prompt_brew="/usr/local/etc/bash_completion.d/git-prompt.sh"
 git_prompt_macos="/Library/Developer/CommandLineTools/usr/share/git-core/git-prompt.sh"
 source "$git_prompt_macos"
 if exists __git_ps1 ; then
-    export PROMPT='%B%F{yellow}%n@%m%f:%F{blue}%0~%f%b$(__git_ps1 " [\033[32m%s\033[0m]")%# '
+    # `%%` is character `%` on __git_ps1.
+    # zsh color sequence %F{name} and %f are
+    # right measurable as line character count.
+    # see: https://scrapbox.io/jiro4989/Zsh%E3%81%AE%E3%83%97%E3%83%AD%E3%83%B3%E3%83%97%E3%83%88%E3%81%8C%E5%A4%89%E3%81%AA%E4%BD%8D%E7%BD%AE%E3%81%AB%E6%94%B9%E8%A1%8C%E3%81%95%E3%82%8C%E3%82%8B%E5%95%8F%E9%A1%8C%E3%81%AE%E8%A7%A3%E6%B1%BA
+    export PROMPT='%B%F{yellow}%n@%m%f:%F{blue}%0~%f%b$(__git_ps1 " [%%F{green}%s%%f]")%# '
 else
     export PROMPT='%B%F{yellow}%n@%m%f:%F{blue}%0~%f%b%# '
 fi
