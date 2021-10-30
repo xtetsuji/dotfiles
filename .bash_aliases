@@ -63,7 +63,8 @@ function xtcache-need-fetch {
         return $RC_FETCH
     fi
     # TODO: `stat -s` is only available BSD like system. It is need Linux support.
-    eval local $(stat -s "$file")
+    # ad-hoc support, for brew coreutils conflict
+    eval local $(/usr/bin/stat -s "$file")
     if (( now - st_mtime > XTCACHE_LIFETIME )) ; then
         return $RC_FETCH
     fi
