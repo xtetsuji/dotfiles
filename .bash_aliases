@@ -107,8 +107,17 @@ function __cdhook_screen_title_pwd {
 
 case "$UNAME" in
     Darwin) ### Mac OS X
-        alias ls='ls -FG' # BSD type "ls"
-        exists gls && alias ls='gls --color=auto -F'
+        #alias ls='ls -FG' # BSD type "ls"
+        #exists gls && alias ls='gls --color=auto -F'
+        if [[ $(type ls) =~ coreutils ]] ; then
+            # from brew coreutils
+            alias ls='ls --color=auto -F'
+            # from `dircolors -b | pbcopy`
+            xtsource "dircolors.init" "system:dircolors -b"
+        else
+            alias ls='ls -FG'
+        fi
+
         # Recommend to create symlink /usr/sbin/airport as the airport.
         if [ ! -f /sbin/airport ] || [ ! -f /usr/sbin/airport ] ; then
             alias airport='/System/Library/PrivateFrameworks/Apple80211.framework/Versions/Current/Resources/airport'

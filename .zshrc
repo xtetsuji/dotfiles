@@ -13,9 +13,11 @@ alias add_path_var=push_path_var
 ### Path
 ###
 export PATH
+# https://qiita.com/y_310/items/101ef023124072b9c73f
 add_path_var ~/bin
 add_path_var ~/Dropbox/bin
 add_path_var /usr/local/bin
+unshift_path_var /usr/local/opt/coreutils/libexec/gnubin
 unshift_path_var /usr/local/opt/zip/bin
 unshift_path_var /usr/local/opt/unzip/bin
 
