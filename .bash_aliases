@@ -63,7 +63,9 @@ function xtcache-need-fetch {
         return $RC_FETCH
     fi
     # TODO: `stat -s` is only available BSD like system. It is need Linux support.
-    eval local $(stat -s "$file")
+    # ad-hoc support, for brew coreutils conflict
+    # in other words, this function only works on macOS and BSD like OS.
+    eval local $(/usr/bin/stat -s "$file")
     if (( now - st_mtime > XTCACHE_LIFETIME )) ; then
         return $RC_FETCH
     fi
@@ -105,8 +107,17 @@ function __cdhook_screen_title_pwd {
 
 case "$UNAME" in
     Darwin) ### Mac OS X
-        alias ls='ls -FG' # BSD type "ls"
-        exists gls && alias ls='gls --color=auto -F'
+        #alias ls='ls -FG' # BSD type "ls"
+        #exists gls && alias ls='gls --color=auto -F'
+        if [[ $(type ls) =~ coreutils ]] ; then
+            # from brew coreutils
+            alias ls='ls --color=auto -F'
+            # from `dircolors -b | pbcopy`
+            xtsource "dircolors.init" "system:dircolors -b"
+        else
+            alias ls='ls -FG'
+        fi
+
         # Recommend to create symlink /usr/sbin/airport as the airport.
         if [ ! -f /sbin/airport ] || [ ! -f /usr/sbin/airport ] ; then
             alias airport='/System/Library/PrivateFrameworks/Apple80211.framework/Versions/Current/Resources/airport'
@@ -327,7 +338,10 @@ function ps2 {
         return 1
     fi
     echo "pids $pids"
-    read -p "Choice [kill|kill -*|SIG***|pbcopy]: " choice
+    # MEMO: zsh compatible, read `-p` option is different as printing prompt.
+    #read -p "Choice [kill|kill -*|SIG***|pbcopy]: " choice
+    echo -n "Choice [kill|kill -*|SIG***|pbcopy]: "
+    read choice
     case $choice in
         kill|"kill -*")
             $choice $pid

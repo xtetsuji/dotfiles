@@ -1,6 +1,8 @@
 # -*- shell-script -*-
 : "start .zshrc"
 
+#zmodload zsh/zprof && zprof
+
 UNAME="$(uname)"
 #BREW_PREFIX="$(brew --prefix)"
 BREW_PREFIX="/usr/local"
@@ -13,9 +15,11 @@ alias add_path_var=push_path_var
 ### Path
 ###
 export PATH
+# https://qiita.com/y_310/items/101ef023124072b9c73f
 add_path_var ~/bin
 add_path_var ~/Dropbox/bin
 add_path_var /usr/local/bin
+unshift_path_var /usr/local/opt/coreutils/libexec/gnubin
 unshift_path_var /usr/local/opt/zip/bin
 unshift_path_var /usr/local/opt/unzip/bin
 
@@ -42,7 +46,11 @@ git_prompt_brew="/usr/local/etc/bash_completion.d/git-prompt.sh"
 git_prompt_macos="/Library/Developer/CommandLineTools/usr/share/git-core/git-prompt.sh"
 source "$git_prompt_macos"
 if exists __git_ps1 ; then
-    export PROMPT='%B%F{yellow}%n@%m%f:%F{blue}%0~%f%b$(__git_ps1 " [\033[32m%s\033[0m]")%# '
+    # `%%` is character `%` on __git_ps1.
+    # zsh color sequence %F{name} and %f are
+    # right measurable as line character count.
+    # see: https://scrapbox.io/jiro4989/Zsh%E3%81%AE%E3%83%97%E3%83%AD%E3%83%B3%E3%83%97%E3%83%88%E3%81%8C%E5%A4%89%E3%81%AA%E4%BD%8D%E7%BD%AE%E3%81%AB%E6%94%B9%E8%A1%8C%E3%81%95%E3%82%8C%E3%82%8B%E5%95%8F%E9%A1%8C%E3%81%AE%E8%A7%A3%E6%B1%BA
+    export PROMPT='%B%F{yellow}%n@%m%f:%F{blue}%0~%f%b$(__git_ps1 " [%%F{green}%s%%f]")%# '
 else
     export PROMPT='%B%F{yellow}%n@%m%f:%F{blue}%0~%f%b%# '
 fi
@@ -50,7 +58,12 @@ if [ "$TERM" = screen ] ; then
     PROMPT+='$(__cdhook_screen_title_pwd)'
 fi
 
-PROMPT="%F{black}%1(?.%K{red}.%K{green})↪%?%k%f @%T $PROMPT"
+#PROMPT="%F{black}%1(?.%K{red}.%K{green})↪%?%k%f @%T $PROMPT"
+prompt_rc="%F{black}%1(?.%K{red}.%K{green})↪%?%k%f"
+prompt_dt="%F{white}%K{blue}%T%k%f"
+#prompt_jc="%F{black}%1(j.%K{magenta}.%K{white})&%j%k%f"
+prompt_jc="%1(j.%F{black}%K{cyan}&%j%k%f .)"
+PROMPT="$prompt_rc $prompt_dt $prompt_jc$PROMPT"
 
 #export RPROMPT='[%j%1(j.:$(jobs|perl -e "print join q(,), map { /^\[\d+\](?:  [+-])?\s+\w+\s+(\S+)/ } <>").)] %F{black}%1(?.%K{red}.%K{green})↪%?%k%f @%T'
 
@@ -88,5 +101,7 @@ bindkey -s '^g' 'git '
 ### common env
 ###
 source ~/.common_env
+
+#zmodload zsh/zprof && zprof
 
 : "end .zshrc"
