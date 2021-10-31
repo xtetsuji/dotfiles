@@ -1,6 +1,8 @@
 # -*- shell-script -*-
 : "start .zshrc"
 
+#zmodload zsh/zprof && zprof
+
 UNAME="$(uname)"
 #BREW_PREFIX="$(brew --prefix)"
 BREW_PREFIX="/usr/local"
@@ -94,5 +96,7 @@ bindkey -s '^g' 'git '
 ### common env
 ###
 source ~/.common_env
+
+#zmodload zsh/zprof && zprof
 
 : "end .zshrc"
