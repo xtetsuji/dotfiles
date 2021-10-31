@@ -58,7 +58,12 @@ if [ "$TERM" = screen ] ; then
     PROMPT+='$(__cdhook_screen_title_pwd)'
 fi
 
-PROMPT="%F{black}%1(?.%K{red}.%K{green})↪%?%k%f @%T $PROMPT"
+#PROMPT="%F{black}%1(?.%K{red}.%K{green})↪%?%k%f @%T $PROMPT"
+prompt_rc="%F{black}%1(?.%K{red}.%K{green})↪%?%k%f"
+prompt_dt="%F{white}%K{blue}%T%k%f"
+#prompt_jc="%F{black}%1(j.%K{magenta}.%K{white})&%j%k%f"
+prompt_jc="%1(j.%F{black}%K{cyan}&%j%k%f .)"
+PROMPT="$prompt_rc $prompt_dt $prompt_jc$PROMPT"
 
 #export RPROMPT='[%j%1(j.:$(jobs|perl -e "print join q(,), map { /^\[\d+\](?:  [+-])?\s+\w+\s+(\S+)/ } <>").)] %F{black}%1(?.%K{red}.%K{green})↪%?%k%f @%T'
 
