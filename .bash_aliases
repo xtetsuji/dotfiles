@@ -124,11 +124,12 @@ case "$UNAME" in
         fi
         alias ql='qlmanage -p 2>/dev/null'
         alias imgdim='sips -g pixelHeight -g pixelWidth $1'
-        # see various-commands/alt-md5sum more.
-        if exists alt-md5sum && ! exists md5sum ; then
-            alias md5sum=alt-md5
-        elif exists md5 && ! exists md5sum ; then
-            alias md5sum='md5 -s '
+        if ! exists md5sum ; then
+            if exists gmd5sum ; then
+                alias md5sum=gmd5sum
+            else
+                alias md5sum='md5 -s '
+            fi
         fi
         alias pbtee='cat | pbcopy ; sleep 1 ; pbpaste'
         alias pwdcopy='echo -n $(pwd)/ | pbcopy'
