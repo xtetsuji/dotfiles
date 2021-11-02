@@ -7,15 +7,14 @@ BREW_PREFIX="/usr/local"
 
 function push_path_var { test -d "$1" && PATH=$PATH:$1 ; }
 function unshift_path_var { test -d "$1" && PATH=$1:$PATH ; }
-alias add_path_var=push_path_var
 
 ###
 ### Path
 ###
 export PATH
-add_path_var ~/bin
-add_path_var ~/Dropbox/bin
-add_path_var /usr/local/bin
+push_path_var ~/bin
+push_path_var ~/Dropbox/bin
+push_path_var /usr/local/bin
 unshift_path_var /usr/local/opt/zip/bin
 unshift_path_var /usr/local/opt/unzip/bin
 
