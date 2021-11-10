@@ -113,7 +113,8 @@ case "$UNAME" in
             # from brew coreutils
             alias ls='ls --color=auto -F'
             # from `dircolors -b | pbcopy`
-            xtsource "dircolors.init" "system:dircolors -b"
+            # definition LS_COLORS environment variable
+            xtsource "dircolors.init" "system:dircolors -b ~/.dir_colors"
         else
             alias ls='ls -FG'
         fi
