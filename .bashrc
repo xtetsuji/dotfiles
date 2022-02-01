@@ -3,7 +3,7 @@
 
 UNAME="$(uname)"
 #BREW_PREFIX="$(brew --prefix)"
-BREW_PREFIX="/usr/local"
+BREW_PREFIX="/opt/homebrew"
 
 function push_path_var { test -d "$1" && PATH=$PATH:$1 ; }
 function unshift_path_var { test -d "$1" && PATH=$1:$PATH ; }
@@ -16,9 +16,9 @@ push_path_var ~/bin
 push_path_var ~/Dropbox/bin
 push_path_var /usr/local/bin
 push_path_var /opt/homebrew/bin
-unshift_path_var /usr/local/opt/coreutils/libexec/gnubin
-unshift_path_var /usr/local/opt/zip/bin
-unshift_path_var /usr/local/opt/unzip/bin
+unshift_path_var $BREW_PREFIX/opt/coreutils/libexec/gnubin
+unshift_path_var $BREW_PREFIX/opt/zip/bin
+unshift_path_var $BREW_PREFIX/opt/unzip/bin
 
 ###
 ### Config

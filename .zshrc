@@ -19,9 +19,9 @@ push_path_var ~/bin
 push_path_var ~/Dropbox/bin
 push_path_var /usr/local/bin
 push_path_var /opt/homebrew/bin
-unshift_path_var /usr/local/opt/coreutils/libexec/gnubin
-unshift_path_var /usr/local/opt/zip/bin
-unshift_path_var /usr/local/opt/unzip/bin
+unshift_path_var $BREW_PREFIX/opt/coreutils/libexec/gnubin
+unshift_path_var $BREW_PREFIX/opt/zip/bin
+unshift_path_var $BREW_PREFIX/opt/unzip/bin
 
 # /usr/share/zsh/5.8 is macOS 11 (Big Sur) default zsh library path
 fpath=(/usr/share/zsh/5.8/functions/ $fpath)
