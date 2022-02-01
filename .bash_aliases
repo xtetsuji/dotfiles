@@ -113,7 +113,8 @@ case "$UNAME" in
             # from brew coreutils
             alias ls='ls --color=auto -F'
             # from `dircolors -b | pbcopy`
-            xtsource "dircolors.init" "system:dircolors -b"
+            # definition LS_COLORS environment variable
+            xtsource "dircolors.init" "system:dircolors -b ~/.dir_colors"
         else
             alias ls='ls -FG'
         fi
@@ -124,17 +125,15 @@ case "$UNAME" in
         fi
         alias ql='qlmanage -p 2>/dev/null'
         alias imgdim='sips -g pixelHeight -g pixelWidth $1'
-        # see various-commands/alt-md5sum more.
-        if exists alt-md5sum && ! exists md5sum ; then
-            alias md5sum=alt-md5
-        elif exists md5 && ! exists md5sum ; then
-            alias md5sum='md5 -s '
+        if ! exists md5sum ; then
+            if exists gmd5sum ; then
+                alias md5sum=gmd5sum
+            else
+                alias md5sum='md5 -s '
+            fi
         fi
         alias pbtee='cat | pbcopy ; sleep 1 ; pbpaste'
         alias pwdcopy='echo -n $(pwd)/ | pbcopy'
-
-        # see: http://deeeet.com/writing/2014/04/30/beer-on-terminal/
-        function beers () { ruby -e 'C=`stty size`.scan(/\d+/)[1].to_i;S=ARGV.shift||"\xf0\x9f\x8d\xba";a={};puts "\033[2J";loop{a[rand(C)]=0;a.each{|x,o|;a[x]+=1;print "\033[#{o};#{x}H \033[#{a[x]};#{x}H#{S} \033[0;0H"};$stdout.flush;sleep 0.01}' ; }
         ;;
     Linux)
         alias ls='ls --color=auto -F'
