@@ -16,6 +16,7 @@ push_path_var ~/bin
 push_path_var ~/Dropbox/bin
 push_path_var /usr/local/bin
 push_path_var /opt/homebrew/bin
+unshift_path_var /usr/local/opt/coreutils/libexec/gnubin
 unshift_path_var /usr/local/opt/zip/bin
 unshift_path_var /usr/local/opt/unzip/bin
 
