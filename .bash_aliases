@@ -35,6 +35,10 @@ function xtsource {
         # backup previous cache
         if [ -f "$file" ] ; then
             mv "$file" "$file.$(date +%Y%m%d-%H%M%S)-backup"
+        else
+            # XXX: This patche is not effected when basedir is not found.
+            local basedir=$(dirname "$file")
+            test -d "$basedir" || mkdir -vp "$basedir"
         fi
         # command detect
         if [[ $url =~ ^https?: ]] ; then
