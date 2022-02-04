@@ -5,7 +5,7 @@
 
 UNAME="$(uname)"
 #BREW_PREFIX="$(brew --prefix)"
-BREW_PREFIX="/usr/local"
+BREW_PREFIX="/opt/homebrew"
 
 function push_path_var { test -d "$1" && PATH=$PATH:$1 ; }
 function unshift_path_var { test -d "$1" && PATH=$1:$PATH ; }
