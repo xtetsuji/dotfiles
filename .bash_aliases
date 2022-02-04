@@ -118,7 +118,9 @@ case "$UNAME" in
             alias ls='ls --color=auto -F'
             # from `dircolors -b | pbcopy`
             # definition LS_COLORS environment variable
-            xtsource "dircolors.init" "system:dircolors -b ~/.dir_colors"
+            dircolors -b ~/.dir_colors
+            # XXX: xtsource bug!!!
+            #　xtsource "dircolors.init" "system:dircolors -b ~/.dir_colors"
         else
             alias ls='ls -FG'
         fi
