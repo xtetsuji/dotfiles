@@ -70,8 +70,9 @@ set bell-style visible
 IGNOREEOF=3
 
 function import-clr {
-    xtsource bash_colors \
-        https://raw.githubusercontent.com/maxtsepkov/bash_colors/master/bash_colors.sh
+    local url=https://raw.githubusercontent.com/maxtsepkov/bash_colors/master/bash_colors.sh
+    echo "download $url or take its cache"
+    eval "$(bkt --ttl=$BKT_TTL -- curl -fsSL $url)"
     echo "import clr_*"
     echo "  clr_dump:"
     clr_dump
