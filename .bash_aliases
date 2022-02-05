@@ -16,6 +16,21 @@ fi
 declare ALIASES=$HOME/.bash_aliases
 declare UNAME=$(uname)
 
+# bkt - https://github.com/dimo414/bkt
+# Cache commands using bkt if installed
+if command -v bkt >&/dev/null; then
+    bkt() { command bkt "$@"; }
+else
+  # If bkt isn't installed skip its arguments and just execute directly.
+  # Optionally write a msg to stderr suggesting users install bkt.
+  bkt() {
+    while [[ "$1" == --* ]]; do shift; done
+    "$@"
+  }
+fi
+
+export BKT_TTL="120s"
+
 export XTCACHE_LIFETIME=$(( 120 * 86400 )) # 120 days
 export XTSOURCE_CACHE_DIR=~/.config/xtsource/cache
 
