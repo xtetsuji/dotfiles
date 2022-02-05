@@ -87,12 +87,12 @@ if exists drip ; then
 fi
 
 ###
-### plenv on xtenv
+### plenv
 ###
 if [ -d $HOME/.plenv ] ; then
     export PLENV_ROOT=$HOME/.plenv
     export PATH=$PLENV_ROOT/bin:$PATH
-    xtsource "plenv.init.$SHELL_NAME" "system:plenv init -"
+    eval "$(bkt --ttl=$BKT_TTL -- plenv init -)"
 fi
 
 ###
