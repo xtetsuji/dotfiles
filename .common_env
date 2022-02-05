@@ -96,12 +96,12 @@ if [ -d $HOME/.plenv ] ; then
 fi
 
 ###
-### rbenv on xtenv
+### rbenv
 ###
 if [ -d $HOME/.rbenv ] ; then
     export RBENV_ROOT=$HOME/.rbenv
     export PATH=$RBENV_ROOT/bin:$PATH
-    xtsource "rbenv.init.$SHELL_NAME" "system:rbenv init -"
+    eval "$(bkt --ttl=$BKT_TTL -- rbenv init -)"
 fi
 
 ###
