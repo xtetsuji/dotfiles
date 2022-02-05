@@ -81,13 +81,6 @@ function import-clr {
 SHELL_NAME=${SHELL##*/}
 
 ###
-### chdrip on xtenv
-###
-if exists drip ; then
-    xtsource "drip.init" "system:drip drip-init"
-fi
-
-###
 ### plenv
 ###
 if [ -d $HOME/.plenv ] ; then
