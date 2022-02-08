@@ -34,7 +34,7 @@ case "$TERM" in
     screen) color_prompt=yes;;
 esac
 
-git_prompt_brew="/usr/local/etc/bash_completion.d/git-prompt.sh"
+git_prompt_brew="$BREW_PREFIX/etc/bash_completion.d/git-prompt.sh"
 git_prompt_macos="/Library/Developer/CommandLineTools/usr/share/git-core/git-prompt.sh"
 if [ "$color_prompt" = yes ] ; then
     for f in "$git_prompt_brew" "$git_prompt_macos" ; do

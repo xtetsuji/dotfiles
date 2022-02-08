@@ -42,7 +42,7 @@ source_if_readable ~/.bash_secret
 ### Prompt
 ###
 setopt PROMPT_SUBST
-git_prompt_brew="/usr/local/etc/bash_completion.d/git-prompt.sh"
+git_prompt_brew="$BREW_PREFIX/etc/bash_completion.d/git-prompt.sh"
 git_prompt_macos="/Library/Developer/CommandLineTools/usr/share/git-core/git-prompt.sh"
 source "$git_prompt_macos"
 if exists __git_ps1 ; then
