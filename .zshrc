@@ -3,7 +3,6 @@
 
 #zmodload zsh/zprof && zprof
 
-UNAME="$(uname)"
 #BREW_PREFIX="$(brew --prefix)"
 BREW_PREFIX="/opt/homebrew"
 

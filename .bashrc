@@ -1,7 +1,6 @@
 # -*- mode: shell-script ; coding: utf-8 ; -*-
 : "start .bashrc"
 
-UNAME="$(uname)"
 #BREW_PREFIX="$(brew --prefix)"
 BREW_PREFIX="/opt/homebrew"
 
