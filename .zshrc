@@ -43,7 +43,9 @@ source_if_readable ~/.bash_secret
 setopt PROMPT_SUBST
 git_prompt_brew="$BREW_PREFIX/etc/bash_completion.d/git-prompt.sh"
 git_prompt_macos="/Library/Developer/CommandLineTools/usr/share/git-core/git-prompt.sh"
-source "$git_prompt_macos"
+for f in "$git_prompt_brew" "$git_prompt_macos" ; do
+    test -f "$f" && source "$f" && break
+done
 if exists __git_ps1 ; then
     # `%%` is character `%` on __git_ps1.
     # zsh color sequence %F{name} and %f are
