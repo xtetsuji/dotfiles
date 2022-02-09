@@ -86,7 +86,7 @@ SHELL_NAME=${SHELL##*/}
 if [ -d $HOME/.plenv ] ; then
     export PLENV_ROOT=$HOME/.plenv
     export PATH=$PLENV_ROOT/bin:$PATH
-    eval "$(bkt --ttl=$BKT_TTL -- plenv init -)"
+    eval "$(bkt --ttl=$BKT_TTL -- plenv init - ${SHELL##*/})"
 fi
 
 ###
@@ -95,7 +95,7 @@ fi
 if [ -d $HOME/.rbenv ] ; then
     export RBENV_ROOT=$HOME/.rbenv
     export PATH=$RBENV_ROOT/bin:$PATH
-    eval "$(bkt --ttl=$BKT_TTL -- rbenv init -)"
+    eval "$(bkt --ttl=$BKT_TTL -- rbenv init - ${SHELL##*/})"
 fi
 
 ###
