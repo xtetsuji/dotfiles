@@ -119,6 +119,30 @@ alias uri_escape='perl -MURI::Escape=uri_escape -E "say uri_escape(join q/ /, @A
 ### big functions
 ###
 
+is_current_zsh && \
+function cd {
+    local arg="$1" dir subcommand
+    if [ "${arg:0:1}" = ":" ] ; then
+        subcommand="${arg#:}"
+        case "$subcommand" in
+            planter)
+                dir="$(planter peco)"
+                ;;
+            *)
+                echo "subcommand \"$subcommand\" is not found"
+                return 1
+                ;;
+        esac
+    else
+        dir="$arg"
+    fi
+    if [ -z "$dir" ] ; then
+        builtin cd
+    else
+        builtin cd "$dir"
+    fi
+}
+
 # previous cd at 2005/03/22 (original idea)
 # enahnced cd at 2019/03/31 (following)
 is_current_bash && \
