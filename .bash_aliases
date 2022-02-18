@@ -58,10 +58,6 @@ case "$UNAME" in
             alias ls='ls -FG'
         fi
 
-        # Recommend to create symlink /usr/sbin/airport as the airport.
-        if [ ! -f /sbin/airport ] || [ ! -f /usr/sbin/airport ] ; then
-            alias airport='/System/Library/PrivateFrameworks/Apple80211.framework/Versions/Current/Resources/airport'
-        fi
         alias ql='qlmanage -p 2>/dev/null'
         alias imgdim='sips -g pixelHeight -g pixelWidth $1'
         if ! exists md5sum ; then
