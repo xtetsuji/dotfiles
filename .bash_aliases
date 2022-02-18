@@ -121,6 +121,12 @@ function cd {
             planter)
                 dir="$(planter peco)"
                 ;;
+            isearch)
+                dir="$(mdfind 'kMDItemContentType == "public.folder"' | peco --select-1 )"
+                ;;
+            isearch-home)
+                dir="$(mdfind -onlyin $HOME 'kMDItemContentType == "public.folder"' | peco --select-1 )"
+                ;;
             *)
                 echo "subcommand \"$subcommand\" is not found"
                 return 1
