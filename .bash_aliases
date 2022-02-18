@@ -51,11 +51,8 @@ function __cdhook_screen_title_pwd {
 
 case "$UNAME" in
     Darwin) ### Mac OS X
-        #alias ls='ls -FG' # BSD type "ls"
-        #exists gls && alias ls='gls --color=auto -F'
-        if [[ $(type ls) =~ coreutils ]] ; then
-            # from brew coreutils
-            alias ls='ls --color=auto -F'
+        if exists gls ; then
+            alias ls='gls --color=auto -F'
             eval "$(dircolors -b ~/.dir_colors)"
         else
             alias ls='ls -FG'
