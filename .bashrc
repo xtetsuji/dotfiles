@@ -2,7 +2,13 @@
 : "start .bashrc"
 
 #BREW_PREFIX="$(brew --prefix)"
-BREW_PREFIX="/opt/homebrew"
+if [ -d "/opt/homebrew" ] ; then
+    BREW_PREFIX="/opt/homebrew"
+elif [ -d "/usr/local/Cellar" ] ; then
+    BREW_PREFIX="/usr/local/Cellar"
+elif type brew >/dev/null 2>&1 ; then
+    BREW_PREFIX="$(brew --prefix)"
+fi
 
 function push_path_var { test -d "$1" && PATH=$PATH:$1 ; }
 function unshift_path_var { test -d "$1" && PATH=$1:$PATH ; }
