@@ -70,8 +70,9 @@ set bell-style visible
 IGNOREEOF=3
 
 function import-clr {
-    xtsource bash_colors \
-        https://raw.githubusercontent.com/maxtsepkov/bash_colors/master/bash_colors.sh
+    local url=https://raw.githubusercontent.com/maxtsepkov/bash_colors/master/bash_colors.sh
+    echo "download $url or take its cache"
+    eval "$(bkt --ttl=$BKT_TTL -- curl -fsSL $url)"
     echo "import clr_*"
     echo "  clr_dump:"
     clr_dump
@@ -80,28 +81,21 @@ function import-clr {
 SHELL_NAME=${SHELL##*/}
 
 ###
-### chdrip on xtenv
-###
-if exists drip ; then
-    xtsource "drip.init" "system:drip drip-init"
-fi
-
-###
-### plenv on xtenv
+### plenv
 ###
 if [ -d $HOME/.plenv ] ; then
     export PLENV_ROOT=$HOME/.plenv
     export PATH=$PLENV_ROOT/bin:$PATH
-    xtsource "plenv.init.$SHELL_NAME" "system:plenv init -"
+    eval "$(bkt --ttl=$BKT_TTL -- plenv init - ${SHELL##*/})"
 fi
 
 ###
-### rbenv on xtenv
+### rbenv
 ###
 if [ -d $HOME/.rbenv ] ; then
     export RBENV_ROOT=$HOME/.rbenv
     export PATH=$RBENV_ROOT/bin:$PATH
-    xtsource "rbenv.init.$SHELL_NAME" "system:rbenv init -"
+    eval "$(bkt --ttl=$BKT_TTL -- rbenv init - ${SHELL##*/})"
 fi
 
 ###

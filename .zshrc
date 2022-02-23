@@ -3,9 +3,14 @@
 
 #zmodload zsh/zprof && zprof
 
-UNAME="$(uname)"
 #BREW_PREFIX="$(brew --prefix)"
-BREW_PREFIX="/usr/local"
+if [ -d "/opt/homebrew" ] ; then
+    BREW_PREFIX="/opt/homebrew"
+elif [ -d "/usr/local/Cellar" ] ; then
+    BREW_PREFIX="/usr/local/Cellar"
+elif type brew >/dev/null 2>&1 ; then
+    BREW_PREFIX="$(brew --prefix)"
+fi
 
 function push_path_var { test -d "$1" && PATH=$PATH:$1 ; }
 function unshift_path_var { test -d "$1" && PATH=$1:$PATH ; }
@@ -18,9 +23,10 @@ export PATH
 push_path_var ~/bin
 push_path_var ~/Dropbox/bin
 push_path_var /usr/local/bin
-unshift_path_var /usr/local/opt/coreutils/libexec/gnubin
-unshift_path_var /usr/local/opt/zip/bin
-unshift_path_var /usr/local/opt/unzip/bin
+push_path_var /opt/homebrew/bin
+unshift_path_var $BREW_PREFIX/opt/coreutils/libexec/gnubin
+unshift_path_var $BREW_PREFIX/opt/zip/bin
+unshift_path_var $BREW_PREFIX/opt/unzip/bin
 
 # /usr/share/zsh/5.8 is macOS 11 (Big Sur) default zsh library path
 fpath=(/usr/share/zsh/5.8/functions/ $fpath)
@@ -41,9 +47,11 @@ source_if_readable ~/.bash_secret
 ### Prompt
 ###
 setopt PROMPT_SUBST
-git_prompt_brew="/usr/local/etc/bash_completion.d/git-prompt.sh"
+git_prompt_brew="$BREW_PREFIX/etc/bash_completion.d/git-prompt.sh"
 git_prompt_macos="/Library/Developer/CommandLineTools/usr/share/git-core/git-prompt.sh"
-source "$git_prompt_macos"
+for f in "$git_prompt_brew" "$git_prompt_macos" ; do
+    test -f "$f" && source "$f" && break
+done
 if exists __git_ps1 ; then
     # `%%` is character `%` on __git_ps1.
     # zsh color sequence %F{name} and %f are

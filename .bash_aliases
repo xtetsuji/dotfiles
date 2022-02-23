@@ -16,76 +16,20 @@ fi
 declare ALIASES=$HOME/.bash_aliases
 declare UNAME=$(uname)
 
-export XTCACHE_LIFETIME=$(( 120 * 86400 )) # 120 days
-export XTSOURCE_CACHE_DIR=~/.config/xtsource/cache
+# bkt - https://github.com/dimo414/bkt
+# Cache commands using bkt if installed
+if command -v bkt >&/dev/null; then
+    bkt() { command bkt "$@"; }
+else
+  # If bkt isn't installed skip its arguments and just execute directly.
+  # Optionally write a msg to stderr suggesting users install bkt.
+  bkt() {
+    while [[ "$1" == --* ]]; do shift; done
+    "$@"
+  }
+fi
 
-# xtsource FILE URL_OR_COMMAND
-# source FILE_OF_URL or eval $(COMMAND) from URL or Command
-# if 2nd argument is URL,
-#     then GET URL is saved to file and this file is sourced
-# if 2nd argument is command (with `system:` scheme),
-#     then executed content is saved to file and this file is sourced
-# source <(curl URL) => xtsource CACHE_FILE URL
-function xtsource {
-    local file=$1 url=$2 command mode
-    if ! [[ $file =~ / ]] ; then
-        file=$XTSOURCE_CACHE_DIR/$file
-    fi
-    if xtcache-need-fetch "$file" ; then
-        # backup previous cache
-        if [ -f "$file" ] ; then
-            mv "$file" "$file.$(date +%Y%m%d-%H%M%S)-backup"
-        fi
-        # command detect
-        if [[ $url =~ ^https?: ]] ; then
-            command=(curl -q "$url")
-            mode=curl
-        elif [[ $url =~ ^system: ]] ; then
-            command=($(sed -e 's/^system: *//' <<<"$url" ))
-            mode=system
-        else
-            echo "xtsource: URL format error" >&2
-            return 1
-        fi
-        # command execute and create cache
-        "${command[@]}" > "$file" || {
-            echo "xtsource: $mode \"$url\" failed" >&2
-            return 1
-        } # TODO: stderr log
-    fi
-    source "$file"
-}
-
-function xtcache-need-fetch {
-    local file=$1 now=$(date +%s)
-    local RC_FETCH=0 RC_USE_CACHE=1
-    if [ ! -f "$file" ] ; then
-        return $RC_FETCH
-    fi
-    # TODO: `stat -s` is only available BSD like system. It is need Linux support.
-    # ad-hoc support, for brew coreutils conflict
-    # in other words, this function only works on macOS and BSD like OS.
-    eval local $(/usr/bin/stat -s "$file")
-    if (( now - st_mtime > XTCACHE_LIFETIME )) ; then
-        return $RC_FETCH
-    fi
-    return $RC_USE_CACHE
-}
-
-function xtsourcectl {
-    command="$1"
-    case "$command" in
-        setup) mkdir -v -p "$XTSOURCE_CACHE_DIR" ;;
-        list)  ls -l "$XTSOURCE_CACHE_DIR" ;;
-        clear) rm -v "$XTSOURCE_CACHE_DIR/"* ;;
-        dir)   echo "$XTSOURCE_CACHE_DIR" ;;
-        cd)    cd "$XTSOURCE_CACHE_DIR" ;;
-        *)
-            echo "Usage:"
-            echo "  xtsourcectl [setup|list|clear|dir|cd]"
-            ;;
-    esac
-}
+export BKT_TTL="120s"
 
 ###
 ### hooks
@@ -107,22 +51,13 @@ function __cdhook_screen_title_pwd {
 
 case "$UNAME" in
     Darwin) ### Mac OS X
-        #alias ls='ls -FG' # BSD type "ls"
-        #exists gls && alias ls='gls --color=auto -F'
-        if [[ $(type ls) =~ coreutils ]] ; then
-            # from brew coreutils
-            alias ls='ls --color=auto -F'
-            # from `dircolors -b | pbcopy`
-            # definition LS_COLORS environment variable
-            xtsource "dircolors.init" "system:dircolors -b ~/.dir_colors"
+        if exists gls ; then
+            alias ls='gls --color=auto -F'
+            eval "$(dircolors -b ~/.dir_colors)"
         else
             alias ls='ls -FG'
         fi
 
-        # Recommend to create symlink /usr/sbin/airport as the airport.
-        if [ ! -f /sbin/airport ] || [ ! -f /usr/sbin/airport ] ; then
-            alias airport='/System/Library/PrivateFrameworks/Apple80211.framework/Versions/Current/Resources/airport'
-        fi
         alias ql='qlmanage -p 2>/dev/null'
         alias imgdim='sips -g pixelHeight -g pixelWidth $1'
         if ! exists md5sum ; then
@@ -176,6 +111,36 @@ alias uri_escape='perl -MURI::Escape=uri_escape -E "say uri_escape(join q/ /, @A
 ###
 ### big functions
 ###
+
+is_current_zsh && \
+function cd {
+    local arg="$1" dir subcommand
+    if [ "${arg:0:1}" = ":" ] ; then
+        subcommand="${arg#:}"
+        case "$subcommand" in
+            planter)
+                dir="$(planter peco)"
+                ;;
+            isearch)
+                dir="$(mdfind 'kMDItemContentType == "public.folder"' | peco --select-1 )"
+                ;;
+            isearch-home)
+                dir="$(mdfind -onlyin $HOME 'kMDItemContentType == "public.folder"' | peco --select-1 )"
+                ;;
+            *)
+                echo "subcommand \"$subcommand\" is not found"
+                return 1
+                ;;
+        esac
+    else
+        dir="$arg"
+    fi
+    if [ -z "$dir" ] ; then
+        builtin cd
+    else
+        builtin cd "$dir"
+    fi
+}
 
 # previous cd at 2005/03/22 (original idea)
 # enahnced cd at 2019/03/31 (following)
@@ -356,58 +321,6 @@ function ps2 {
             ;;
     esac
 }
-
-function choice-prompt {
-    local type="$1"
-    case "$type" in
-        default-color)
-            PS1="$COLOR_PROMPT_PS1"
-            ;;
-        simple)
-            PS1='$ '
-            ;;
-        *)
-            echo Usage:
-            echo "  $FUNCNAME: [default-color|simple]"
-            ;;
-    esac
-}
-
-
-# see: http://qiita.com/yungsang/items/09890a06d204bf398eea
-#export HISTCONTROL="ignoredups"
-# peco-history / C-x C-r
-function peco-history() {
-  local NUM=$(history | wc -l)
-  local FIRST=$((-1*(NUM-1)))
-
-  if [ $FIRST -eq 0 ] ; then
-    # Remove the last entry, "peco-history"
-    history -d $((HISTCMD-1))
-    echo "No history" >&2
-    return
-  fi
-
-  local CMD=$(fc -l $FIRST | sort -k 2 -k 1nr | uniq -f 1 | sort -nr | sed -E 's/^[0-9]+[[:blank:]]+//' | peco | head -n 1)
-
-  if [ -n "$CMD" ] ; then
-    # Replace the last entry, "peco-history", with $CMD
-    history -s $CMD
-
-    if type osascript > /dev/null 2>&1 ; then
-      # Send UP keystroke to console
-      (osascript -e 'tell application "System Events" to keystroke (ASCII character 30)' &)
-    fi
-
-    # Uncomment below to execute it here directly
-    # echo $CMD >&2
-    # eval $CMD
-  else
-    # Remove the last entry, "peco-history"
-    history -d $((HISTCMD-1))
-  fi
-}
-is_current_bash && bind '"\C-x\C-r":"peco-history\n"'
 
 unset ALIASES
 unset UNAME
