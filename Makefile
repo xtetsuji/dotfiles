@@ -11,13 +11,7 @@ usage:
 	@echo "  make uninstall-symlink"
 
 status:
-	for target in $(MANAGED_DOTFILES) ; do \
-		if [ -z "$$(stat -f '%T' $$target )" ] ; then \
-			echo "- $$target" ; \
-		else \
-			stat -f '%T %N' $$target ; \
-		fi ; \
-	done
+	ls -l --color $(MANAGED_DOTFILES)
 
 $(ALL_DOTFILES):
 	@f=$$(basename $@) ; test -f "$$f" -a -f "$(CURDIR)/$$f"
