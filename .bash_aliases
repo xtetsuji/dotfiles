@@ -53,7 +53,7 @@ case "$UNAME" in
     Darwin) ### Mac OS X
         if exists gls ; then
             alias ls='gls --color=auto -F'
-            eval "$(dircolors -b ~/.dir_colors)"
+            # dircolors process is following
         else
             alias ls='ls -FG'
         fi
@@ -80,6 +80,14 @@ case "$UNAME" in
         source_if_readable ~/.bash_aliases_cygwin
         ;;
 esac
+
+if exists dircolors ; then
+    if [ -f ~/.dir_colors ] ; then
+        eval "$(dircolors -b ~/.dir_colors)"
+    else
+        eval "$(dircolors -b)"
+    fi
+fi
 
 alias grep='grep --color=auto'
 alias en='env LANG=C '
