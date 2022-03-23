@@ -16,6 +16,17 @@
 	ba = branch -a
 	ra = remote -v
 
+	cb = switch
+	chbr = switch
+	chbris = cop
+	mkchbr = switch -c
+	rmbr = branch -d
+	origin-rmbr = push origin --delete
+	cbp = cop
+	lb = branch -a
+	lr = remote -v
+	wb = branch --show-current
+
 	# enhancement hub clone
 	named-clone = "!perl -E '($n, $r) = split m{/}, shift; system qw(hub clone), qq($n/$r), qq($n/$r\\@$n);'"
 	### branch management
