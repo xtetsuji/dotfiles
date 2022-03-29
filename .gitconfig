@@ -22,6 +22,8 @@
 	mkchbr = switch -c
 	rmbr = branch -d
 	origin-rmbr = push origin --delete
+	lsbr = branch -a
+	lsrt = remote -v
 	cbp = cop
 	lb = branch -a
 	lr = remote -v
