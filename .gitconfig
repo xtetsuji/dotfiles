@@ -55,6 +55,8 @@
 
 	sjisdiff = !git diff --color=always | piconv -f shiftjis -t utf8
 	eucjpdiff = !git diff --color=always | piconv -f euc-jp -t utf8
+	sjisdf = sjisdiff
+	eucjpdf = eucjpdiff
 
 	### reset methods
 	cancel      = reset --soft HEAD^
