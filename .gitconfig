@@ -49,9 +49,7 @@
 	diffns = diff --name-only --cached
 	df = diff
 	dfs = diff --cached
-	ds = diff --cached
 	dfn = diff --name-only
-	dn = diff --name-only
 
 	sjisdiff = !git diff --color=always | piconv -f shiftjis -t utf8
 	eucjpdiff = !git diff --color=always | piconv -f euc-jp -t utf8
