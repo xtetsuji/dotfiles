@@ -58,6 +58,11 @@
 	sjisdf = sjisdiff
 	eucjpdf = eucjpdiff
 
+	sjisdiffs = !git diff --color=always --cached | piconv -f shiftjis -t utf8
+	eucjpdiffs = !git diff --color=always --cached | piconv -f euc-jp -t utf8
+	sjisdfs = sjisdiffs
+	eucjpdfs = eucjpdiffs
+
 	### reset methods
 	cancel      = reset --soft HEAD^
 	reset-merge = reset --merge
