@@ -22,6 +22,8 @@
 	mkchbr = switch -c
 	rmbr = branch -d
 	origin-rmbr = push origin --delete
+	lsbr = branch -a
+	lsrt = remote -v
 	cbp = cop
 	lb = branch -a
 	lr = remote -v
@@ -50,6 +52,9 @@
 	ds = diff --cached
 	dfn = diff --name-only
 	dn = diff --name-only
+
+	sjisdiff = !git diff --color=always | piconv -f shiftjis -t utf8
+	eucjpdiff = !git diff --color=always | piconv -f euc-jp -t utf8
 
 	### reset methods
 	cancel      = reset --soft HEAD^
