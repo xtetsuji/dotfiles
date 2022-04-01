@@ -51,13 +51,13 @@
 	dfs = diff --cached
 	dfn = diff --name-only
 
-	sjisdiff = !git diff --color=always | piconv -f shiftjis -t utf8
-	eucjpdiff = !git diff --color=always | piconv -f euc-jp -t utf8
+	sjisdiff = "!function f { git diff --color=always \"$@\" | piconv -f shiftjis -t utf8;}; f"
+	eucjpdiff = "!function f { git diff --color=always \"$@\" | piconv -f euc-jp -t utf8;}; f"
 	sjisdf = sjisdiff
 	eucjpdf = eucjpdiff
 
-	sjisdiffs = !git diff --color=always --cached | piconv -f shiftjis -t utf8
-	eucjpdiffs = !git diff --color=always --cached | piconv -f euc-jp -t utf8
+	sjisdiffs = sjisdiff --cached
+	eucjpdiffs = eucjpdiff --cached
 	sjisdfs = sjisdiffs
 	eucjpdfs = eucjpdiffs
 
