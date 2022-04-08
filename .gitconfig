@@ -49,12 +49,18 @@
 	diffns = diff --name-only --cached
 	df = diff
 	dfs = diff --cached
-	ds = diff --cached
 	dfn = diff --name-only
-	dn = diff --name-only
 
-	sjisdiff = !git diff --color=always | piconv -f shiftjis -t utf8
-	eucjpdiff = !git diff --color=always | piconv -f euc-jp -t utf8
+	piconvdiff = "!function f { enc=$1 ; shift ; git diff --color=always \"$@\" | piconv -f $enc -t utf8;}; f"
+	sjisdiff = piconvdiff shiftjis
+	eucjpdiff = piconvdiff euc-jp
+	sjisdf = sjisdiff
+	eucjpdf = eucjpdiff
+
+	sjisdiffs = sjisdiff --cached
+	eucjpdiffs = eucjpdiff --cached
+	sjisdfs = sjisdiffs
+	eucjpdfs = eucjpdiffs
 
 	### reset methods
 	cancel      = reset --soft HEAD^
