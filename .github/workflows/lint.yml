@@ -1,0 +1,22 @@
+name: lint
+
+on:
+  push:
+    branches: '*'
+
+jobs:
+  lint-check:
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v2
+
+    - name: Install required packages
+      run: |
+        sudo apt install shellcheck
+
+    - name: Check .bash_profile
+      run: make shellcheck-bash_profile
+
+    - name: Check .bashrc
+      run: make shellcheck-bashrc
