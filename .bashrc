@@ -54,7 +54,6 @@ if [ "$color_prompt" = yes ] ; then
     else
         PS1='\[\033[01;33m\]\u@\h\[\033[00m\]:\[\033[01;34m\]\w\[\033[00m\]\$ '
     fi
-    COLOR_PROMPT_PS1="$PS1"
 fi
 
 if [ "$TERM" = screen ] ; then
