@@ -18,6 +18,6 @@ if [ -n "$BASH_VERSION" ] && [ -f ~/.bashrc ] ; then
     source ~/.bashrc
 fi
 
-BASH_PROFILE_DONE=1
+export BASH_PROFILE_DONE=1
 
 : "end .bash_profile"
