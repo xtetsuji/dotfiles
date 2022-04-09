@@ -42,6 +42,10 @@ jobs:
       run: |
         bash -l
         exit
+
+    - name: Install zsh
+      run: sudo apt-get --assume-yes zsh
+
     - name: Run zsh login shell
       run: |
         zsh -l
