@@ -11,14 +11,19 @@ jobs:
     steps:
     - uses: actions/checkout@v2
 
+    - name: Debug output
+      run: |
+        echo "Current directory is $(PWD)"
+        echo "Home directory is $HOME"
+
     - name: List original dotfiles
       run: |
         ls -ld ~/.??*
 
     - name: Move original dotfiles
       run: |
-        for f in .bash??* ; do
-          mv $f $f.bak
+        for f in ~/.bash??* ; do
+          mv -v $f $f.bak
         done
 
     - name: Deploy dotfiles
