@@ -11,6 +11,16 @@ jobs:
     steps:
     - uses: actions/checkout@v2
 
+    - name: List original dotfiles
+      run: |
+        ls -ld ~/.??*
+
+    - name: Move original dotfiles
+      run: |
+        for f in .bash??* ; do
+          mv $f $f.bak
+        done
+
     - name: Deploy dotfiles
       run: make install-symlink
 
