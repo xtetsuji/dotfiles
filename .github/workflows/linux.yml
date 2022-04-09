@@ -26,6 +26,8 @@ jobs:
 
     - name: Load .bash_profile
       run: |
+        cat -n ~/.bash_profile
+        echo "==="
         bash ~/.bash_profile 2> error.log; cat error.log
         if [ -s error.log ]; then false; fi
 
@@ -33,7 +35,7 @@ jobs:
       run: |
         cat -n ~/.bashrc
         echo "==="
-        bash ~/.bashrc 2> error.log; cat error.log
+        bash -l -c "source ~/.bashrc" 2> error.log; cat error.log
         if [ -s error.log ]; then false; fi
 
     - name: Run bash login shell
