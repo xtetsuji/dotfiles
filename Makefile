@@ -20,10 +20,8 @@ targets:
 		echo "  make $$f" ; \
 	done
 
-$(ALL_DOTFILES):
-	@f=$$(basename $@) ; test -f "$$f" -a -f "$(CURDIR)/$$f"
-	f=$$(basename $@) ; \
-		ln -s "$(CURDIR)/$$f" "$@"
+$(MANAGED_DOTFILES):
+	f="$@" ; ln -s "$(CURDIR)/$$(basename $$f)" "$$f"
 
 install-symlink:
 	for target in $(MANAGED_DOTFILES) ; do \
