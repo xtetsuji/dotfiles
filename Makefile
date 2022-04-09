@@ -1,7 +1,6 @@
 # -*- makefile -*-
 
 MANAGED_DOTFILES	= $(shell git ls-files '.??*' | grep -v '/' | sed -e 's|^|~/|')
-ALL_DOTFILES	= $(shell for f in .??* ; do echo "$$f" ; done | sed -e 's|^|~/|')
 
 usage:
 	@echo "Usage:"
