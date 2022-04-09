@@ -19,6 +19,18 @@ targets:
 		echo "  make $$f" ; \
 	done
 
+# see: https://qiita.com/rtakasuke/items/85133e396ba766458c20
+shellcheck:
+	$(MAKE) shellcheck-bash_profile
+	$(MAKE) shellcheck-bashrc
+
+shellcheck-bash_profile:
+	shellcheck .bash_profile --exclude=SC2148,SC1090
+
+shellcheck-bashrc:
+	shellcheck .bashrc --exclude=SC2148,SC1090
+
+
 $(MANAGED_DOTFILES):
 	f="$@" ; ln -s "$(CURDIR)/$$(basename $$f)" "$$f"
 
