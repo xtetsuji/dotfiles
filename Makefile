@@ -16,7 +16,7 @@ status:
 
 targets:
 	@echo "Usage:"
-	@for f in $(ALL_DOTFILES) ; do \
+	@for f in $(MANAGED_DOTFILES) ; do \
 		echo "  make $$f" ; \
 	done
 
