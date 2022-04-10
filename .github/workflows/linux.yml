@@ -29,6 +29,9 @@ jobs:
     - name: Deploy dotfiles
       run: make install-symlink
 
+    - name: Define locale
+      run: sudo localedef -f UTF-8 -i ja_JP ja_JP
+
     - name: Load .bash_profile
       run: |
         cat -n ~/.bash_profile
