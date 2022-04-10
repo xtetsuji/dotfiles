@@ -13,7 +13,7 @@ jobs:
 
     - name: Debug output
       run: |
-        echo "Current directory is $(PWD)"
+        echo "Current directory is $PWD"
         echo "Home directory is $HOME"
 
     - name: List original dotfiles
