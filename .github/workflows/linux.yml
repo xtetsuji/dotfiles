@@ -32,29 +32,17 @@ jobs:
     - name: Define locale
       run: sudo localedef -f UTF-8 -i ja_JP ja_JP
 
-    - name: Load .bash_profile
-      run: |
-        cat -n ~/.bash_profile
-        echo "==="
-        bash ~/.bash_profile 2> error.log; cat error.log
-        if [ -s error.log ]; then false; fi
-
-    - name: Load .bashrc
-      run: |
-        cat -n ~/.bashrc
-        echo "==="
-        bash -l -c "source ~/.bashrc" 2> error.log; cat error.log
-        if [ -s error.log ]; then false; fi
-
-    - name: Run bash login shell
-      run: |
-        bash -l
-        exit
-
     - name: Install zsh
       run: sudo apt-get --assume-yes install zsh
 
-    - name: Run zsh login shell
+    - name: Run login bash which read .bash_profile and .bashrc
       run: |
-        zsh -l
-        exit
+        echo "previous SHLVL=$SHLVL"
+        bash -l -c 'echo "sub-bash SHLVL=$SHLVL"'
+        echo "post SHLVL=$SHLVL"
+
+    - name: Run login zsh which read .zprofile and .zshrc
+      run: |
+        echo "previous SHLVL=$SHLVL"
+        zsh -l -c 'echo "sub-zsh SHLVL=$SHLVL"'
+        echo "post SHLVL=$SHLVL"
