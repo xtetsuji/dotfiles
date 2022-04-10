@@ -102,7 +102,9 @@ fi
 ### keybind
 ###
 
-bind '"\C-g": "git "'
+if is_interactive_shell ; then
+    bind '"\C-g": "git "'
+fi
 
 ###
 ### common env
