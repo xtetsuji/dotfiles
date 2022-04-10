@@ -33,7 +33,7 @@ jobs:
       run: sudo localedef -f UTF-8 -i ja_JP ja_JP
 
     - name: Install zsh
-      run: sudo apt-get --assume-yes install zsh
+      run: sudo apt-get --quiet --assume-yes install zsh
 
     - name: Run login bash which read .bash_profile and .bashrc
       run: |
