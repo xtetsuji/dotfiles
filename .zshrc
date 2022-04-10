@@ -79,9 +79,10 @@ export MYSQL_PS1='\u@\h> '
 ###
 ### completion
 ###
-autoload -Uz compinit && compinit
-
-zstyle ':completion:*' matcher-list 'm:{a-z}={A-Z}'
+if is_interactive_shell ; then
+    autoload -Uz compinit && compinit
+    zstyle ':completion:*' matcher-list 'm:{a-z}={A-Z}'
+fi
 
 ###
 ### history
@@ -97,12 +98,12 @@ setopt EXTENDED_HISTORY
 ###
 ### keybind
 ###
+if is_interactive_shell ; then
+    # Emacs like keybind
+    bindkey -e
 
-# Emacs like keybind
-bindkey -e
-
-bindkey -s '^g' 'git '
-
+    bindkey -s '^g' 'git '
+fi
 
 ###
 ### common env
