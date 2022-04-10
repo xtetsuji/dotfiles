@@ -12,6 +12,7 @@ usage:
 	@echo "  make ~/.SOMEFILE"
 	@echo "  make install-symlink"
 	@echo "  make uninstall-symlink"
+	@echo "  make shelter-dotfiles"
 
 status:
 	ls -l --color $(MANAGED_DOTFILES)
@@ -48,4 +49,9 @@ uninstall-symlink:
 			ls -l $$target ; \
 			rm -v $$target ; \
 		fi ; \
+	done
+
+shelter-dotfiles:
+	for f in $(MANAGED_DOTFILES) ; do \
+		mv "$$f" "$$f.$$(date +"%Y%m%d_%H%M")" ; \
 	done
