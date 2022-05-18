@@ -128,10 +128,9 @@ function cd {
         case "$subcommand" in
             planter)
                 dir="$(planter peco)"
-                if [ -z "$dir" ] ; then
-                    echo "select stop"
-                    return
-                fi
+                ;;
+            repo)
+                dir=$(cd-plugin-repo | peco --select-1)
                 ;;
             isearch)
                 dir="$(mdfind 'kMDItemContentType == "public.folder"' | peco --select-1 )"
@@ -144,6 +143,10 @@ function cd {
                 return 1
                 ;;
         esac
+        if [ -z "$dir" ] ; then
+            echo "select stop"
+            return
+        fi
     else
         dir="$arg"
     fi
