@@ -1,7 +1,7 @@
 #!/bin/bash
 set -eu
 
-if exists ghq ; then
+if type ghq 2>&1 >/dev/null ; then
     ghq list -p
 fi
 
