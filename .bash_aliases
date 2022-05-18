@@ -125,12 +125,13 @@ function cd {
     local arg="$1" dir subcommand
     if [ "${arg:0:1}" = ":" ] ; then
         subcommand="${arg#:}"
+        shift || true
         case "$subcommand" in
             planter)
                 dir="$(planter peco)"
                 ;;
             repo)
-                dir=$(cd-plugin-repo | peco --select-1)
+                dir=$(cd-plugin-repo | peco --select-1 --query="${1:-}")
                 ;;
             isearch)
                 dir="$(mdfind 'kMDItemContentType == "public.folder"' | peco --select-1 )"
