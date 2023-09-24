@@ -20,7 +20,6 @@ function is_cygwin { [[ "${UNAME:=$(uname)}" =~ ^CYGWIN ]] ; }
 function is_codepsaces { test -n "$CODESPACES" && test "$CODESPACES" = true ; }
 function is_kde { test -n "$KDE_FULL_SESSION" && test "$KDE_FULL_SESSION" = true ; }
 
-declare ALIASES=$HOME/.bash_aliases
 declare UNAME=$(uname)
 # color prompt が大丈夫な場合、ステータス 0 を return する
 # そうでない場合、ステータス 1 を return する
@@ -355,7 +354,6 @@ function ps2 {
     esac
 }
 
-unset ALIASES
 unset UNAME
 
 ALIASES_DONE=1
