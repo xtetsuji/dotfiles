@@ -1,0 +1,10 @@
+#!/bin/bash
+set -eu
+
+if type ghq 2>&1 >/dev/null ; then
+    ghq list -p
+fi
+
+if [ -d ~/Project ] ; then
+    find ~/Project -name .git -maxdepth 2 | sed -e 's|/\.git$||'
+fi
