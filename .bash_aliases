@@ -14,6 +14,11 @@ if is_current_bash ; then
 elif is_current_zsh ; then
     function is_login_shell { [[ -o login ]] ; }
 fi
+function is_darwin { test "${UNAME:=$(uname)}" = Darwin ; }
+function is_linux  { test "${UNAME:=$(uname)}" = Linux  ; }
+function is_cygwin { [[ "${UNAME:=$(uname)}" =~ ^CYGWIN ]] ; }
+function is_codepsaces { test -n "$CODESPACES" && test "$CODESPACES" = true ; }
+function is_kde { test -n "$KDE_FULL_SESSION" && test "$KDE_FULL_SESSION" = true ; }
 
 declare ALIASES=$HOME/.bash_aliases
 declare UNAME=$(uname)
