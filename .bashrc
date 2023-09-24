@@ -11,18 +11,6 @@ elif type brew >/dev/null 2>&1 ; then
 fi
 
 ###
-### Path
-###
-export PATH
-push_path_var ~/bin
-push_path_var ~/Dropbox/bin
-push_path_var /usr/local/bin
-push_path_var /opt/homebrew/bin
-unshift_path_var "$BREW_PREFIX/opt/coreutils/libexec/gnubin"
-unshift_path_var "$BREW_PREFIX/opt/zip/bin"
-unshift_path_var "$BREW_PREFIX/opt/unzip/bin"
-
-###
 ### Config
 ###
 source ~/.bash_aliases
