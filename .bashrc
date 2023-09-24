@@ -32,6 +32,11 @@ source ~/.bash_aliases
 source_if_readable ~/.bash_secret
 
 ###
+### common env
+###
+source ~/.common_env
+
+###
 ### Prompt
 ###
 case "$TERM" in
@@ -103,10 +108,5 @@ fi
 ###
 
 bind '"\C-g": "git "'
-
-###
-### common env
-###
-source ~/.common_env
 
 : "end .bashrc"

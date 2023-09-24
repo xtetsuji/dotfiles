@@ -44,6 +44,11 @@ source ~/.bash_aliases
 source_if_readable ~/.bash_secret
 
 ###
+### common env
+###
+source ~/.common_env
+
+###
 ### Prompt
 ###
 setopt PROMPT_SUBST
@@ -102,12 +107,6 @@ setopt EXTENDED_HISTORY
 bindkey -e
 
 bindkey -s '^g' 'git '
-
-
-###
-### common env
-###
-source ~/.common_env
 
 #zmodload zsh/zprof && zprof
 
