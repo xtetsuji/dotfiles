@@ -52,8 +52,6 @@ fi
 
 unset f color_prompt git_prompt_brew git_prompt_macos
 
-export MYSQL_PS1='\u@\h> '
-
 ###
 ### completion
 ###
@@ -75,6 +73,7 @@ function share_history {
 shopt -u histappend
 shopt -s checkwinsize
 ### add at 2012/07/01
+
 # http://blog.withsin.net/2010/12/29/bash%E3%81%AEhistcontrol%E5%A4%89%E6%95%B0/
 # ignoredups：連続した同一コマンドの履歴を1回に
 # ignorespace：空白から始まるコマンドを履歴に残さない

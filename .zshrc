@@ -63,8 +63,6 @@ PROMPT="$prompt_rc $prompt_dt $prompt_jc$PROMPT"
 
 #export RPROMPT='[%j%1(j.:$(jobs|perl -e "print join q(,), map { /^\[\d+\](?:  [+-])?\s+\w+\s+(\S+)/ } <>").)] %F{black}%1(?.%K{red}.%K{green})↪%?%k%f @%T'
 
-export MYSQL_PS1='\u@\h> '
-
 ###
 ### completion
 ###

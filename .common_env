@@ -46,6 +46,9 @@ if exists vim ; then
     export EDITOR=vim
 fi
 
+# mysql
+export MYSQL_PS1='\u@\h> '
+
 ###
 ### Locale / Lang
 ###
