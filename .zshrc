@@ -12,9 +12,6 @@ elif type brew >/dev/null 2>&1 ; then
     BREW_PREFIX="$(brew --prefix)"
 fi
 
-function push_path_var { test -d "$1" && PATH=$PATH:$1 ; }
-function unshift_path_var { test -d "$1" && PATH=$1:$PATH ; }
-
 ###
 ### Path
 ###
