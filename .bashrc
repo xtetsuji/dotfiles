@@ -10,26 +10,16 @@ elif type brew >/dev/null 2>&1 ; then
     BREW_PREFIX="$(brew --prefix)"
 fi
 
-function push_path_var { test -d "$1" && PATH=$PATH:$1 ; }
-function unshift_path_var { test -d "$1" && PATH=$1:$PATH ; }
-
-###
-### Path
-###
-export PATH
-push_path_var ~/bin
-push_path_var ~/Dropbox/bin
-push_path_var /usr/local/bin
-push_path_var /opt/homebrew/bin
-unshift_path_var "$BREW_PREFIX/opt/coreutils/libexec/gnubin"
-unshift_path_var "$BREW_PREFIX/opt/zip/bin"
-unshift_path_var "$BREW_PREFIX/opt/unzip/bin"
-
 ###
 ### Config
 ###
 source ~/.bash_aliases
 source_if_readable ~/.bash_secret
+
+###
+### common env
+###
+source ~/.common_env
 
 ###
 ### Prompt
@@ -62,8 +52,6 @@ fi
 
 unset f color_prompt git_prompt_brew git_prompt_macos
 
-export MYSQL_PS1='\u@\h> '
-
 ###
 ### completion
 ###
@@ -85,6 +73,7 @@ function share_history {
 shopt -u histappend
 shopt -s checkwinsize
 ### add at 2012/07/01
+
 # http://blog.withsin.net/2010/12/29/bash%E3%81%AEhistcontrol%E5%A4%89%E6%95%B0/
 # ignoredups：連続した同一コマンドの履歴を1回に
 # ignorespace：空白から始まるコマンドを履歴に残さない
@@ -103,10 +92,5 @@ fi
 ###
 
 bind '"\C-g": "git "'
-
-###
-### common env
-###
-source ~/.common_env
 
 : "end .bashrc"

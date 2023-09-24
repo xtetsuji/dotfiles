@@ -2,6 +2,8 @@
 # .bash_aliases - bash and zsh aliases
 : "start .bash_aliases"
 
+function push_path_var { test -d "$1" && PATH=$PATH:$1 ; }
+function unshift_path_var { test -d "$1" && PATH=$1:$PATH ; }
 function exists { type $1 >/dev/null 2>&1 ; }
 function source_if_readable { test -r "$1" && source "$1" ; }
 function is_current_bash { test -n "$BASH_VERSION" ; }
@@ -12,9 +14,26 @@ if is_current_bash ; then
 elif is_current_zsh ; then
     function is_login_shell { [[ -o login ]] ; }
 fi
+function is_darwin { test "${UNAME:=$(uname)}" = Darwin ; }
+function is_linux  { test "${UNAME:=$(uname)}" = Linux  ; }
+function is_cygwin { [[ "${UNAME:=$(uname)}" =~ ^CYGWIN ]] ; }
+function is_codepsaces { test -n "$CODESPACES" && test "$CODESPACES" = true ; }
+function is_kde { test -n "$KDE_FULL_SESSION" && test "$KDE_FULL_SESSION" = true ; }
 
-declare ALIASES=$HOME/.bash_aliases
-declare UNAME=$(uname)
+# color prompt が大丈夫な場合、ステータス 0 を return する
+# そうでない場合、ステータス 1 を return する
+function color_prompt_ok {
+    local color_prompt=no
+    case "$TERM" in
+        *color*) color_prompt=yes;;
+        screen) color_prompt=yes;;
+    esac
+    if [ "$color_prompt" = yes ] ; then
+        return 0
+    else
+        return 1
+    fi
+}
 
 # bkt - https://github.com/dimo414/bkt
 # Cache commands using bkt if installed
@@ -49,37 +68,40 @@ function __cdhook_screen_title_pwd {
 ### Basics
 ###
 
-case "$UNAME" in
-    Darwin) ### Mac OS X
-        if exists gls ; then
-            alias ls='gls --color=auto -F'
-            # dircolors process is following
-        else
-            alias ls='ls -FG'
-        fi
+if is_darwin ; then
+    if exists gls ; then
+        alias ls='gls --color=auto -F'
+        # dircolors process is following
+    else
+        alias ls='ls -FG'
+    fi
 
-        alias ql='qlmanage -p 2>/dev/null'
-        alias imgdim='sips -g pixelHeight -g pixelWidth $1'
-        if ! exists md5sum ; then
-            if exists gmd5sum ; then
-                alias md5sum=gmd5sum
-            else
-                alias md5sum='md5 -s '
-            fi
+    alias ql='qlmanage -p 2>/dev/null'
+    alias imgdim='sips -g pixelHeight -g pixelWidth $1'
+    if ! exists md5sum ; then
+        if exists gmd5sum ; then
+            alias md5sum=gmd5sum
+        else
+            alias md5sum='md5 -s '
         fi
-        alias pbtee='cat | pbcopy ; sleep 1 ; pbpaste'
-        alias pwdcopy='echo -n $(pwd)/ | pbcopy'
-        ;;
-    Linux)
-        alias ls='ls --color=auto -F'
-        alias crontab='crontab -i'
-        source_if_readable ~/.bash_aliases_kde
-        ;;
-    CYGWIN*)
-        alias ls='ls --color -F --show-control-chars'
-        source_if_readable ~/.bash_aliases_cygwin
-        ;;
-esac
+    fi
+    alias pbtee='cat | pbcopy ; sleep 1 ; pbpaste'
+    alias pwdcopy='echo -n $(pwd)/ | pbcopy'
+fi
+
+if is_linux ; then
+    alias ls='ls --color=auto -F'
+    alias crontab='crontab -i'
+fi
+
+if is_kde ; then
+    source_if_readable ~/.bash_aliases_kde
+fi
+
+if is_cygwin ; then
+    alias ls='ls --color -F --show-control-chars'
+    source_if_readable ~/.bash_aliases_cygwin
+fi
 
 if exists dircolors ; then
     if [ -f ~/.dir_colors ] ; then
@@ -333,9 +355,6 @@ function ps2 {
             ;;
     esac
 }
-
-unset ALIASES
-unset UNAME
 
 ALIASES_DONE=1
 

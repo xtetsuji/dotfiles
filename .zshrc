@@ -12,22 +12,6 @@ elif type brew >/dev/null 2>&1 ; then
     BREW_PREFIX="$(brew --prefix)"
 fi
 
-function push_path_var { test -d "$1" && PATH=$PATH:$1 ; }
-function unshift_path_var { test -d "$1" && PATH=$1:$PATH ; }
-
-###
-### Path
-###
-export PATH
-# https://qiita.com/y_310/items/101ef023124072b9c73f
-push_path_var ~/bin
-push_path_var ~/Dropbox/bin
-push_path_var /usr/local/bin
-push_path_var /opt/homebrew/bin
-unshift_path_var $BREW_PREFIX/opt/coreutils/libexec/gnubin
-unshift_path_var $BREW_PREFIX/opt/zip/bin
-unshift_path_var $BREW_PREFIX/opt/unzip/bin
-
 # /usr/share/zsh/5.8 is macOS 11 (Big Sur) default zsh library path
 fpath=(/usr/share/zsh/5.8/functions/ $fpath)
 
@@ -42,6 +26,11 @@ fpath=(/usr/share/zsh/5.8/functions/ $fpath)
 ###
 source ~/.bash_aliases
 source_if_readable ~/.bash_secret
+
+###
+### common env
+###
+source ~/.common_env
 
 ###
 ### Prompt
@@ -74,8 +63,6 @@ PROMPT="$prompt_rc $prompt_dt $prompt_jc$PROMPT"
 
 #export RPROMPT='[%j%1(j.:$(jobs|perl -e "print join q(,), map { /^\[\d+\](?:  [+-])?\s+\w+\s+(\S+)/ } <>").)] %F{black}%1(?.%K{red}.%K{green})↪%?%k%f @%T'
 
-export MYSQL_PS1='\u@\h> '
-
 ###
 ### completion
 ###
@@ -102,12 +89,6 @@ setopt EXTENDED_HISTORY
 bindkey -e
 
 bindkey -s '^g' 'git '
-
-
-###
-### common env
-###
-source ~/.common_env
 
 #zmodload zsh/zprof && zprof
 
