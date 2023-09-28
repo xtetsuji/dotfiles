@@ -1,0 +1,1 @@
+EXCLUDES="Makefile README.md MEMO.md bin instant"
