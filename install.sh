@@ -58,6 +58,7 @@ function backup-home-real-dotfiles {
         -name '.??*' \
         -not -name '.*.bak' \
         -not -name .dotfiles \
+        -not -name .local \
         -not -type l \
     | while read dotfile ; do
         backup_file="$dotfile.bak"
