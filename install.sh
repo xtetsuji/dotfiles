@@ -18,8 +18,9 @@ function main {
     # Codespaces の場合、~/.dotfiles 自体が揮発的になってしまうことと、
     #   これ自体をシンボリックリンクにしてしまうと、シンボリックリンクが多重となってしまい混乱を生む可能性があるため
     #   -C でコピーを作ることでもろもろ回避しようとしている
-    #   ドットファイルに変更があれば、再度 rcup を実行したり、
-    env RCRC=./rcrc rcup -v -f -C
+    #   ドットファイルに変更があれば、再度 rcup を実行したりすればよい
+    # Codespaces では .bashrc .zshrc は温存して、あとで追加する
+    env RCRC=./rcrc rcup -v -f -C -x ".bashrc" -x ".zshrc"
 }
 
 function is-pwd-dotfiles-root {
