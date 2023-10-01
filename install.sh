@@ -21,6 +21,8 @@ function main {
     #   ドットファイルに変更があれば、再度 rcup を実行したりすればよい
     # Codespaces では .bashrc .zshrc は温存して、あとで追加する
     env RCRC=./rcrc rcup -v -f -C -x "bashrc" -x "zshrc"
+
+    append-codespaces-
 }
 
 function is-pwd-dotfiles-root {
