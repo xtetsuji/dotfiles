@@ -2,13 +2,19 @@
 set -eu
 
 function main {
-    if ! is-rcm-exist ; then
-        echo "rcm is not installed" >&2
+    if ! is-codespaces ; then
+        echo "currently, this script is only for codespaces" >&2
         return 1
     fi
-    if ! is-codespaces ; then
-        echo "this script is only for codespaces" >&2
-        return 1
+    if ! is-rcm-exist ; then
+        echo "rcm is not installed" >&2
+        if is-codespaces ; then
+            # 取りあえず Ubuntu/Debian 決め打ちで入れてしまう
+            sudo apt-get update && sudo apt-get install -y rcm
+        else
+            echo "please install rcm" >&2
+            return 1
+        fi
     fi
     backup-home-real-dotfiles
     create-home-dotfiles-dir-symlink
