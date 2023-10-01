@@ -73,4 +73,64 @@ function backup-home-real-dotfiles {
     done
 }
 
+function append-codespaces-bashrc {
+    local RCFILE="$HOME/.bashrc"
+    if [ ! -f "$RCFILE" ] ; then
+        return 0
+    fi
+    local ME=xtetsuji
+    if grep -q "$ME" "$RCFILE" ; then
+        return 0
+    fi
+    cat <<'EOF' >> "$RCFILE"
+
+### for Codespaces by $ME
+
+source ~/.bash_aliases # これは Codespaces でやっているので重複読み込み防止施策をしたい
+source_if_readable ~/.bash_secret
+source ~/.common_env # _if_readable でも OK
+if is_interactive_shell ; then
+    source_if_readable ~/.bash_completion # これも念のため重複読み込み対策したい
+    if [ -z "${BASH_COMPLETION_VERSINFO:-}" ] ; then
+        source_if_readable /etc/bash_completion
+    fi
+    function share_history { history -acr ; }
+    shopt -u histappend
+    shopt -s checkwinsize
+    PROMPT_COMMAND=share_history
+    bind '"\C-g": "git "'
+fi
+EOF
+}
+
+function append-codespaces-zshrc {
+    local RCFILE="$HOME/.zshrc"
+    if [ ! -f "$RCFILE" ] ; then
+        return 0
+    fi
+    local ME=xtetsuji
+    if grep -q "$ME" "$RCFILE" ; then
+        return 0
+    fi
+    cat <<'EOF' >> "$RCFILE"
+
+### for Codespaces by $ME
+
+source ~/.bash_aliases # これは Codespaces でやっているので重複読み込み防止施策をしたい
+source_if_readable ~/.bash_secret
+source ~/.common_env # _if_readable でも OK
+if is_interactive_shell ; then
+    export HISTSIZE=2000
+    export SAVEHIST=100000
+    setopt share_history
+    setopt hist_ignore_space
+    setopt hist_ignore_dups
+    setopt hist_no_store
+    setopt EXTENDED_HISTORY
+    bindkey -e # emacs like keybind
+    bindkey -s '^g' 'git '
+fi
+EOF
+}
+
 main "$@"
