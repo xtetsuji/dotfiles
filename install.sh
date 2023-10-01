@@ -104,9 +104,9 @@ function append-codespaces-bashrc {
     if grep -q "$ME" "$RCFILE" ; then
         return 0
     fi
-    cat <<'EOF' >> "$RCFILE"
+    cat <<'EOF' >> "$RCFILE" | sed -e "s/__ME__/$ME/g'
 
-### for Codespaces by $ME
+### for Codespaces by __ME__
 
 source ~/.bash_aliases # これは Codespaces でやっているので重複読み込み防止施策をしたい
 source_if_readable ~/.bash_secret
@@ -134,9 +134,9 @@ function append-codespaces-zshrc {
     if grep -q "$ME" "$RCFILE" ; then
         return 0
     fi
-    cat <<'EOF' >> "$RCFILE"
+    cat <<'EOF' >> "$RCFILE" | sed -e "s/__ME__/$ME/g'
 
-### for Codespaces by $ME
+### for Codespaces by __ME__
 
 source ~/.bash_aliases # これは Codespaces でやっているので重複読み込み防止施策をしたい
 source_if_readable ~/.bash_secret
