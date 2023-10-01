@@ -67,13 +67,13 @@ function backup-home-real-dotfiles {
         backup_file="$dotfile.bak"
         # すでにリアルの ~/.foo がある場合、コピーするものと差分がなければバックアップしない
         if [ -f "$backup_file" ] && cmp -s "$dotfile" "$backup_file" ; then
-            echo "skip backup: $dotfile" (because "$backup_file" is same as "$dotfile")
+            echo "skip backup: $dotfile (because \"$backup_file\" is same as \"$dotfile\")"
             continue
         fi
         # カレントディレクトリ（この install.sh があるディレクトリ）に ./foo がない場合、~/.foo はバックアップしない（rcup で書き込みがないので）
         local base_dotfile=$(basename "$dotfile")
         if [ ! -f "./${base_dotfile#.}" ] ; then
-            echo "skip backup: $dotfile (because ./${base_dotfile#.} does not exists))"
+            echo "skip backup: $dotfile (because \"./${base_dotfile#.}\" does not exists))"
             continue
         fi
         echo "backup: $dotfile -> $backup_file"
