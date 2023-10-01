@@ -54,6 +54,7 @@ function create-home-dotfiles-dir-symlink {
 
 # 既存のホームディレクトリにドットファイルがある場合、シンボリックでなければバックアップする
 function backup-home-real-dotfiles {
+    local loopguard=0
      find "$HOME" \
         -maxdepth 1 \
         -name '.??*' \
@@ -70,6 +71,10 @@ function backup-home-real-dotfiles {
         fi
         echo "backup: $dotfile -> $backup_file"
         cp -rp "$dotfile" "$backup_file"
+        if (( loopguard++ > 100 )); then
+            echo "loopguard" >&2
+            break
+        fi
     done
 }
 
