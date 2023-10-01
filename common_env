@@ -52,7 +52,7 @@ export MYSQL_PS1='\u@\h> '
 ###
 ### Locale / Lang
 ###
-if ! is-codespaces ; then
+if ! is_codepsaces ; then
     export LANG="ja_JP.UTF-8"
     export LC_COLLATE="ja_JP.UTF-8"
     export LC_CTYPE="UTF-8"
