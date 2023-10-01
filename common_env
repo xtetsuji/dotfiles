@@ -70,7 +70,12 @@ export RSYNC_RSH=ssh
 ###
 ### Information
 ###
-export icloud_drive=$HOME/Library/Mobile\ Documents/com~apple~CloudDocs
+if is_darwin ; then
+    export icloud_drive=$HOME/Library/Mobile\ Documents/com~apple~CloudDocs
+    if [ ! -d "$icloud_drive" ] ; then
+        unset icloud_drive
+    fi
+fi
 
 ###
 ### some settings
