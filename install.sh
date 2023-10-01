@@ -67,7 +67,7 @@ function backup-home-real-dotfiles {
             continue
         fi
         echo "backup: $dotfile -> $backup_file"
-        cp -p "$dotfile" "$backup_file"
+        cp -rp "$dotfile" "$backup_file"
     done
 }
 
