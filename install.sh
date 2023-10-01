@@ -21,8 +21,7 @@ function main {
     #   ドットファイルに変更があれば、再度 rcup を実行したりすればよい
     # Codespaces では .bashrc .zshrc は温存して、あとで追加する
     env RCRC=./rcrc rcup -v -f -C -x "bashrc" -x "zshrc"
-
-    append-codespaces-
+    append-codespaces-shellrc
 }
 
 function is-pwd-dotfiles-root {
@@ -138,6 +137,21 @@ if is_interactive_shell ; then
     bindkey -s '^g' 'git '
 fi
 EOF
+}
+
+function append-codespaces-shellrc {
+    local login_shell_name=$(basename "$SHELL")
+    case "$login_shell_name" in
+        bash)
+            append-codespaces-bashrc
+            ;;
+        zsh)
+            append-codespaces-zshrc
+            ;;
+        *)
+            echo "unsupported login shell: $login_shell_name" >&2
+            ;;
+    esac
 }
 
 main "$@"
