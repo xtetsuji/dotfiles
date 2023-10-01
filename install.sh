@@ -116,7 +116,11 @@ if is_interactive_shell ; then
     if [ -z "${BASH_COMPLETION_VERSINFO:-}" ] ; then
         source_if_readable /etc/bash_completion
     fi
-    function share_history { history -acr ; }
+    function share_history {
+        history -a
+        history -c
+        history -r
+    }
     shopt -u histappend
     shopt -s checkwinsize
     PROMPT_COMMAND=share_history
