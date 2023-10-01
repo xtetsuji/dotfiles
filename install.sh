@@ -20,7 +20,7 @@ function main {
     #   -C でコピーを作ることでもろもろ回避しようとしている
     #   ドットファイルに変更があれば、再度 rcup を実行したりすればよい
     # Codespaces では .bashrc .zshrc は温存して、あとで追加する
-    env RCRC=./rcrc rcup -v -f -C -x ".bashrc" -x ".zshrc"
+    env RCRC=./rcrc rcup -v -f -C -x "bashrc" -x "zshrc"
 }
 
 function is-pwd-dotfiles-root {
