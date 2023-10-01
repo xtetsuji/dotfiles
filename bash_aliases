@@ -37,7 +37,8 @@ function color_prompt_ok {
 
 # bkt - https://github.com/dimo414/bkt
 # Cache commands using bkt if installed
-if command -v bkt >&/dev/null; then
+#if command -v bkt >&/dev/null; then
+if which bkt >/dev/null ; then
     bkt() { command bkt "$@"; }
 else
   # If bkt isn't installed skip its arguments and just execute directly.
