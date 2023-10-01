@@ -16,8 +16,12 @@ function main {
             return 1
         fi
     fi
+    if [ ! -f "./rcrc" ] ; then
+        echo "./rcrc is not found" >&2
+        return 1
+    fi
     backup-home-real-dotfiles
-    create-home-dotfiles-dir-symlink
+    #create-home-dotfiles-dir-symlink
     pwd # for debug
     # Codespaces の場合、シンボリックリンクではなく、-C でコピーを作成する
     #   あと、-f で対話が発生しないようにする
@@ -26,7 +30,7 @@ function main {
     #   -C でコピーを作ることでもろもろ回避しようとしている
     #   ドットファイルに変更があれば、再度 rcup を実行したりすればよい
     # Codespaces では .bashrc .zshrc は温存して、あとで追加する
-    env RCRC=./rcrc rcup -v -f -C -x "bashrc" -x "zshrc"
+    env RCRC=./rcrc rcup -v -f -C -x "bashrc" -x "zshrc" -d "$PWD"
     append-codespaces-shellrc
 }
 
@@ -54,10 +58,10 @@ function is-codespaces {
     fi
 }
 
-function create-home-dotfiles-dir-symlink {
-    cloned_dotfiles_dir=$PWD
-    ln -v -s $cloned_dotfiles_dir "$HOME/.dotfiles"
-}
+# function create-home-dotfiles-dir-symlink {
+#     cloned_dotfiles_dir=$PWD
+#     ln -v -s $cloned_dotfiles_dir "$HOME/.dotfiles"
+# }
 
 # 既存のホームディレクトリにドットファイルがある場合、シンボリックでなければバックアップする
 function backup-home-real-dotfiles {
