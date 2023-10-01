@@ -104,7 +104,7 @@ function append-codespaces-bashrc {
     if grep -q "$ME" "$RCFILE" ; then
         return 0
     fi
-    cat <<'EOF' | sed -e "s/__ME__/$ME/g >> "$RCFILE""
+    cat <<'EOF' | sed -e "s/__ME__/$ME/g" >> "$RCFILE"
 
 ### for Codespaces by __ME__
 
