@@ -1,0 +1,1 @@
+EXCLUDES="dotfiles Makefile README.md MEMO.md install.sh bin instant bash_aliases_cygwin bash_aliases_kde screenrc.euc-jp"

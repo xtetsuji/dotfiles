@@ -65,10 +65,11 @@ fi
 ### history and PROMPT_COMMAND
 ###
 # see: http://tukaikta.blog135.fc2.com/blog-entry-187.html
+# see: http://iandeth.dyndns.org/mt/ian/archives/000651.html
 function share_history {
-    history -a
-    history -c
-    history -r
+    history -a  # .bash_historyに前回コマンドを1行追記
+    history -c  # 端末ローカルの履歴を一旦消去
+    history -r  # .bash_historyから履歴を読み込み直す
 }
 shopt -u histappend
 shopt -s checkwinsize
