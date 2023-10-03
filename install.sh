@@ -1,6 +1,10 @@
 #!/bin/bash
 set -eu
 
+declare DOTFILES_BACKUP
+# DOTFILES_BACKUP が環境変数として定義されていなければ、false にする
+: ${DOTFILES_BACKUP:=false}
+
 function main {
     if ! is-codespaces ; then
         echo "currently, this script is only for codespaces" >&2
@@ -66,6 +70,11 @@ function is-codespaces {
 
 # 既存のホームディレクトリにドットファイルがある場合、シンボリックでなければバックアップする
 function backup-home-real-dotfiles {
+    # DOTFILES_BACKUP 環境変数が true で無ければバックアップしない
+    if [ "$DOTFILES_BACKUP" != "true" ] ; then
+        echo "backup-home-real-dotfiles: skip backup because \$DOTFILES_BACKUP is not true"
+        return 0
+    fi
     local loopguard=0
      find "$HOME" \
         -maxdepth 1 \
