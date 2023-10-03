@@ -58,6 +58,7 @@ function is-codespaces {
     fi
 }
 
+# 今のディレクトリのシンボリックリンクとして ~/.dotfiles を作成する
 # function create-home-dotfiles-dir-symlink {
 #     cloned_dotfiles_dir=$PWD
 #     ln -v -s $cloned_dotfiles_dir "$HOME/.dotfiles"
