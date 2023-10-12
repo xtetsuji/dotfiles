@@ -132,14 +132,14 @@ function append-codespaces-bashrc {
 
 ### for Codespaces by __ME__
 
-source ~/.bash_aliases # これは Codespaces でやっているので重複読み込み防止施策をしたい
+source ~/.bash_aliases
 source_if_readable ~/.bash_secret
-source ~/.common_env # _if_readable でも OK
+source_if_readable ~/.common_env
 if is_interactive_shell ; then
-    source_if_readable ~/.bash_completion # これも念のため重複読み込み対策したい
-    if [ -z "${BASH_COMPLETION_VERSINFO:-}" ] ; then
-        source_if_readable /etc/bash_completion
-    fi
+    # source_if_readable ~/.bash_completion # これも念のため重複読み込み対策したい
+    # if [ -z "${BASH_COMPLETION_VERSINFO:-}" ] ; then
+    #     source_if_readable /etc/bash_completion
+    # fi
     function share_history {
         history -a
         history -c
@@ -166,7 +166,7 @@ function append-codespaces-zshrc {
 
 ### for Codespaces by __ME__
 
-source ~/.bash_aliases # これは Codespaces でやっているので重複読み込み防止施策をしたい
+source ~/.bash_aliases
 source_if_readable ~/.bash_secret
 source ~/.common_env # _if_readable でも OK
 if is_interactive_shell ; then
