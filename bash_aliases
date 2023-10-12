@@ -20,21 +20,6 @@ function is_cygwin { [[ "${UNAME:=$(uname)}" =~ ^CYGWIN ]] ; }
 function is_codepsaces { test -n "$CODESPACES" && test "$CODESPACES" = true ; }
 function is_kde { test -n "$KDE_FULL_SESSION" && test "$KDE_FULL_SESSION" = true ; }
 
-# color prompt が大丈夫な場合、ステータス 0 を return する
-# そうでない場合、ステータス 1 を return する
-function color_prompt_ok {
-    local color_prompt=no
-    case "$TERM" in
-        *color*) color_prompt=yes;;
-        screen) color_prompt=yes;;
-    esac
-    if [ "$color_prompt" = yes ] ; then
-        return 0
-    else
-        return 1
-    fi
-}
-
 # bkt - https://github.com/dimo414/bkt
 # Cache commands using bkt if installed
 #if command -v bkt >&/dev/null; then
