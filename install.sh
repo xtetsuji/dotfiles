@@ -34,7 +34,21 @@ function main {
     #   -C でコピーを作ることでもろもろ回避しようとしている
     #   ドットファイルに変更があれば、再度 rcup を実行したりすればよい
     # Codespaces では .bashrc .zshrc は温存して、あとで追加する
-    env RCRC=./rcrc rcup -v -f -C -x "rcrc" -x "bashrc" -x "zshrc" -d "$PWD"
+    # XXX: RCRC 環境変数が意味をなしていない？
+    env RCRC=./rcrc rcup -v -f -C -d "$PWD" \
+        -x "rcrc" \
+        -x "bashrc" \
+        -x "zshrc" \
+        -x "Makefile" \
+        -x "README.md" \
+        -x "bash_aliases_cygwin" \
+        -x "bash_aliases_kde" \
+        -x "bash_completion" \
+        -x "cvsrc" \
+        -x "screenrc.euc-jp" \
+        -x "install.sh"
+    # MEMO: bash_completion を読み込むと、ディレクトリ補完で警告が発生するのと
+    #       特に現状 Codespaces 上でこれを読まないことで困ることがないので、読み込まないようにする
     append-codespaces-shellrc
 }
 
