@@ -26,12 +26,12 @@ function is_kde { test -n "$KDE_FULL_SESSION" && test "$KDE_FULL_SESSION" = true
 if which bkt >/dev/null ; then
     bkt() { command bkt "$@"; }
 else
-  # If bkt isn't installed skip its arguments and just execute directly.
-  # Optionally write a msg to stderr suggesting users install bkt.
-  bkt() {
-    while [[ "$1" == --* ]]; do shift; done
-    "$@"
-  }
+    # If bkt isn't installed skip its arguments and just execute directly.
+    # Optionally write a msg to stderr suggesting users install bkt.
+    bkt() {
+        while [[ "$1" == --* ]]; do shift; done
+        "$@"
+    }
 fi
 
 export BKT_TTL="120s"
