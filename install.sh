@@ -5,6 +5,17 @@ declare DOTFILES_BACKUP
 # DOTFILES_BACKUP が環境変数として定義されていなければ、false にする
 : ${DOTFILES_BACKUP:=false}
 
+declare -a INSTALL_DOTFILES_IN_CODESPACES=(
+    bash_aliases
+    bash_profile
+    git_config
+    git_ignore
+    inputrc
+    tigrc
+    vimrc
+    zprofile
+)
+
 function main {
     if ! is-codespaces ; then
         echo "currently, this script is only for codespaces" >&2
@@ -34,7 +45,12 @@ function main {
     #   -C でコピーを作ることでもろもろ回避しようとしている
     #   ドットファイルに変更があれば、再度 rcup を実行したりすればよい
     # Codespaces では .bashrc .zshrc は温存して、あとで追加する
-    env RCRC=./rcrc rcup -v -f -C -x "rcrc" -x "bashrc" -x "zshrc" -d "$PWD"
+    # XXX: RCRC 環境変数が意味をなしていない？
+    env RCRC=./rcrc rcup -v -f -C -d "$PWD" \
+        "${INSTALL_DOTFILES_IN_CODESPACES[@]}"
+    # MEMO: bashrc と zshrc は Codespaces のものを採用して、あとで追記する
+    # MEMO: bash_completion を読み込むと、ディレクトリ補完で警告が発生するのと
+    #       特に現状 Codespaces 上でこれを読まないことで困ることがないので、読み込まないようにする
     append-codespaces-shellrc
 }
 
@@ -118,14 +134,14 @@ function append-codespaces-bashrc {
 
 ### for Codespaces by __ME__
 
-source ~/.bash_aliases # これは Codespaces でやっているので重複読み込み防止施策をしたい
+source ~/.bash_aliases
 source_if_readable ~/.bash_secret
-source ~/.common_env # _if_readable でも OK
+source_if_readable ~/.common_env
 if is_interactive_shell ; then
-    source_if_readable ~/.bash_completion # これも念のため重複読み込み対策したい
-    if [ -z "${BASH_COMPLETION_VERSINFO:-}" ] ; then
-        source_if_readable /etc/bash_completion
-    fi
+    # source_if_readable ~/.bash_completion # これも念のため重複読み込み対策したい
+    # if [ -z "${BASH_COMPLETION_VERSINFO:-}" ] ; then
+    #     source_if_readable /etc/bash_completion
+    # fi
     function share_history {
         history -a
         history -c
@@ -152,7 +168,7 @@ function append-codespaces-zshrc {
 
 ### for Codespaces by __ME__
 
-source ~/.bash_aliases # これは Codespaces でやっているので重複読み込み防止施策をしたい
+source ~/.bash_aliases
 source_if_readable ~/.bash_secret
 source ~/.common_env # _if_readable でも OK
 if is_interactive_shell ; then
