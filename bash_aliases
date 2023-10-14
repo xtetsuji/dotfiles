@@ -128,34 +128,6 @@ alias uri_escape='perl -MURI::Escape=uri_escape -E "say uri_escape(join q/ /, @A
 ### big functions
 ###
 
-function pathctl {
-    local pathctl_out=_pathctl.sh
-    local subcommand=${1:-}
-    if [ -z "$subcommand" ] ; then
-        $pathctl_out help
-        return
-    fi
-    shift
-    case "$subcommand" in
-        add|delete|clean)
-            # 編集系
-            local new_path=$( $pathctl_out edited-path-string-by-$subcommand "$@" )
-            test $? = 0 || return 1
-            test "$PATH" = "$new_path" && { echo "PATH is not modified" ; return ; }
-            test -z "$new_path" && { echo "new path is empty. error." ; return 1 ; }
-            export PATH=$new_path
-            ;;
-        view|grep|dump)
-            $pathctl_out $subcommand "$@"
-            ;;
-        *)
-            echo "$FUNCNAME: unknown subcommand ($subcommand)"
-            return 1
-            ;;
-    esac
-    return $?
-}
-
 function jobs2 {
     #local line=$(builtin jobs | peco)
     local line=$(jobs | peco)
