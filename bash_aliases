@@ -128,24 +128,6 @@ alias uri_escape='perl -MURI::Escape=uri_escape -E "say uri_escape(join q/ /, @A
 ### big functions
 ###
 
-# chenv - change environment variable at 2019/04/07
-# with chenv.pl
-function chenv {
-    case "$#" in
-        1)
-            chenv.pl $1
-            ;;
-        2)
-            local shcode="export $1=\"$(chenv.pl $1 $2)\""
-            echo "$shcode"
-            eval "$shcode"
-            ;;
-        *)
-            echo -e "Usage:\n  chenv ENV_NAME [KEY]"
-            ;;
-    esac
-}
-
 function pathctl {
     local pathctl_out=_pathctl.sh
     local subcommand=${1:-}
