@@ -124,44 +124,6 @@ alias perl-installed-modules="perl -MExtUtils::Installed -E 'say(\$_) for ExtUti
 alias uri_unescape='perl -MURI::Escape=uri_unescape -E "say uri_unescape(join q/ /, @ARGV)" '
 alias uri_escape='perl -MURI::Escape=uri_escape -E "say uri_escape(join q/ /, @ARGV)" '
 
-###
-### big functions
-###
-
-
-function ps2 {
-    local lines=$(ps "$@" | peco)
-    local choice pid
-    if [ -z "$lines" ] ; then
-        return
-    fi
-    echo $lines
-    pids=$(<<<"$lines" perl -ne 'push @pids, (grep { /^\d+$/ } split / /, $_)[0]; END { print join " ", @pids; }')
-    if [ -z "$pids" ] ; then
-        echo "PID read error"
-        return 1
-    fi
-    echo "pids $pids"
-    # MEMO: zsh compatible, read `-p` option is different as printing prompt.
-    #read -p "Choice [kill|kill -*|SIG***|pbcopy]: " choice
-    echo -n "Choice [kill|kill -*|SIG***|pbcopy]: "
-    read choice
-    case $choice in
-        kill|"kill -*")
-            $choice $pid
-            ;;
-        SIG*)
-            local signal=$(<<<"$choice" sed -e 's/^SIG//')
-            kill -$signal $pids
-            ;;
-        pbcopy)
-            <<<"$lines" pbcopy
-            ;;
-        *)
-            ;;
-    esac
-}
-
 ALIASES_DONE=1
 
 : "end .bash_aliases"
