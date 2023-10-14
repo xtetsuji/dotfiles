@@ -5,6 +5,17 @@ declare DOTFILES_BACKUP
 # DOTFILES_BACKUP が環境変数として定義されていなければ、false にする
 : ${DOTFILES_BACKUP:=false}
 
+declare -a INSTALL_DOTFILES_IN_CODESPACES=(
+    bash_aliases
+    bash_profile
+    git_config
+    git_ignore
+    inputrc
+    tigrc
+    vimrc
+    zprofile
+)
+
 function main {
     if ! is-codespaces ; then
         echo "currently, this script is only for codespaces" >&2
@@ -36,17 +47,8 @@ function main {
     # Codespaces では .bashrc .zshrc は温存して、あとで追加する
     # XXX: RCRC 環境変数が意味をなしていない？
     env RCRC=./rcrc rcup -v -f -C -d "$PWD" \
-        -x "rcrc" \
-        -x "bashrc" \
-        -x "zshrc" \
-        -x "Makefile" \
-        -x "README.md" \
-        -x "bash_aliases_cygwin" \
-        -x "bash_aliases_kde" \
-        -x "bash_completion" \
-        -x "cvsrc" \
-        -x "screenrc.euc-jp" \
-        -x "install.sh"
+        "${INSTALL_DOTFILES_IN_CODESPACES[@]}"
+    # MEMO: bashrc と zshrc は Codespaces のものを採用して、あとで追記する
     # MEMO: bash_completion を読み込むと、ディレクトリ補完で警告が発生するのと
     #       特に現状 Codespaces 上でこれを読まないことで困ることがないので、読み込まないようにする
     append-codespaces-shellrc
