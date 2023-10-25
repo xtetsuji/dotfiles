@@ -92,4 +92,10 @@ bindkey -s '^g' 'git '
 
 #zmodload zsh/zprof && zprof
 
+###
+### local setting (if exists)
+###
+
+source_if_readable ~/.zshrc.local
+
 : "end .zshrc"

@@ -148,4 +148,11 @@ else
     : #echo "no ssh-agent"
 fi
 
+###
+### local setting (if exists)
+###
+
+source_if_readable ~/.common_env.local
+
+
 : "end .common_env"
