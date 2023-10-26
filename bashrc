@@ -94,4 +94,10 @@ fi
 
 bind '"\C-g": "git "'
 
+###
+### local setting (if exists)
+###
+
+source_if_readable ~/.bashrc.local
+
 : "end .bashrc"

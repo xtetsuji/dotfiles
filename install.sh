@@ -8,8 +8,8 @@ declare DOTFILES_BACKUP
 declare -a INSTALL_DOTFILES_IN_CODESPACES=(
     bash_aliases
     bash_profile
-    git_config
-    git_ignore
+    gitconfig
+    gitignore
     inputrc
     tigrc
     vimrc
