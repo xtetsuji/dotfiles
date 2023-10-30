@@ -142,15 +142,6 @@ if [ -d $HOME/.plenv ] ; then
 fi
 
 ###
-### rbenv
-###
-if [ -d $HOME/.rbenv ] ; then
-    export RBENV_ROOT=$HOME/.rbenv
-    export PATH=$RBENV_ROOT/bin:$PATH
-    eval "$(bkt --ttl=$BKT_TTL -- rbenv init - ${SHELL##*/})"
-fi
-
-###
 ### golang
 ###
 # brew install go
