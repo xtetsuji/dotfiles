@@ -102,6 +102,37 @@ function import-clr {
 SHELL_NAME=${SHELL##*/}
 
 ###
+### asdf
+###
+# see: https://blog.3qe.us/entry/2022/03/24/031224
+# if [ ! -d ~/.asdf ] && is_interactive_shell ; then
+#     echo '*** Installing ASDF into ~/.asdf ...'
+#     if exists git ; then
+#         git clone https://github.com/asdf-vm/asdf.git ~/.asdf --branch v0.13.1
+#     else
+#         echo "please install git command for asdf installation"
+#     fi
+# fi
+# see: https://asdf-vm.com/guide/getting-started.html
+function setup-asdf {
+    echo '*** Installing ASDF into ~/.asdf ...'
+    if exists git ; then
+        git clone https://github.com/asdf-vm/asdf.git ~/.asdf --branch v0.13.1
+    else
+        echo "please install git command for asdf installation"
+    fi
+}
+if is_interactive_shell ; then
+    source_if_readable ~/.asdf/asdf.sh
+    if is_current_bash ; then
+        source_if_readable $ASDF_DIR/completions/asdf.bash
+    fi
+    if is_current_zsh ; then
+        fpath=(${ASDF_DIR}/completions $fpath)
+    fi
+fi
+
+###
 ### plenv
 ###
 if [ -d $HOME/.plenv ] ; then
