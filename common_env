@@ -60,7 +60,7 @@ if ! is_codepsaces ; then
     export LC_MONETARY="ja_JP.UTF-8"
     export LC_NUMERIC="ja_JP.UTF-8"
     export LC_TIME="ja_JP.UTF-8"
-    export LC_ALL=
+    export LC_ALL="ja_JP.UTF-8"
     export TZ=JST-9
 fi
 
