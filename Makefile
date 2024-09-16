@@ -1,6 +1,7 @@
 # -*- makefile -*-
 
-MANAGED_DOTFILES	= $(shell git ls-files '.??*' | grep -v '/' | sed -e 's|^|~/|')
+DOT_EXCLUDE_FILES_RE	= ^README\.md\$$|^Makefile\$$|^rclone\.sh\$$|^testproc\.sh\$$
+MANAGED_DOTFILES	= $(shell git ls-files '*' | grep -v '/' | grep -E -v "$(DOT_EXCLUDE_FILES_RE)" | sed -e 's|^|~/.|')
 
 usage:
 	@echo "Usage:"
@@ -10,14 +11,17 @@ usage:
 	@echo "    make shellcheck-bash_profile"
 	@echo "    make shellcheck-bashrc"
 	@echo "  make ~/.SOMEFILE"
-	@echo "  make install-symlink"
-	@echo "  make uninstall-symlink"
+	@echo "  make install-all-symlink"
+	@echo "  make uninstall-all-symlink"
+	@echo ""
+	@echo "Dotfiles symlink creation targets:"
+	@$(MAKE) targets SUBTARGET=true
 
 status:
 	ls -l --color $(MANAGED_DOTFILES)
 
 targets:
-	@echo "Usage:"
+	@if [ -z "$(SUBTARGET)" ] ; then echo "Usage:" ; fi
 	@for f in $(MANAGED_DOTFILES) ; do \
 		echo "  make $$f" ; \
 	done
@@ -33,16 +37,18 @@ shellcheck-bash_profile:
 shellcheck-bashrc:
 	shellcheck bashrc --exclude=SC2148,SC1090
 
-
 $(MANAGED_DOTFILES):
-	f="$@" ; ln -s "$(CURDIR)/$$(basename $$f)" "$$f"
+	ln -s "$(CURDIR)/$$(basename "$@")" "$@"
 
-install-symlink:
+print-dotfiles:
+	@echo $(MANAGED_DOTFILES)
+
+install-all-symlink:
 	for target in $(MANAGED_DOTFILES) ; do \
 		$(MAKE) $$target || exit 1 ; \
 	done
 
-uninstall-symlink:
+uninstall-all-symlink:
 	for target in $(MANAGED_DOTFILES) ; do \
 		if [ -L $$target ] ; then \
 			ls -l $$target ; \
