@@ -28,10 +28,10 @@ shellcheck:
 	$(MAKE) shellcheck-bashrc
 
 shellcheck-bash_profile:
-	shellcheck .bash_profile --exclude=SC2148,SC1090
+	shellcheck bash_profile --exclude=SC2148,SC1090
 
 shellcheck-bashrc:
-	shellcheck .bashrc --exclude=SC2148,SC1090
+	shellcheck bashrc --exclude=SC2148,SC1090
 
 
 $(MANAGED_DOTFILES):
