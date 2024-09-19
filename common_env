@@ -99,8 +99,6 @@ function import-clr {
     clr_dump
 }
 
-SHELL_NAME=${SHELL##*/}
-
 ###
 ### plenv
 ###
