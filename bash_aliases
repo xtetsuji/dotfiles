@@ -97,7 +97,6 @@ alias tree='tree -NC' # tree -N for showing multibytes character
 alias lv='lv -c'
 alias less='less -R'
 
-exists gtar      && alias tar=gtar
 exists hub       && alias git=hub
 exists colordiff && alias diff=colordiff
 alias od='od -tx1z -Ax -v' # http://d.hatena.ne.jp/maji-KY/20110718/1310985449
