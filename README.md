@@ -2,9 +2,8 @@ This repositry has xtetsuji's dotfiles.
 
 You can use at ordinary 
 
-- Linux (especially Debian GNU/Linux)
-- Mac OS X (Darwin)
-- Windows Cygwin)
+- Linux (especially Debian GNU/Linux & Ubuntu)
+- macOS (Darwin)
 
 environment maybe.
 
