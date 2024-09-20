@@ -42,7 +42,7 @@ $(MANAGED_DOTFILES):
 	ln -s "$(CURDIR)/$$(basename "$@")" "$@"
 
 print-dotfiles:
-	@echo $(MANAGED_DOTFILES)
+	@xargs -n 1 echo <<<"$(MANAGED_DOTFILES)"
 
 install-all-symlink:
 	for target in $(MANAGED_DOTFILES) ; do \
