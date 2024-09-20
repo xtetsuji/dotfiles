@@ -7,6 +7,7 @@ usage:
 	@echo "Usage:"
 	@echo "  make status"
 	@echo "  make targets"
+	@echo "  make print-dotfiles"
 	@echo "  make shellcheck"
 	@echo "    make shellcheck-bash_profile"
 	@echo "    make shellcheck-bashrc"
