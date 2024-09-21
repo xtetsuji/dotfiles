@@ -64,13 +64,6 @@ if is_darwin ; then
 
     alias ql='qlmanage -p 2>/dev/null'
     alias imgdim='sips -g pixelHeight -g pixelWidth $1'
-    if ! exists md5sum ; then
-        if exists gmd5sum ; then
-            alias md5sum=gmd5sum
-        else
-            alias md5sum='md5 -s '
-        fi
-    fi
     alias pbtee='cat | pbcopy ; sleep 1 ; pbpaste'
     alias pwdcopy='echo -n $(pwd)/ | pbcopy'
 fi
@@ -104,7 +97,6 @@ alias tree='tree -NC' # tree -N for showing multibytes character
 alias lv='lv -c'
 alias less='less -R'
 
-exists gtar      && alias tar=gtar
 exists hub       && alias git=hub
 exists colordiff && alias diff=colordiff
 alias od='od -tx1z -Ax -v' # http://d.hatena.ne.jp/maji-KY/20110718/1310985449
