@@ -130,6 +130,31 @@ alias perl-installed-modules="perl -MExtUtils::Installed -E 'say(\$_) for ExtUti
 alias uri_unescape='perl -MURI::Escape=uri_unescape -E "say uri_unescape(join q/ /, @ARGV)" '
 alias uri_escape='perl -MURI::Escape=uri_escape -E "say uri_escape(join q/ /, @ARGV)" '
 
+###
+### path
+###
+function pathctl {
+    local subcommand="${1:-}"
+    shift || true
+    case "$subcommand" in
+        view)
+            echo "PATH=$PATH"
+            ;;
+        list)
+            echo "$PATH" | tr : '\n'
+            ;;
+        uniq)
+            PATH=$( perl -e 'print join ":", grep { !$seen{$_}++ } split /:/, $ENV{PATH}' )
+            ;;
+        exist)
+            perl -e '$p = shift; exit($ENV{PATH} =~ /(?<=:|\A)\Q$p\E(?=:|\z)/ ? 0 : 1)' "$1"
+            ;;
+        *)
+            echo "Usage: pathctl [view|list|uniq|exist]"
+            ;;
+    esac
+}
+
 ALIASES_DONE=1
 
 : "end .bash_aliases"
