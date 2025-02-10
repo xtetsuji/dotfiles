@@ -107,6 +107,20 @@ if [ -f /usr/local/bin/highlight ] ; then
 fi
 
 ###
+### JavaScript / TypeScript
+###
+# see: https://zenn.dev/mizchi/articles/experimental-node-typescript
+# ~/.zshrc
+declare -a nodets_opts=(
+    "--experimental-strip-types" # 型注釈の除去
+    "--experimental-transform-types" # enum namespace module の変形
+    "--experimental-detect-module"
+    "--no-warnings=ExperimentalWarning"
+)
+alias nodets="node ${nodets_opts[@]}"
+unset nodets_opts
+
+###
 ### Perl
 ###
 alias system-perldoc='/usr/bin/perldoc'
