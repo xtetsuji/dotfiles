@@ -59,7 +59,7 @@ function is-pwd-dotfiles-root {
 }
 
 function is-rcm-exist {
-    if type "rcup" > /dev/null 2>&1
+    type "rcup" > /dev/null 2>&1
 }
 
 function is-codespaces {
