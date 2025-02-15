@@ -80,7 +80,7 @@ function backup-home-real-dotfiles {
         return 0
     fi
     local loopguard=0
-     find "$HOME" \
+    find "$HOME" \
         -maxdepth 1 \
         -name '.??*' \
         -not -name '.*.bak' \
