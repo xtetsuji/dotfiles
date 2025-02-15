@@ -16,11 +16,18 @@ declare -a INSTALL_DOTFILES_IN_CODESPACES=(
     zprofile
 )
 
+declare -a INSTALL_DEB_PACKAGES_IN_CODESPACES=(
+    tig
+    bat
+    rcm
+)
+
 function main {
     if ! is-codespaces ; then
         echo "currently, this script is only for codespaces" >&2
         return 1
     fi
+    install-codespaces-fundamental-commands-by-apt
     if ! is-rcm-exist ; then
         echo "rcm is not installed" >&2
         if is-codespaces ; then
@@ -200,6 +207,13 @@ function append-codespaces-shellrc {
             echo "unsupported login shell: $login_shell_name" >&2
             ;;
     esac
+}
+
+# apt-get が確認できる場合、Codespaces 用の基本的なコマンドをインストールする
+function install-codespaces-fundamental-commands-by-apt {
+    # apt-get がないなら何もしない
+    type apt-get >/dev/null 2>&1 || return 0
+    sudo apt-get update && sudo apt-get install -y "${INSTALL_DEB_PACKAGES_IN_CODESPACES[@]}"
 }
 
 main "$@"
