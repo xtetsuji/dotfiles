@@ -55,27 +55,15 @@ function main {
 }
 
 function is-pwd-dotfiles-root {
-    if [ -f "./rcrc" ]; then
-        return 0
-    else
-        return 1
-    fi
+    test -f "./rcrc"
 }
 
 function is-rcm-exist {
-    if type "rcup" > /dev/null 2>&1; then
-        return 0
-    else
-        return 1
-    fi
+    if type "rcup" > /dev/null 2>&1
 }
 
 function is-codespaces {
-    if [ -n "${CODESPACES:-}" ]; then
-        return 0
-    else
-        return 1
-    fi
+    test -n "${CODESPACES:-}"
 }
 
 # 今のディレクトリのシンボリックリンクとして ~/.dotfiles を作成する
