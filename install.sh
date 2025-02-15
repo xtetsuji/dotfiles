@@ -141,7 +141,9 @@ function append-codespaces-bashrc {
     fi
     cat <<'EOF' | sed -e "s/__ME__/$ME/g" >> "$RCFILE"
 
+###
 ### for Codespaces by __ME__
+###
 
 source ~/.bash_aliases
 source_if_readable ~/.bash_secret
@@ -175,7 +177,9 @@ function append-codespaces-zshrc {
     fi
     cat <<'EOF' | sed -e "s/__ME__/$ME/g" >> "$RCFILE"
 
+###
 ### for Codespaces by __ME__
+###
 
 source ~/.bash_aliases
 source_if_readable ~/.bash_secret
