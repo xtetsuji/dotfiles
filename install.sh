@@ -179,7 +179,7 @@ function append-codespaces-zshrc {
 
 source ~/.bash_aliases
 source_if_readable ~/.bash_secret
-source ~/.common_env # _if_readable でも OK
+source_if_readable ~/.common_env
 if is_interactive_shell ; then
     export HISTSIZE=2000
     export SAVEHIST=100000
