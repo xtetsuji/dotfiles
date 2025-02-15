@@ -109,12 +109,26 @@ function backup-home-real-dotfiles {
     done
 }
 
+# Codespaces 追記用に、自分のアカウント名を取得する
+function get-my-account {
+    if [ -n "${GITHUB_USER:-}" ] ; then
+        # シェルインジェクション対策のためチェックする
+        if [[ "$GITHUB_USER" =~ ^[a-zA-Z0-9_-]+$ ]] ; then
+            echo "@${GITHUB_USER}"
+        else
+            echo "__myself__"
+        fi
+    else
+        echo "__myself__"
+    fi
+}
+
 function append-codespaces-bashrc {
     local RCFILE="$HOME/.bashrc"
+    local ME=$(get-my-account)
     if [ ! -f "$RCFILE" ] ; then
         return 0
     fi
-    local ME=xtetsuji
     if grep -q "$ME" "$RCFILE" ; then
         return 0
     fi
@@ -145,10 +159,10 @@ EOF
 
 function append-codespaces-zshrc {
     local RCFILE="$HOME/.zshrc"
+    local ME=$(get-my-account)
     if [ ! -f "$RCFILE" ] ; then
         return 0
     fi
-    local ME=xtetsuji
     if grep -q "$ME" "$RCFILE" ; then
         return 0
     fi
