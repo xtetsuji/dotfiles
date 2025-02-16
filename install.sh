@@ -16,11 +16,18 @@ declare -a INSTALL_DOTFILES_IN_CODESPACES=(
     zprofile
 )
 
+declare -a INSTALL_DEB_PACKAGES_IN_CODESPACES=(
+    tig
+    bat
+    rcm
+)
+
 function main {
     if ! is-codespaces ; then
         echo "currently, this script is only for codespaces" >&2
         return 1
     fi
+    install-codespaces-fundamental-commands-by-apt
     if ! is-rcm-exist ; then
         echo "rcm is not installed" >&2
         if is-codespaces ; then
@@ -55,27 +62,15 @@ function main {
 }
 
 function is-pwd-dotfiles-root {
-    if [ -f "./rcrc" ]; then
-        return 0
-    else
-        return 1
-    fi
+    test -f "./rcrc"
 }
 
 function is-rcm-exist {
-    if type "rcup" > /dev/null 2>&1; then
-        return 0
-    else
-        return 1
-    fi
+    type "rcup" > /dev/null 2>&1
 }
 
 function is-codespaces {
-    if [ -n "${CODESPACES:-}" ]; then
-        return 0
-    else
-        return 1
-    fi
+    test -n "${CODESPACES:-}"
 }
 
 # 今のディレクトリのシンボリックリンクとして ~/.dotfiles を作成する
@@ -92,7 +87,7 @@ function backup-home-real-dotfiles {
         return 0
     fi
     local loopguard=0
-     find "$HOME" \
+    find "$HOME" \
         -maxdepth 1 \
         -name '.??*' \
         -not -name '.*.bak' \
@@ -121,18 +116,34 @@ function backup-home-real-dotfiles {
     done
 }
 
+# Codespaces 追記用に、自分のアカウント名を取得する
+function get-my-account {
+    if [ -n "${GITHUB_USER:-}" ] ; then
+        # シェルインジェクション対策のためチェックする
+        if [[ "$GITHUB_USER" =~ ^[a-zA-Z0-9_-]+$ ]] ; then
+            echo "@${GITHUB_USER}"
+        else
+            echo "__myself__"
+        fi
+    else
+        echo "__myself__"
+    fi
+}
+
 function append-codespaces-bashrc {
     local RCFILE="$HOME/.bashrc"
+    local ME=$(get-my-account)
     if [ ! -f "$RCFILE" ] ; then
         return 0
     fi
-    local ME=xtetsuji
     if grep -q "$ME" "$RCFILE" ; then
         return 0
     fi
     cat <<'EOF' | sed -e "s/__ME__/$ME/g" >> "$RCFILE"
 
+###
 ### for Codespaces by __ME__
+###
 
 source ~/.bash_aliases
 source_if_readable ~/.bash_secret
@@ -157,20 +168,22 @@ EOF
 
 function append-codespaces-zshrc {
     local RCFILE="$HOME/.zshrc"
+    local ME=$(get-my-account)
     if [ ! -f "$RCFILE" ] ; then
         return 0
     fi
-    local ME=xtetsuji
     if grep -q "$ME" "$RCFILE" ; then
         return 0
     fi
     cat <<'EOF' | sed -e "s/__ME__/$ME/g" >> "$RCFILE"
 
+###
 ### for Codespaces by __ME__
+###
 
 source ~/.bash_aliases
 source_if_readable ~/.bash_secret
-source ~/.common_env # _if_readable でも OK
+source_if_readable ~/.common_env
 if is_interactive_shell ; then
     export HISTSIZE=2000
     export SAVEHIST=100000
@@ -198,6 +211,13 @@ function append-codespaces-shellrc {
             echo "unsupported login shell: $login_shell_name" >&2
             ;;
     esac
+}
+
+# apt-get が確認できる場合、Codespaces 用の基本的なコマンドをインストールする
+function install-codespaces-fundamental-commands-by-apt {
+    # apt-get がないなら何もしない
+    type apt-get >/dev/null 2>&1 || return 0
+    sudo apt-get update && sudo apt-get install -y "${INSTALL_DEB_PACKAGES_IN_CODESPACES[@]}"
 }
 
 main "$@"
