@@ -28,6 +28,7 @@ function main {
         return 1
     fi
     install-codespaces-fundamental-commands-by-apt
+    setup-bat
     if ! is-rcm-exist ; then
         echo "rcm is not installed" >&2
         if is-codespaces ; then
@@ -227,6 +228,16 @@ function install-codespaces-fundamental-commands-by-apt {
     # apt-get がないなら何もしない
     type apt-get >/dev/null 2>&1 || return 0
     sudo apt-get update && sudo apt-get install -y "${INSTALL_DEB_PACKAGES_IN_CODESPACES[@]}"
+}
+
+# bat パッケージを入れた後、batcat コマンドを bat コマンドとして実行できるようにする
+function setup-bat {
+    if ! type bat > /dev/null 2>&1 ; then
+        echo "bat is not installed" >&2
+        return 1
+    fi
+    mkdir -p ~/.local/bin
+    ln -s /usr/bin/batcat ~/.local/bin/bat
 }
 
 main "$@"
