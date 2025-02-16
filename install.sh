@@ -130,13 +130,25 @@ function get-my-account {
     fi
 }
 
+# RCFILE チェック
+function check-rcfile {
+    local RCFILE="$1"
+    local ME="$2"
+    if [ ! -f "$RCFILE" ] ; then
+        echo "RCFILE not found: $RCFILE" >&2
+        return 1
+    fi
+    if grep -q "$ME" "$RCFILE" ; then
+        echo "RCFILE already has '$ME': $RCFILE" >&2
+        return 1
+    fi
+}
+
+# Codespaces の .bashrc に自分のコンパクトな定義を追記する
 function append-codespaces-bashrc {
     local RCFILE="$HOME/.bashrc"
     local ME=$(get-my-account)
-    if [ ! -f "$RCFILE" ] ; then
-        return 0
-    fi
-    if grep -q "$ME" "$RCFILE" ; then
+    if ! check-rcfile "$RCFILE" "$ME" ; then
         return 0
     fi
     cat <<'EOF' | sed -e "s/__ME__/$ME/g" >> "$RCFILE"
@@ -169,10 +181,7 @@ EOF
 function append-codespaces-zshrc {
     local RCFILE="$HOME/.zshrc"
     local ME=$(get-my-account)
-    if [ ! -f "$RCFILE" ] ; then
-        return 0
-    fi
-    if grep -q "$ME" "$RCFILE" ; then
+    if ! check-rcfile "$RCFILE" "$ME" ; then
         return 0
     fi
     cat <<'EOF' | sed -e "s/__ME__/$ME/g" >> "$RCFILE"
