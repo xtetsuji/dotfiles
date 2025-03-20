@@ -85,6 +85,10 @@ if is_cygwin ; then
     source_if_readable ~/.bash_aliases_cygwin
 fi
 
+if is_cursor_local || is_cursor_codespaces ; then
+    alias code='echo "dispatch cursor cli ✨" ; cursor'
+fi
+
 if exists dircolors ; then
     if [ -f ~/.dir_colors ] ; then
         eval "$(dircolors -b ~/.dir_colors)"
