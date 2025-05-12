@@ -113,6 +113,11 @@ if [ -f /usr/local/bin/highlight ] ; then
     alias syntaxhi=/usr/local/bin/highlight
 fi
 
+if exists eza ; then
+    alias lse='eza -F --color=auto --git '
+    alias treee='eza -F --color=auto --git --tree '
+fi
+
 ###
 ### JavaScript / TypeScript
 ###
