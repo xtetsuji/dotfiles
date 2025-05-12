@@ -176,6 +176,14 @@ if is_interactive_shell ; then
     PROMPT_COMMAND=share_history
     bind '"\C-g": "git "'
 fi
+
+# For Cursor + SSH Codespaces connection setting. This emulates the behavior of VSCode's initial connection
+# by automatically changing to the repository directory when connected.
+if [ "$CODESPACES" = "true" ] ; then
+    if [ "$PWD" = "$HOME" ] && [ -d "/workspaces/$RepositoryName" ] ; then
+        cd "/workspaces/$RepositoryName"
+    fi
+fi
 EOF
 }
 
@@ -204,6 +212,14 @@ if is_interactive_shell ; then
     setopt EXTENDED_HISTORY
     bindkey -e # emacs like keybind
     bindkey -s '^g' 'git '
+fi
+
+# For Cursor + SSH Codespaces connection setting. This emulates the behavior of VSCode's initial connection
+# by automatically changing to the repository directory when connected.
+if [ "$CODESPACES" = "true" ] ; then
+    if [ "$PWD" = "$HOME" ] && [ -d "/workspaces/$RepositoryName" ] ; then
+        cd "/workspaces/$RepositoryName"
+    fi
 fi
 EOF
 }
