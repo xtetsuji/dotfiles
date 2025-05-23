@@ -114,8 +114,8 @@ if [ -f /usr/local/bin/highlight ] ; then
 fi
 
 if exists eza ; then
-    alias lse='eza -F --color=auto --git '
-    alias treee='eza -F --color=auto --git --tree '
+    alias els='eza -F --color=auto --git '
+    alias etree='eza -F --color=auto --git --tree '
 fi
 
 ###
