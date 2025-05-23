@@ -114,6 +114,8 @@ if [ -f /usr/local/bin/highlight ] ; then
 fi
 
 if exists eza ; then
+    # The prefix 'e' in commands represents 'extended' or 'eza' (a modern ls replacement),
+    # indicating enhanced functionality over standard commands.
     alias els='eza -F --color=auto --git '
     alias etree='eza -F --color=auto --git --tree '
 fi
