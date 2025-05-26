@@ -135,7 +135,7 @@ fi
 ### zoxide
 ###
 if exists zoxide && exists shell_name ; then
-    declare ZO_SHELL=$(shell_name)
+    ZO_SHELL=$(shell_name)
     if [ -n "$ZO_SHELL" ] ; then
         eval "$(bkt --ttl=$BKT_TTL -- zoxide init --cmd cd $ZO_SHELL)"
     fi
