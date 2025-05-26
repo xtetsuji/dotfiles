@@ -14,6 +14,15 @@ if is_current_bash ; then
 elif is_current_zsh ; then
     function is_login_shell { [[ -o login ]] ; }
 fi
+function shell_name {
+    if is_current_bash ; then
+        echo "bash"
+    elif is_current_zsh ; then
+        echo "zsh"
+    else
+        echo ""
+    fi
+}
 function is_darwin { test "${UNAME:=$(uname)}" = Darwin ; }
 function is_linux  { test "${UNAME:=$(uname)}" = Linux  ; }
 function is_cygwin { [[ "${UNAME:=$(uname)}" =~ ^CYGWIN ]] ; }

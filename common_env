@@ -132,6 +132,17 @@ if exists go ; then
 fi
 
 ###
+### zoxide
+###
+if exists zoxide ; then
+    declare ZO_SHELL=$(shell_name)
+    if [ -n "$ZO_SHELL" ] ; then
+        eval "$(bkt --ttl=$BKT_TTL -- zoxide init --cmd cd $ZO_SHELL)"
+    fi
+    unset ZO_SHELL
+fi
+
+###
 ### ssh-agent
 ###
 # http://www.gcd.org/blog/2006/09/100/
