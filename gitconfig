@@ -100,6 +100,11 @@
 
 [ghi]
 	token = !security find-internet-password -a xtetsuji -s github.com -l 'ghi token' -w
+[filter "lfs"]
+	smudge = git-lfs smudge -- %f
+	process = git-lfs filter-process
+	required = true
+	clean = git-lfs clean -- %f
 
 [include]
     path = .gitconfig.local
