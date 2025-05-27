@@ -1,9 +1,14 @@
 #!/bin/bash
 set -eu
 
+declare UNAME="$(uname)"
 declare DOTFILES_BACKUP
 # DOTFILES_BACKUP が環境変数として定義されていなければ、false にする
 : ${DOTFILES_BACKUP:=false}
+
+declare DRY_RUN
+# DRY_RUN が環境変数として定義されていなければ、false にする
+: ${DRY_RUN:=false}
 
 declare -a INSTALL_DOTFILES_IN_CODESPACES=(
     bash_aliases
@@ -16,6 +21,17 @@ declare -a INSTALL_DOTFILES_IN_CODESPACES=(
     zprofile
 )
 
+# 実験でいくつかだけ自動インストール
+declare -a INSTALL_DOTFILES_IN_MACOS=(
+    bash_aliases
+    common_env
+    gitconfig
+    gitignore
+    nanorc
+    tigrc
+    vimrc
+)
+
 declare -a INSTALL_DEB_PACKAGES_IN_CODESPACES=(
     tig
     bat
@@ -23,43 +39,41 @@ declare -a INSTALL_DEB_PACKAGES_IN_CODESPACES=(
 )
 
 function main {
-    if ! is-codespaces ; then
-        echo "currently, this script is only for codespaces" >&2
-        return 1
-    fi
-    install-codespaces-fundamental-commands-by-apt
-    setup-bat || true
-    if ! is-rcm-exist ; then
-        echo "rcm is not installed" >&2
-        if is-codespaces ; then
+    if is-codespaces ; then
+        install-codespaces-fundamental-commands-by-apt
+        setup-bat || true
+        if ! is-rcm-exist ; then
+            echo "rcm is not installed" >&2
             # 取りあえず Ubuntu/Debian 決め打ちで入れてしまう
             sudo apt-get update && sudo apt-get install -y rcm
-        else
-            echo "please install rcm" >&2
+        fi
+        if [ ! -f "./rcrc" ] ; then
+            echo "./rcrc is not found" >&2
             return 1
         fi
-    fi
-    if [ ! -f "./rcrc" ] ; then
-        echo "./rcrc is not found" >&2
+        backup-home-real-dotfiles
+        #create-home-dotfiles-dir-symlink
+        pwd # for debug
+        # Codespaces の場合、シンボリックリンクではなく、-C でコピーを作成する
+        #   あと、-f で対話が発生しないようにする
+        # Codespaces の場合、~/.dotfiles 自体が揮発的になってしまうことと、
+        #   これ自体をシンボリックリンクにしてしまうと、シンボリックリンクが多重となってしまい混乱を生む可能性があるため
+        #   -C でコピーを作ることでもろもろ回避しようとしている
+        #   ドットファイルに変更があれば、再度 rcup を実行したりすればよい
+        # Codespaces では .bashrc .zshrc は温存して、あとで追加する
+        # XXX: RCRC 環境変数が意味をなしていない？
+        env RCRC=./rcrc rcup -v -f -C -d "$PWD" \
+            "${INSTALL_DOTFILES_IN_CODESPACES[@]}"
+        # MEMO: bashrc と zshrc は Codespaces のものを採用して、あとで追記する
+        # MEMO: bash_completion を読み込むと、ディレクトリ補完で警告が発生するのと
+        #       特に現状 Codespaces 上でこれを読まないことで困ることがないので、読み込まないようにする
+        append-codespaces-shellrc
+    elif is-macos ; then
+        dispatch-macos
+    else
+        echo "currently, this script is only for codespaces or macOS" >&2
         return 1
     fi
-    backup-home-real-dotfiles
-    #create-home-dotfiles-dir-symlink
-    pwd # for debug
-    # Codespaces の場合、シンボリックリンクではなく、-C でコピーを作成する
-    #   あと、-f で対話が発生しないようにする
-    # Codespaces の場合、~/.dotfiles 自体が揮発的になってしまうことと、
-    #   これ自体をシンボリックリンクにしてしまうと、シンボリックリンクが多重となってしまい混乱を生む可能性があるため
-    #   -C でコピーを作ることでもろもろ回避しようとしている
-    #   ドットファイルに変更があれば、再度 rcup を実行したりすればよい
-    # Codespaces では .bashrc .zshrc は温存して、あとで追加する
-    # XXX: RCRC 環境変数が意味をなしていない？
-    env RCRC=./rcrc rcup -v -f -C -d "$PWD" \
-        "${INSTALL_DOTFILES_IN_CODESPACES[@]}"
-    # MEMO: bashrc と zshrc は Codespaces のものを採用して、あとで追記する
-    # MEMO: bash_completion を読み込むと、ディレクトリ補完で警告が発生するのと
-    #       特に現状 Codespaces 上でこれを読まないことで困ることがないので、読み込まないようにする
-    append-codespaces-shellrc
 }
 
 function is-pwd-dotfiles-root {
@@ -72,6 +86,30 @@ function is-rcm-exist {
 
 function is-codespaces {
     test -n "${CODESPACES:-}"
+}
+
+function is-macos {
+    test "$UNAME" = "Darwin"
+}
+
+function dispatch-macos {
+    backup-home-real-dotfiles
+    pwd # for debug
+    # macOS の場合、シンボリックリンクで実装する
+    if [ "$DRY_RUN" = "true" ]; then
+        echo "[DRY-RUN] Would execute: env RCRC=./rcrc rcup -v -d '$PWD' ${INSTALL_DOTFILES_IN_MACOS[*]}"
+        echo "[DRY-RUN] Files that would be linked:"
+        for file in "${INSTALL_DOTFILES_IN_MACOS[@]}"; do
+            if [ -f "./$file" ]; then
+                echo "  $PWD/$file -> $HOME/.$file"
+            else
+                echo "  [WARNING] Source file not found: ./$file"
+            fi
+        done
+    else
+        env RCRC=./rcrc rcup -v -d "$PWD" \
+            "${INSTALL_DOTFILES_IN_MACOS[@]}"
+    fi
 }
 
 # 今のディレクトリのシンボリックリンクとして ~/.dotfiles を作成する
