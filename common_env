@@ -102,6 +102,41 @@ function import-clr {
 }
 
 ###
+### development tools environment
+###
+
+# nix support (conditional)
+if [ -f /nix/var/nix/profiles/default/etc/profile.d/nix-daemon.sh ] ; then
+    source /nix/var/nix/profiles/default/etc/profile.d/nix-daemon.sh
+fi
+
+# direnv support (conditional)
+if exists direnv ; then
+    shell=$(shell_name)
+    if [ -n "$shell" ]; then
+        eval "$(direnv hook $shell)"
+    fi
+    unset shell
+fi
+
+# pnpm support (conditional)
+if exists pnpm ; then
+    export PNPM_HOME="$HOME/Library/pnpm"
+    case ":$PATH:" in
+      *":$PNPM_HOME:"*) ;;
+      *) export PATH="$PNPM_HOME:$PATH" ;;
+    esac
+fi
+
+# Windsurf support (conditional)
+# NOTE: Unlike other editors (code/cursor) that create symlinks in /usr/local/bin/,
+# Windsurf requires adding its own bin directory to PATH for just one command.
+# This approach makes PATH longer but follows Windsurf's installation design.
+if [ -d "$HOME/.codeium/windsurf/bin" ] ; then
+    export PATH="$HOME/.codeium/windsurf/bin:$PATH"
+fi
+
+###
 ### plenv
 ###
 if [ -d $HOME/.plenv ] ; then
