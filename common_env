@@ -131,9 +131,7 @@ fi
 # NOTE: Unlike other editors (code/cursor) that create symlinks in /usr/local/bin/,
 # Windsurf requires adding its own bin directory to PATH for just one command.
 # This approach makes PATH longer but follows Windsurf's installation design.
-if [ -d "$HOME/.codeium/windsurf/bin" ] ; then
-    export PATH="$HOME/.codeium/windsurf/bin:$PATH"
-fi
+push_path_var "$HOME/.codeium/windsurf/bin"
 
 ###
 ### plenv
