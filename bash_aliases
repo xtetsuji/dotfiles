@@ -4,7 +4,7 @@
 
 function push_path_var { test -d "$1" && PATH=$PATH:$1 ; }
 function unshift_path_var { test -d "$1" && PATH=$1:$PATH ; }
-function if_path_contains { [[ ":$PATH:" == *":${1:?}:"* ]] ; }
+function path_contains { [[ ":$PATH:" == *":${1:?}:"* ]] ; }
 function exists { type $1 >/dev/null 2>&1 ; }
 function source_if_readable { test -r "$1" && source "$1" ; }
 function is_current_bash { test -n "$BASH_VERSION" ; }

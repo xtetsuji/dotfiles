@@ -121,10 +121,9 @@ fi
 # pnpm support (conditional)
 if exists pnpm ; then
     export PNPM_HOME="$HOME/Library/pnpm"
-    case ":$PATH:" in
-      *":$PNPM_HOME:"*) ;;
-      *) export PATH="$PNPM_HOME:$PATH" ;;
-    esac
+    if ! path_contains "$PNPM_HOME" ; then
+        unshift_path_var "$PNPM_HOME"
+    then
 fi
 
 # Windsurf support (conditional)
