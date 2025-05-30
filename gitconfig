@@ -51,6 +51,9 @@
 	dfs = diff --cached
 	dfn = diff --name-only
 
+	### git-hidedir (original command)
+	hd = hidedir
+
 	piconvdiff = "!function f { enc=$1 ; shift ; git diff --color=always \"$@\" | piconv -f $enc -t utf8;}; f"
 	sjisdiff = piconvdiff shiftjis
 	eucjpdiff = piconvdiff euc-jp
@@ -63,9 +66,10 @@
 	eucjpdfs = eucjpdiffs
 
 	### reset methods
-	cancel      = reset --soft HEAD^
-	reset-merge = reset --merge
+	# HEAD^ and HEAD~1 are equivalent (one commit back)
+	uncommit    = reset --soft HEAD^
 	unstage     = reset HEAD
+	abort-merge = merge --abort
 
 	# see: http://ikeyasu.hatenablog.com/entries/2011/05/25
 	# http://qiita.com/peccul/items/90dd469e2f72babbc106
