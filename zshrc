@@ -55,7 +55,12 @@ if [ "$TERM" = screen ] ; then
 fi
 
 #PROMPT="%F{black}%1(?.%K{red}.%K{green})↪%?%k%f @%T $PROMPT"
-prompt_rc="%F{black}%1(?.%K{red}.%K{green})↪%?%k%f"
+# Remove exit code from prompt when in VSCode
+if is_vscode_local ; then
+    prompt_rc=""
+else
+    prompt_rc="%F{black}%1(?.%K{red}.%K{green})↪%?%k%f"
+fi
 prompt_dt="%F{white}%K{blue}%T%k%f"
 #prompt_jc="%F{black}%1(j.%K{magenta}.%K{white})&%j%k%f"
 prompt_jc="%1(j.%F{black}%K{cyan}&%j%k%f .)"
