@@ -32,6 +32,7 @@ function is_kde { test -n "$KDE_FULL_SESSION" && test "$KDE_FULL_SESSION" = true
 
 function is_cursor_local { test -n "$CURSOR_TRACE_ID" ; }
 function is_cursor_codespaces { [[ $BROWSER =~ cursor-server ]] ; }
+function is_vscode_local { [[ $TERM_PROGRAM == vscode ]] ; }
 
 # bkt - https://github.com/dimo414/bkt
 # Cache commands using bkt if installed
