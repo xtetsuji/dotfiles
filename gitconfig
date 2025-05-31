@@ -51,8 +51,8 @@
 	dfs = diff --cached
 	dfn = diff --name-only
 
-	### git-hidedir (original command)
-	hd = hidedir
+	### git-hiddendir (original command)
+	hd = hiddendir
 
 	piconvdiff = "!function f { enc=$1 ; shift ; git diff --color=always \"$@\" | piconv -f $enc -t utf8;}; f"
 	sjisdiff = piconvdiff shiftjis
