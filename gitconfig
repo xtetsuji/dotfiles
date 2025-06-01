@@ -71,6 +71,10 @@
 	unstage     = reset HEAD
 	abort-merge = merge --abort
 
+	### worktree
+	wt = worktree
+	wti = !git worktree list | fzf | awk '{print $1}'
+
 	# see: http://ikeyasu.hatenablog.com/entries/2011/05/25
 	# http://qiita.com/peccul/items/90dd469e2f72babbc106
 
