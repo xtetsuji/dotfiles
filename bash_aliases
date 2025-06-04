@@ -132,7 +132,7 @@ if exists eza ; then
 elif [ -x "/opt/homebrew/bin/eza" ]; then
     # Fallback: if eza is not in PATH but exists in Homebrew location
     # This handles cases where bash_aliases is sourced before Homebrew PATH setup
-    alias els='/opt/homebrew/bin/eza -F --color=auto --git'
+    alias els='/opt/homebrew/bin/eza -F --color=auto --git '
     alias etree='/opt/homebrew/bin/eza -F --color=auto --git --tree'
 fi
 
