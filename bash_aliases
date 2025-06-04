@@ -129,21 +129,19 @@ if exists eza ; then
     # indicating enhanced functionality over standard commands.
     alias els='eza -F --color=auto --git '
     alias etree='eza -F --color=auto --git --tree '
+elif [ -x "/opt/homebrew/bin/eza" ]; then
+    # Fallback: if eza is not in PATH but exists in Homebrew location
+    # This handles cases where bash_aliases is sourced before Homebrew PATH setup
+    alias els='/opt/homebrew/bin/eza -F --color=auto --git'
+    alias etree='/opt/homebrew/bin/eza -F --color=auto --git --tree'
 fi
 
 ###
 ### JavaScript / TypeScript
 ###
 # see: https://zenn.dev/mizchi/articles/experimental-node-typescript
-# ~/.zshrc
-declare -a nodets_opts=(
-    "--experimental-strip-types" # 型注釈の除去
-    "--experimental-transform-types" # enum namespace module の変形
-    "--experimental-detect-module"
-    "--no-warnings=ExperimentalWarning"
-)
-alias nodets="node ${nodets_opts[@]}"
-unset nodets_opts
+# Simple version without arrays to avoid shell compatibility issues
+alias nodets='node --experimental-strip-types --experimental-transform-types --experimental-detect-module --no-warnings=ExperimentalWarning'
 
 ###
 ### Perl
