@@ -1,0 +1,66 @@
+# -*- mode: shell-script ; coding: utf-8 ; -*-
+# cdwt - Change Directory to git WorkTree
+# Select and change to git worktree directory interactively
+# 
+# Compatible with both bash and zsh
+
+function cdwt {
+    local worktrees selected_path
+    
+    # Check if we're in a git repository
+    if ! git rev-parse --git-dir >/dev/null 2>&1 ; then
+        echo "Error: Not in a git repository" >&2
+        return 1
+    fi
+    
+    # Get list of worktrees
+    worktrees=$(git worktree list --porcelain | grep "^worktree " | cut -d' ' -f2-)
+    
+    if [ -z "$worktrees" ] ; then
+        echo "No worktrees found" >&2
+        return 1
+    fi
+    
+    # Check if fzf is available for better selection
+    if command -v fzf >/dev/null 2>&1 ; then
+        selected_path=$(echo "$worktrees" | fzf --prompt="Select worktree: " --height=40% --reverse)
+    else
+        # Fallback to simple numbered selection
+        echo "Available worktrees:"
+        local i=1
+        # Array declaration compatible with both bash and zsh
+        local paths
+        if [ -n "$BASH_VERSION" ] ; then
+            local paths=()  # bash style
+        elif [ -n "$ZSH_VERSION" ] ; then
+            local -a paths  # zsh style
+        else
+            local paths=()  # fallback to bash style for other shells
+        fi
+        
+        while IFS= read -r path; do
+            echo "$i) $path"
+            paths[$i]="$path"
+            ((i++))
+        done <<< "$worktrees"
+        
+        echo -n "Select worktree number: "
+        read selection
+        
+        if [[ "$selection" =~ ^[0-9]+$ ]] && [ "$selection" -ge 1 ] && [ "$selection" -lt "$i" ] ; then
+            selected_path="${paths[$selection]}"
+        else
+            echo "Invalid selection" >&2
+            return 1
+        fi
+    fi
+    
+    # Change directory if a path was selected
+    if [ -n "$selected_path" ] && [ -d "$selected_path" ] ; then
+        cd "$selected_path"
+        echo "Changed to: $PWD"
+    else
+        echo "Selection cancelled or invalid path" >&2
+        return 1
+    fi
+}
