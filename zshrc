@@ -39,6 +39,13 @@ source_if_readable ~/.bash_secret
 source ~/.common_env
 
 ###
+### functions
+###
+# NOTE: function_cd.zsh is disabled to prioritize zoxide's cd command
+# source_if_readable ~/.function_cd.zsh
+source_if_readable ~/.function_cdwt.shell
+
+###
 ### Prompt
 ###
 setopt PROMPT_SUBST
