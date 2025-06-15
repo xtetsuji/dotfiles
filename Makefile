@@ -39,7 +39,23 @@ shellcheck-bashrc:
 	shellcheck bashrc --exclude=SC2148,SC1090
 
 $(MANAGED_DOTFILES):
-	ln -s "$(CURDIR)/$$(basename "$@")" "$@"
+	@target_path="$@"; \
+	source_path="$(CURDIR)/$$(basename "$@")"; \
+	if [ ! -e "$$target_path" ]; then \
+		echo "Creating symlink: $$target_path -> $$source_path"; \
+		ln -s "$$source_path" "$$target_path"; \
+	elif [ -L "$$target_path" ] && [ "$$(readlink "$$target_path")" = "$$source_path" ]; then \
+		echo "Already linked: $$target_path"; \
+	else \
+		echo "Warning: $$target_path exists but is not the expected symlink"; \
+		echo "  Expected: $$target_path -> $$source_path"; \
+		if [ -L "$$target_path" ]; then \
+			echo "  Current:  $$target_path -> $$(readlink "$$target_path")"; \
+		else \
+			echo "  Current:  $$target_path is a regular file/directory"; \
+		fi; \
+		exit 1; \
+	fi
 
 print-dotfiles:
 	@xargs -n 1 echo <<<"$(MANAGED_DOTFILES)"
