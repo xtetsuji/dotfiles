@@ -40,7 +40,7 @@ function is_linux  { test "${UNAME:=$(uname)}" = Linux  ; }
 function is_cygwin { [[ "${UNAME:=$(uname)}" =~ ^CYGWIN ]] ; }
 
 # Environment detection functions
-function is_codepsaces { test -n "$CODESPACES" && test "$CODESPACES" = true ; }
+function is_codespaces { test -n "$CODESPACES" && test "$CODESPACES" = true ; }
 function is_kde { test -n "$KDE_FULL_SESSION" && test "$KDE_FULL_SESSION" = true ; }
 
 # Editor detection functions
