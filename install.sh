@@ -203,7 +203,6 @@ source ~/.path_functions
 source ~/.common_env
 source ~/.bash_aliases
 source_if_readable ~/.bash_secret
-source_if_readable ~/.common_env
 if is_interactive_shell ; then
     # source_if_readable ~/.bash_completion # これも念のため重複読み込み対策したい
     # if [ -z "${BASH_COMPLETION_VERSINFO:-}" ] ; then
@@ -246,7 +245,6 @@ source ~/.path_functions
 source ~/.common_env
 source ~/.bash_aliases
 source_if_readable ~/.bash_secret
-source_if_readable ~/.common_env
 if is_interactive_shell ; then
     export HISTSIZE=2000
     export SAVEHIST=100000
