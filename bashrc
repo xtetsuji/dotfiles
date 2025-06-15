@@ -13,13 +13,10 @@ fi
 ###
 ### Config
 ###
+source ~/.path_functions
+source ~/.common_env
 source ~/.bash_aliases
 source_if_readable ~/.bash_secret
-
-###
-### common env
-###
-source ~/.common_env
 
 ###
 ### functions

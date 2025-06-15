@@ -24,19 +24,14 @@ fpath=(/usr/share/zsh/5.8/functions/ $fpath)
 ###
 ### Config
 ###
-# NOTE: Loading order is important due to function dependencies
-# bash_aliases defines utility functions (push_path_var, exists, source_if_readable, etc.)
-# common_env uses these functions, so bash_aliases must be loaded first
-# 
-# Future improvement: Extract path utility functions to a separate file
-# and load them first, then common_env → bash_aliases for logical order
+# NOTE: Loading order is optimized for function dependencies
+# 1. path_functions - defines utility functions (push_path_var, exists, source_if_readable, etc.)
+# 2. common_env - uses utility functions for PATH setup and environment configuration
+# 3. bash_aliases - uses commands that are now properly available in PATH
+source ~/.path_functions
+source ~/.common_env
 source ~/.bash_aliases
 source_if_readable ~/.bash_secret
-
-###
-### common env
-###
-source ~/.common_env
 
 ###
 ### functions

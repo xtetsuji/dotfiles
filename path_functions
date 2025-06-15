@@ -1,0 +1,51 @@
+# -*- mode: shell-script ; coding: utf-8 ; -*-
+# path_functions - Shell utility functions for path manipulation and system detection
+: "start .path_functions"
+
+# Path manipulation functions
+function push_path_var { test -d "$1" && PATH=$PATH:$1 ; }
+function unshift_path_var { test -d "$1" && PATH=$1:$PATH ; }
+function path_contains { [[ ":$PATH:" == *":${1:?}:"* ]] ; }
+
+# Command existence check
+function exists { type $1 >/dev/null 2>&1 ; }
+
+# File sourcing utility
+function source_if_readable { test -r "$1" && source "$1" ; }
+
+# Shell detection functions
+function is_current_bash { test -n "$BASH_VERSION" ; }
+function is_current_zsh  { test -n "$ZSH_VERSION" ; }
+function is_interactive_shell { [[ $- =~ i ]] ; }
+
+if is_current_bash ; then
+    function is_login_shell { shopt -q login_shell ; }
+elif is_current_zsh ; then
+    function is_login_shell { [[ -o login ]] ; }
+fi
+
+function shell_name {
+    if is_current_bash ; then
+        echo "bash"
+    elif is_current_zsh ; then
+        echo "zsh"
+    else
+        echo ""
+    fi
+}
+
+# Platform detection functions
+function is_darwin { test "${UNAME:=$(uname)}" = Darwin ; }
+function is_linux  { test "${UNAME:=$(uname)}" = Linux  ; }
+function is_cygwin { [[ "${UNAME:=$(uname)}" =~ ^CYGWIN ]] ; }
+
+# Environment detection functions
+function is_codepsaces { test -n "$CODESPACES" && test "$CODESPACES" = true ; }
+function is_kde { test -n "$KDE_FULL_SESSION" && test "$KDE_FULL_SESSION" = true ; }
+
+# Editor detection functions
+function is_cursor_local { test -n "$CURSOR_TRACE_ID" ; }
+function is_cursor_codespaces { [[ $BROWSER =~ cursor-server ]] ; }
+function is_vscode_local { [[ $TERM_PROGRAM == vscode ]] ; }
+
+: "end .path_functions"
