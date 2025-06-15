@@ -1,6 +1,9 @@
 # -*- shell-script -*-
 : "start .common_env"
 
+# bkt cache TTL setting
+export BKT_TTL="120s"
+
 ###
 ### Path
 ###

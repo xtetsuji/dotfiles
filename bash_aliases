@@ -16,8 +16,6 @@ else
     }
 fi
 
-export BKT_TTL="120s"
-
 ###
 ### hooks
 ###
