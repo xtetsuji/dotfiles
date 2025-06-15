@@ -40,7 +40,8 @@ shellcheck-bashrc:
 
 $(MANAGED_DOTFILES):
 	@target_path="$@"; \
-	source_path="$(CURDIR)/$$(basename "$@")"; \
+	source_filename="$$(basename "$$target_path" | sed 's/^\.//')"; \
+	source_path="$(CURDIR)/$$source_filename"; \
 	if [ ! -e "$$target_path" ]; then \
 		echo "Creating symlink: $$target_path -> $$source_path"; \
 		ln -s "$$source_path" "$$target_path"; \
