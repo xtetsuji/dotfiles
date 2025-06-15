@@ -13,13 +13,10 @@ fi
 ###
 ### Config
 ###
+source ~/.path_functions
+source ~/.common_env
 source ~/.bash_aliases
 source_if_readable ~/.bash_secret
-
-###
-### common env
-###
-source ~/.common_env
 
 ###
 ### functions
@@ -62,7 +59,7 @@ unset f color_prompt git_prompt_brew git_prompt_macos
 ###
 ### completion
 ###
-if is_interactive_shell && ! is_codepsaces ; then
+if is_interactive_shell && ! is_codespaces ; then
     source_if_readable ~/.bash_completion
     source_if_readable "$BREW_PREFIX/etc/bash_completion"
     source_if_readable /etc/bash_completion

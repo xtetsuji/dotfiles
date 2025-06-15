@@ -1,6 +1,9 @@
 # -*- shell-script -*-
 : "start .common_env"
 
+# bkt cache TTL setting
+export BKT_TTL="120s"
+
 ###
 ### Path
 ###
@@ -53,7 +56,7 @@ export MYSQL_PS1='\u@\h> '
 ###
 ### Locale / Lang
 ###
-if ! is_codepsaces ; then
+if ! is_codespaces ; then
     export LANG="ja_JP.UTF-8"
     export LC_COLLATE="ja_JP.UTF-8"
     export LC_CTYPE="UTF-8"

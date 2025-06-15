@@ -2,38 +2,6 @@
 # .bash_aliases - bash and zsh aliases
 : "start .bash_aliases"
 
-function push_path_var { test -d "$1" && PATH=$PATH:$1 ; }
-function unshift_path_var { test -d "$1" && PATH=$1:$PATH ; }
-function path_contains { [[ ":$PATH:" == *":${1:?}:"* ]] ; }
-function exists { type $1 >/dev/null 2>&1 ; }
-function source_if_readable { test -r "$1" && source "$1" ; }
-function is_current_bash { test -n "$BASH_VERSION" ; }
-function is_current_zsh  { test -n "$ZSH_VERSION" ; }
-function is_interactive_shell { [[ $- =~ i ]] ; }
-if is_current_bash ; then
-    function is_login_shell { shopt -q login_shell ; }
-elif is_current_zsh ; then
-    function is_login_shell { [[ -o login ]] ; }
-fi
-function shell_name {
-    if is_current_bash ; then
-        echo "bash"
-    elif is_current_zsh ; then
-        echo "zsh"
-    else
-        echo ""
-    fi
-}
-function is_darwin { test "${UNAME:=$(uname)}" = Darwin ; }
-function is_linux  { test "${UNAME:=$(uname)}" = Linux  ; }
-function is_cygwin { [[ "${UNAME:=$(uname)}" =~ ^CYGWIN ]] ; }
-function is_codepsaces { test -n "$CODESPACES" && test "$CODESPACES" = true ; }
-function is_kde { test -n "$KDE_FULL_SESSION" && test "$KDE_FULL_SESSION" = true ; }
-
-function is_cursor_local { test -n "$CURSOR_TRACE_ID" ; }
-function is_cursor_codespaces { [[ $BROWSER =~ cursor-server ]] ; }
-function is_vscode_local { [[ $TERM_PROGRAM == vscode ]] ; }
-
 # bkt - https://github.com/dimo414/bkt
 # Cache commands using bkt if installed
 #if command -v bkt >&/dev/null; then
@@ -47,8 +15,6 @@ else
         "$@"
     }
 fi
-
-export BKT_TTL="120s"
 
 ###
 ### hooks
@@ -129,11 +95,6 @@ if exists eza ; then
     # indicating enhanced functionality over standard commands.
     alias els='eza -F --color=auto --git '
     alias etree='eza -F --color=auto --git --tree '
-elif [ -x "/opt/homebrew/bin/eza" ]; then
-    # Fallback: if eza is not in PATH but exists in Homebrew location
-    # This handles cases where bash_aliases is sourced before Homebrew PATH setup
-    alias els='/opt/homebrew/bin/eza -F --color=auto --git '
-    alias etree='/opt/homebrew/bin/eza -F --color=auto --git --tree'
 fi
 
 ###

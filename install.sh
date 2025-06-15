@@ -13,9 +13,11 @@ declare DRY_RUN
 declare -a INSTALL_DOTFILES_IN_CODESPACES=(
     bash_aliases
     bash_profile
+    common_env
     gitconfig
     gitignore
     inputrc
+    path_functions
     tigrc
     vimrc
     zprofile
@@ -28,6 +30,7 @@ declare -a INSTALL_DOTFILES_IN_MACOS=(
     gitconfig
     gitignore
     nanorc
+    path_functions
     tigrc
     vimrc
 )
@@ -196,9 +199,10 @@ function append-codespaces-bashrc {
 ### for Codespaces by __ME__
 ###
 
+source ~/.path_functions
+source ~/.common_env
 source ~/.bash_aliases
 source_if_readable ~/.bash_secret
-source_if_readable ~/.common_env
 if is_interactive_shell ; then
     # source_if_readable ~/.bash_completion # これも念のため重複読み込み対策したい
     # if [ -z "${BASH_COMPLETION_VERSINFO:-}" ] ; then
@@ -237,9 +241,10 @@ function append-codespaces-zshrc {
 ### for Codespaces by __ME__
 ###
 
+source ~/.path_functions
+source ~/.common_env
 source ~/.bash_aliases
 source_if_readable ~/.bash_secret
-source_if_readable ~/.common_env
 if is_interactive_shell ; then
     export HISTSIZE=2000
     export SAVEHIST=100000
