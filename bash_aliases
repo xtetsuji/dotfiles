@@ -97,6 +97,22 @@ if exists eza ; then
     alias etree='eza -F --color=auto --git --tree '
 fi
 
+if exists gemini ; then
+    alias gprompt='gemini --prompt'
+    function gsearch {
+        [ -z "${1:?Usage: geman <command>}" ] && return 1
+        local prompt="「${1}」について調べて下さい"
+        echo "💬 $prompt"
+        gprompt "$prompt"
+    }
+    function geman {
+        [ -z "${1:?Usage: geman <command>}" ] && return 1
+        local prompt="\"${1}\" コマンドの使い方を教えてください"
+        echo "💬 $prompt"
+        gprompt "$prompt"
+    }
+fi
+
 ###
 ### JavaScript / TypeScript
 ###
