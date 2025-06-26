@@ -100,7 +100,7 @@ fi
 if exists gemini ; then
     alias gprompt='gemini --prompt'
     function gsearch {
-        [ -z "${1:?Usage: geman <command>}" ] && return 1
+        [ -z "${1:?Usage: gsearch <query>}" ] && return 1
         local prompt="「${1}」について調べて下さい"
         echo "💬 $prompt"
         gprompt "$prompt"
