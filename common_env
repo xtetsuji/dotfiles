@@ -6,7 +6,7 @@ export BKT_TTL="120s"
 
 # bkt command availability check and fallback function
 # This needs to be defined before bkt is used in this file
-if which bkt >/dev/null 2>&1; then
+if command -v bkt >/dev/null 2>&1; then
     bkt() { command bkt "$@"; }
 else
     # If bkt isn't installed skip its arguments and just execute directly.
