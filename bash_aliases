@@ -2,20 +2,6 @@
 # .bash_aliases - bash and zsh aliases
 : "start .bash_aliases"
 
-# bkt - https://github.com/dimo414/bkt
-# Cache commands using bkt if installed
-#if command -v bkt >&/dev/null; then
-if which bkt >/dev/null ; then
-    bkt() { command bkt "$@"; }
-else
-    # If bkt isn't installed skip its arguments and just execute directly.
-    # Optionally write a msg to stderr suggesting users install bkt.
-    bkt() {
-        while [[ "$1" == --* ]]; do shift; done
-        "$@"
-    }
-fi
-
 ###
 ### hooks
 ###
