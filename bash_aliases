@@ -80,7 +80,9 @@ if exists eza ; then
     # indicating enhanced functionality over standard commands.
     alias els='eza -F --color=auto --git '
     alias etree='eza -F --color=auto --git --tree '
-    alias elsrepo='eza -F --color=auto --git-repos --long --header '
+    # eza is a modern replacement for ls, providing better defaults and features.
+    alias ls='eza -F --color=auto --git '
+    alias lsrepo='eza -F --color=auto --git-repos --long --header '
 fi
 
 if exists gemini ; then
