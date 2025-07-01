@@ -3,9 +3,15 @@
 : "start .path_functions"
 
 # Path manipulation functions
-function push_path_var { test -d "$1" && PATH=$PATH:$1 ; }
-function unshift_path_var { test -d "$1" && PATH=$1:$PATH ; }
-function path_contains { [[ ":$PATH:" == *":${1:?}:"* ]] ; }
+function is_in_path { [[ ":$PATH:" == *":${1:?}:"* ]] ; }
+function push_path_var { 
+    test -d "$1" && ! is_in_path "$1" && PATH="$PATH:$1" 
+}
+function unshift_path_var { 
+    test -d "$1" && ! is_in_path "$1" && PATH="$1:$PATH" 
+}
+# Legacy function name for backward compatibility
+function path_contains { is_in_path "$@" ; }
 
 # Command existence check
 function exists { type "${1}" >/dev/null 2>&1 ; }
