@@ -136,7 +136,7 @@ fi
 # pnpm support (conditional)
 if exists pnpm ; then
     export PNPM_HOME="$HOME/Library/pnpm"
-    if ! path_contains "$PNPM_HOME" ; then
+    if ! is_in_path "$PNPM_HOME" ; then
         unshift_path_var "$PNPM_HOME"
     fi
 fi
