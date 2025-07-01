@@ -15,7 +15,6 @@ function __cdhook_screen_title_pwd {
     screen -X title "$title"
 }
 
-
 ###
 ### Basics
 ###
@@ -81,6 +80,7 @@ if exists eza ; then
     # indicating enhanced functionality over standard commands.
     alias els='eza -F --color=auto --git '
     alias etree='eza -F --color=auto --git --tree '
+    alias elsrepo='eza -F --color=auto --git-repos --long --header '
 fi
 
 if exists gemini ; then
