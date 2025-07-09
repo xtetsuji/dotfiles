@@ -87,17 +87,25 @@ fi
 
 if exists gemini ; then
     alias gprompt='gemini --prompt'
+    GP_PAGER="${GP_PAGER:-}"
+    if [ -z "$GP_PAGER" ] ; then
+        if exists bat ; then
+            GP_PAGER=(bat --plain --color=auto --language=markdown)
+        else
+            GP_PAGER="${PAGER:-less}"
+        fi
+    fi
     function gsearch {
         [ -z "${1:?Usage: gsearch <query>}" ] && return 1
         local prompt="「${1}」について調べて下さい"
         echo "💬 $prompt"
-        gprompt "$prompt"
+        gprompt "$prompt" | ${GP_PAGER[@]}
     }
     function geman {
         [ -z "${1:?Usage: geman <command>}" ] && return 1
         local prompt="\"${1}\" コマンドの使い方を教えてください"
         echo "💬 $prompt"
-        gprompt "$prompt"
+        gprompt "$prompt" | ${GP_PAGER[@]}
     }
 fi
 
