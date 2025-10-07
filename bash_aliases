@@ -108,7 +108,12 @@ if exists gemini ; then
             cat
             return
         fi
-        command "${GP_PAGER_CMD[0]}" "${GP_PAGER_CMD[@]:1}" || cat
+        command "${GP_PAGER_CMD[0]}" "${GP_PAGER_CMD[@]:1}"
+        local pager_status=$?
+        if [ $pager_status -ne 0 ]; then
+            cat
+        fi
+        return $pager_status
     }
 
     function gsearch {
