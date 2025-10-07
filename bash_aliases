@@ -87,17 +87,46 @@ fi
 
 if exists gemini ; then
     alias gprompt='gemini --prompt'
+    GP_PAGER="${GP_PAGER:-}"
+    # Use a wrapper function to avoid array expansion issues in different shells.
+    if [ -z "$GP_PAGER" ] ; then
+        if exists bat ; then
+            GP_PAGER_CMD=(bat --plain --color=auto --language=markdown)
+        else
+            GP_PAGER_CMD=("${PAGER:-less}")
+        fi
+    else
+        # Split GP_PAGER string into array by spaces (simple heuristic)
+        # If the user provided a custom command with arguments, they can set GP_PAGER_CMD manually.
+        GP_PAGER_CMD=($GP_PAGER)
+    fi
+
+    __gpager() {
+        # Pipe stdin to the configured pager command safely.
+        # Use command builtin to avoid aliases.
+        if [ ${#GP_PAGER_CMD[@]} -eq 0 ]; then
+            cat
+            return
+        fi
+        command "${GP_PAGER_CMD[0]}" "${GP_PAGER_CMD[@]:1}"
+        local pager_status=$?
+        if [ $pager_status -ne 0 ]; then
+            cat
+        fi
+        return $pager_status
+    }
+
     function gsearch {
         [ -z "${1:?Usage: gsearch <query>}" ] && return 1
         local prompt="「${1}」について調べて下さい"
         echo "💬 $prompt"
-        gprompt "$prompt"
+        gprompt "$prompt" | __gpager
     }
     function geman {
         [ -z "${1:?Usage: geman <command>}" ] && return 1
         local prompt="\"${1}\" コマンドの使い方を教えてください"
         echo "💬 $prompt"
-        gprompt "$prompt"
+        gprompt "$prompt" | __gpager
     }
 fi
 
