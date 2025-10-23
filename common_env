@@ -193,10 +193,10 @@ fi
 ###
 # mise (formerly rtx) - polyglot runtime manager
 # see: https://github.com/jdx/mise
-if [ -x "$HOME/.local/bin/mise" ] && exists shell_name ; then
+if exists mise && exists shell_name ; then
     MISE_SHELL=$(shell_name)
     if [ -n "$MISE_SHELL" ] ; then
-        eval "$(bkt --ttl=$BKT_TTL -- "$HOME/.local/bin/mise" activate $MISE_SHELL)"
+        eval "$(bkt --ttl=$BKT_TTL -- mise activate $MISE_SHELL)"
     fi
     unset MISE_SHELL
 fi
