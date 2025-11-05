@@ -1,7 +1,7 @@
 [user]
 	name = OGATA Tetsuji
 	email = tetsuji.ogata@gmail.com
-	signingkey = /Users/xtetsuji/.ssh/github2
+	signingkey = ~/.ssh/github2
 
 [alias]
 	### shorthands
@@ -123,4 +123,4 @@
 [commit]
 	gpgsign = true
 [gpg "ssh"]
-	allowedSignersFile = /Users/xtetsuji/.ssh/allowed_signers
+	allowedSignersFile = ~/.ssh/allowed_signers
