@@ -92,6 +92,9 @@
 
 	whole-grep = !git-whole-grep.sh
 
+	with = !with git
+	stig = !tig status
+
 # [push]
 #        default = simple
 
