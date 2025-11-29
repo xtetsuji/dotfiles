@@ -24,6 +24,10 @@ push_path_var ~/bin
 push_path_var ~/Dropbox/bin
 push_path_var /usr/local/bin
 push_path_var /opt/homebrew/bin
+# amp
+push_path_var ~/.local/bin
+# Antigravity
+push_path_var ~/.antigravity/antigravity/bin
 unshift_path_var "$BREW_PREFIX/opt/coreutils/libexec/gnubin"
 unshift_path_var "$BREW_PREFIX/opt/gnu-tar/libexec/gnubin"
 unshift_path_var "$BREW_PREFIX/opt/zip/bin"
