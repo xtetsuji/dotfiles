@@ -195,6 +195,20 @@ if exists zoxide && exists shell_name ; then
     unset ZO_SHELL
 fi
 
+
+###
+### kiro
+###
+# kiro: load shell integration when running inside kiro terminal
+# Centralized here so both bash and zsh get the same behavior.
+if [[ "$TERM_PROGRAM" == "kiro" ]] && exists kiro && exists shell_name ; then
+     # allow opt-out via env var: KIRO_DISABLE_SHELL_INTEGRATION=1
+     if [ -z "${KIRO_DISABLE_SHELL_INTEGRATION:-}" ] ; then
+          kiro_path="$(kiro --locate-shell-integration-path "$(shell_name)")"
+          [[ -n "$kiro_path" && -f "$kiro_path" ]] && . "$kiro_path"
+     fi
+fi
+
 ###
 ### mise
 ###
