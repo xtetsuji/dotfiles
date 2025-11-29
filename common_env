@@ -145,6 +145,9 @@ if exists pnpm ; then
     fi
 fi
 
+# Rust (cargo) environment (conditional)
+source_if_readable "$HOME/.cargo/env"
+
 # Windsurf support (conditional)
 # NOTE: Unlike other editors (code/cursor) that create symlinks in /usr/local/bin/,
 # Windsurf requires adding its own bin directory to PATH for just one command.
